@@ -29,10 +29,4 @@ fun main() {
 
     solver.displayOptimalPath()
 
-//    solver.initialize()
-//
-//    for (i in 0..100) {
-//        solver.iterateStep(true)
-//        solver.display()
-//    }
 }
