@@ -1,3 +1,5 @@
+//Defunct
+
 abstract class POMDP<TState, TAction, TObservation> {
     abstract fun Transition(state: TState, action: TAction) : IDistribution<TState>
 

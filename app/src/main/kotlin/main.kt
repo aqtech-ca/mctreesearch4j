@@ -1,15 +1,32 @@
-fun main() {
-    println("hello world")
+import kotlin.random.Random
 
+fun main() {
     val gridworld = GridworldMDP(
-            10,
-            10,
-            listOf(GridworldReward(4, 3, -10.0),
-                GridworldReward(4, 6, -5.0),
-                GridworldReward(9, 3, 10.0),
-                GridworldReward(8, 8, 3.0)),
-            0.7
+            4,
+            4,
+            listOf(
+                    GridworldReward(3, 1, -0.5),
+                    GridworldReward(1, 3, -0.5),
+                    GridworldReward(3, 3, 1.0),
+                    GridworldReward(1, 1, 0.3)),
+            1.0
     )
 
     // solve
+    val solver = MCTSSolver(
+            gridworld,
+            Random.Default,
+            500,
+            20,
+            1.4,
+            0.9,
+            false
+    )
+
+    solver.buildTree()
+
+    solver.displayTree()
+
+    solver.displayOptimalPath()
+
 }

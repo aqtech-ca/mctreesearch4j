@@ -1,5 +1,5 @@
 import kotlin.random.Random
 
 interface IDistribution<TElement> {
-    fun RandomElement(random: Random): TElement
+    fun randomElement(random: Random): TElement
 }

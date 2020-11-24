@@ -5,4 +5,8 @@ open class GridworldPosition(val x: Int, val y: Int) {
         }
         return super.equals(other)
     }
+
+    override fun toString(): String {
+        return "($x, $y)"
+    }
 }

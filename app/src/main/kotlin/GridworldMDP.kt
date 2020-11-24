@@ -1,17 +1,13 @@
 class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double) : MDP<GridworldState, GridworldAction>() {
-    override fun InitialState(): IDistribution<GridworldState> {
+    override fun initialState(): IDistribution<GridworldState> {
         return UniformDistribution(listOf(GridworldState(0, 0, false)))
     }
 
-    override fun IsTerminal(state: GridworldState): Boolean {
-        return state.isTerminal
+    override fun isTerminal(state: GridworldState): Boolean {
+        return rewards.any { r -> r.equals(state)}
     }
 
-    override fun Reward(previousState: GridworldState, action: GridworldAction, state: GridworldState): Double {
-        if (state.isTerminal) {
-            return 0.0
-        }
-
+    override fun reward(previousState: GridworldState?, action: GridworldAction?, state: GridworldState): Double {
         var reward = 0.0
         for (r in rewards) {
             if (r.equals(state)) {
@@ -22,7 +18,7 @@ class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldRe
         return reward
     }
 
-    override fun Transition(state: GridworldState, action: GridworldAction): IDistribution<GridworldState> {
+    override fun transition(state: GridworldState, action: GridworldAction): IDistribution<GridworldState> {
         if (state.isTerminal) {
             return UniformDistribution(listOf(state))
         }
@@ -50,10 +46,14 @@ class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldRe
             n.probability = otherProbability
         }
 
-        // add targetone
+        // add target neighbour
         allNeighbours.add(ProbabilisticElement(targetNeighbour, transitionProbability))
 
         return SparseCategoricalDistribution(allNeighbours)
+    }
+
+    override fun actions(state: GridworldState): Iterable<GridworldAction> {
+        return GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
     }
 
 }
