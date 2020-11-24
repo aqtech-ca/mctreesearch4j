@@ -1,5 +1,10 @@
-internal class StateNode<TAction, TState>(val state: TState, parent: NodeBase?) : Node<ActionNode<TAction, TState>>(parent) {
-    var validActions : List<TAction>? = null
+internal class StateNode<TAction, TState>(
+        parent: NodeBase?,
+        val state: TState,
+        val validActions: List<TAction>,
+        val isTerminal: Boolean) : Node<ActionNode<TAction, TState>>(parent) {
+
+    var maxReward = 0.0
 
     fun parentAction() : ActionNode<TAction, TState>? {
         return if (parent == null)
@@ -9,6 +14,6 @@ internal class StateNode<TAction, TState>(val state: TState, parent: NodeBase?) 
     }
 
     override fun toString(): String {
-        return "State: $state"
+        return "State: $state, Max Reward: ${"%.5f".format(maxReward)}"
     }
 }

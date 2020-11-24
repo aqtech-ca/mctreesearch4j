@@ -1,4 +1,4 @@
-internal class ActionNode<TAction, TState>(val action: TAction, parent: NodeBase) : Node<StateNode<TAction, TState>>(parent) {
+internal class ActionNode<TAction, TState>(parent: NodeBase, val action: TAction) : Node<StateNode<TAction, TState>>(parent) {
     fun parentState() : StateNode<TAction, TState> {
         return parent as StateNode<TAction, TState>
     }

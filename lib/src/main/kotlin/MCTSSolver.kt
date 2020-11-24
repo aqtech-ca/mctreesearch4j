@@ -14,9 +14,9 @@ class MCTSSolver<TState, TAction>(
         private val verbose: Boolean) {
 
     private var root : StateNode<TAction, TState>? = null
-    private var states = mutableListOf<StateNode<TAction, TState>>()
+    private var stateNodes = mutableListOf<StateNode<TAction, TState>>()
 
-    fun solve() {
+    fun buildTree() {
         initialize()
 
         for (i in 0..iterations) {
@@ -26,23 +26,19 @@ class MCTSSolver<TState, TAction>(
 
     fun initialize() {
         val initialState = mdp.initialState().randomElement(random)
-        val rootNode = StateNode<TAction, TState>(initialState, null)
-        root = rootNode
-        states.add(rootNode)
+        root = createStateNode(null, initialState)
     }
 
     fun iterateStep() {
-        if (verbose) {
-            println()
-            println("New iteration")
-            println("=============")
-        }
+        traceln("")
+        traceln("New iteration")
+        traceln("=============")
 
         // Selection
         val bestState = selectNode(root!!)
 
         if (verbose) {
-            println("Expanding:")
+            traceln("Expanding:")
             displayNode(bestState)
         }
 
@@ -50,12 +46,14 @@ class MCTSSolver<TState, TAction>(
         val expandedState = expandNode(bestState)
 
         if (verbose) {
-            println("Simulating:")
+            traceln("Simulating:")
             displayNode(expandedState)
         }
 
         // Simulation
         val simulatedReward = simulateState(expandedState)
+
+        traceln("Simulated Reward: $simulatedReward")
 
         // Update
         updateNode(expandedState, simulatedReward)
@@ -67,12 +65,11 @@ class MCTSSolver<TState, TAction>(
 
         while (true)
         {
-//            currentStateNode.reward = max(currentReward, currentStateNode.reward)
+            currentStateNode.maxReward = max(currentReward, currentStateNode.maxReward)
             currentStateNode.reward += currentReward
             currentStateNode.n++
 
-            var parentActionNode = currentStateNode.parentAction() ?: break
-//            parentActionNode.reward = max(currentReward, parentActionNode.reward)
+            val parentActionNode = currentStateNode.parentAction() ?: break
             parentActionNode.reward += currentReward
             parentActionNode.n++
 
@@ -82,55 +79,52 @@ class MCTSSolver<TState, TAction>(
     }
 
     private fun simulateState(stateNode: StateNode<TAction, TState>) : Double {
-        if (verbose) {
-            println("Simulation:")
-        }
+        traceln("Simulation:")
 
         // If state is terminal, the reward is defined by MDP
         if (mdp.isTerminal(stateNode.state)) {
-            val reward = mdp.reward(stateNode.parentAction()?.parentState()?.state, stateNode.parentAction()?.action, stateNode.state)
+            traceln("Terminal state reached")
 
-            if (verbose) {
-                println("Terminal reward: $reward")
-            }
-
-            return reward
+            return mdp.reward(stateNode.parentAction()?.parentState()?.state, stateNode.parentAction()?.action, stateNode.state)
         }
 
-        var depth = stateNode.depth
-        var state = stateNode.state
+        var simulationRewards = 0.0
+        val simulationIterations = 10
+
+        repeat (simulationIterations) {
+            simulationRewards += simulateStateIteration(stateNode.state)
+        }
+
+        return simulationRewards/simulationIterations
+    }
+
+    private fun simulateStateIteration(state: TState) : Double {
+        var depth = 0
+        var currentState = state
         var discount = rewardDiscountFactor
 
         while(true) {
-            val validActions = mdp.actions(state)
+            val validActions = mdp.actions(currentState)
             val randomAction = validActions.toList().random()
-            val newState = mdp.transition(state, randomAction).randomElement(random)
+            val newState = mdp.transition(currentState, randomAction).randomElement(random)
 
-            if (verbose) {
-                println("$randomAction")
-                println("$newState")
-            }
+            trace("-> $randomAction ")
+            trace("-> $newState ")
 
             if (mdp.isTerminal(newState)) {
-                val reward = mdp.reward(state, randomAction, newState) * discount
-
-                if (verbose) {
-                    println("Terminal reward: $reward")
-                }
+                val reward = mdp.reward(currentState, randomAction, newState) * discount
+                traceln("-> Terminal state reached : $reward")
 
                 return reward
             }
 
-            state = newState
+            currentState = newState
             depth += 2
             discount *= rewardDiscountFactor
 
             if (depth > simulationDepthLimit) {
                 val reward = mdp.reward(state, randomAction, newState) * discount
-
-                if (verbose) {
-                    println("Depth limit reward: $reward")
-                }
+                traceln("-> Depth limit reached: $reward")
 
                 return reward
             }
@@ -138,100 +132,125 @@ class MCTSSolver<TState, TAction>(
     }
 
     private fun expandNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
-        // If the node is terminal, don't expand it
+        // If the node is terminal, return it
+        if (stateNode.isTerminal) {
+            return stateNode
+        }
+
+        // Expand an unexplored action
+        val unexploredActions = stateNode.validActions.minus(stateNode.children.map { c -> c.action })
+        val actionTaken = unexploredActions.random()
+        val actionNode = createActionNode(stateNode, actionTaken)
+
+        // Transition to new state for given action
+        val newState = mdp.transition(stateNode.state, actionTaken).randomElement(random)
+        return createStateNode(actionNode, newState)
+    }
+
+//    private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
+//        // Filter out terminal and expanded nodes
+//        val stateCandidates = stateNodes.filter { s -> !s.isTerminal && s.validActions.size > s.children.size}
+//
+//        // Select state node with highest UCT value
+//        return stateCandidates.maxByOrNull { a -> calculateUCT(a) }!!
+//    }
+
+    private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
+        // If the node is terminal, return it
         if (mdp.isTerminal(stateNode.state)) {
             return stateNode
         }
 
-        // For debugging
-        if (stateNode.validActions == null) throw IllegalStateException()
-        assert(stateNode.validActions!!.size > stateNode.children.size)
-
-        val unexploredActions = stateNode.validActions!!.minus(stateNode.children.map { c -> c.action })
-        val actionTaken = unexploredActions.random()
-        val actionNode = ActionNode<TAction, TState>(actionTaken, stateNode)
-        stateNode.children.add(actionNode)
-
-        val newState = mdp.transition(stateNode.state, actionTaken).randomElement(random)
-        val newStateNode = StateNode<TAction, TState>(newState, actionNode)
-        actionNode.children.add(newStateNode)
-        states.add(newStateNode)
-
-        return newStateNode
-    }
-
-    private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
-        var bestNode = states.maxByOrNull { a -> calculateUCT(a) }!!
-        if (bestNode.validActions == null) {
-            bestNode.validActions = mdp.actions(bestNode.state).toList()
+        // This state has not been fully explored
+        if (stateNode.validActions!!.size != stateNode.children.size) {
+            return stateNode
         }
-        return bestNode
+
+        // This state has been explored, select best action
+        val actionNode = stateNode.children.maxByOrNull { a -> calculateUCT(a) }
+
+        val newState = mdp.transition(stateNode.state, actionNode!!.action).randomElement(random)
+
+        val actionState = actionNode.children.firstOrNull { s -> s.state == newState }
+                // New state reached by an explored action
+                ?: return createStateNode(actionNode, newState)
+
+
+        // Existing state reached by an explored action
+        return selectNode(actionState)
     }
 
-//    private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
-//        // If the node is terminal, return it
-//        if (mdp.isTerminal(stateNode.state)) {
-//            return stateNode
-//        }
-//
-//        // This state has never been explored
-//        if (stateNode.validActions == null) {
-//            stateNode.validActions = mdp.actions(stateNode.state).toList()
-//            return stateNode
-//        }
-//
-//        // This state has not been fully explored
-//        if (stateNode.validActions!!.size != stateNode.children.size) {
-//            return stateNode
-//        }
-//
-//        // This state has been explored, select best action
-//        val actionNode = stateNode.children.maxByOrNull { a -> calculateUCT(a) }
-//
-//        val newState = mdp.transition(stateNode.state, actionNode!!.action).randomElement(random)
-//        val actionState = actionNode.children.firstOrNull { s -> s.state == newState }
-//
-//        // New state reached by an explored action
-//        if (actionState == null) {
-//            val newStateNode = StateNode<TAction, TState>(newState, actionNode)
-//            newStateNode.validActions = mdp.actions(newState).toList()
-//            actionNode.children.add(newStateNode)
-//            states.add(newStateNode)
-//            return newStateNode
-//        }
-//
-//        // Existing state reached by an explored action
-//        return selectNode(actionState)
-//    }
+    // Utilities
+
+    private fun createActionNode(parent: StateNode<TAction, TState>, action: TAction) : ActionNode<TAction, TState> {
+        val actionNode = ActionNode<TAction, TState>(parent, action)
+        parent.children.add(actionNode)
+
+        return actionNode
+    }
+
+    private fun createStateNode(parent: ActionNode<TAction, TState>?, state: TState) : StateNode<TAction, TState> {
+        val validActions = mdp.actions(state).toList()
+        val isTerminal = mdp.isTerminal(state)
+        val stateNode = StateNode(parent, state, validActions, isTerminal)
+        stateNodes.add(stateNode)
+
+        parent?.children?.add(stateNode)
+
+        return stateNode
+    }
 
     private fun calculateUCT(node: NodeBase) : Double {
-        return node.reward/node.n + explorationConstant*sqrt(ln(root!!.n.toDouble()) /node.n)
+        val parentN = node.parent?.n ?: node.n
+        return node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
     }
 
-    fun display() {
+    // Debug and Diagnostics
+
+    fun traceln(string: String) {
+        if (verbose) {
+            println(string)
+        }
+    }
+
+    fun trace(string: String) {
+        if (verbose) {
+            print(string)
+        }
+    }
+
+    fun displayTree() {
         if (root == null) return
         displayTree(root!!, "")
     }
 
-    fun displayOptimalPath() {
-        if (root == null) return
-
-        println("$root (n: ${root!!.n}, reward: ${root!!.reward}, UCT: ${calculateUCT(root!!)})")
-
-        var node = if (root!!.children.any()) root!!.children.maxByOrNull { a -> calculateUCT(a) } as Node<*> else null
-        var prefix = " └"
-
-        while (node != null) {
-            println("$prefix $node (n: ${node.n}, reward: ${node.reward}, UCT: ${calculateUCT(node)})")
-            node = if (node.children.any()) node.children.maxByOrNull { a -> calculateUCT(a) } as Node<*>? else null
-            prefix = "  $prefix"
-        }
-    }
-
 //    fun displayOptimalPath() {
-//        var bestNode = states.maxByOrNull { n -> n.reward }!!
-//        displayNode(bestNode)
+//        if (root == null) return
+//
+//        println("$root (n: ${root!!.n}, reward: ${root!!.reward}, UCT: ${calculateUCT(root!!)})")
+//
+//        var node = if (root!!.children.any()) root!!.children.maxByOrNull { a -> calculateUCT(a) } as Node<*> else null
+//        var prefix = " └"
+//
+//        while (node != null) {
+//            println("$prefix $node (n: ${node.n}, reward: ${node.reward}, UCT: ${calculateUCT(node)})")
+//            node = if (node.children.any()) node.children.maxByOrNull { a -> calculateUCT(a) } as Node<*>? else null
+//            prefix = "  $prefix"
+//        }
 //    }
+
+    fun displayOptimalPath() {
+        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
+
+        println("Best candidates")
+        for (n in bestNodes!!) {
+            println("$n, depth: ${n.depth}")
+        }
+
+        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
+
+        displayNode(bestNode!!)
+    }
 
     private fun displayNode(node: NodeBase) {
         if (node.parent != null) {
@@ -249,7 +268,7 @@ class MCTSSolver<TState, TAction>(
         val line = StringBuilder()
                 .append(indent)
                 .append(" $node")
-                .append(" (n: ${node.n}, reward: ${node.reward}, UCT: ${calculateUCT(node)})")
+                .append(" (n: ${node.n}, reward: ${"%.5f".format(node.reward)}, UCT: ${"%.5f".format(calculateUCT(node))})")
 
         println(line.toString())
 
