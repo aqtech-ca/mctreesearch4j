@@ -2,7 +2,7 @@ import kotlin.random.Random
 
 class SparseCategoricalDistribution<TElement>(val probabilisticElements: List<ProbabilisticElement<TElement>>) : IDistribution<TElement>
 {
-    override fun RandomElement(random: Random): TElement {
+    override fun randomElement(random: Random): TElement {
         var totalProbabilities = 0.0
         probabilisticElements.forEach { e -> totalProbabilities += e.probability } // simplify?
 

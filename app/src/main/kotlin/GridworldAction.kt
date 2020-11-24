@@ -1,3 +1,3 @@
 enum class GridworldAction {
-    UP, DOWN, LEFT, RIGHT
+    UP, DOWN, LEFT, RIGHT;
 }

@@ -1,9 +1,11 @@
 abstract class MDP<TState, TAction> {
-    abstract fun Transition(state: TState, action: TAction) : IDistribution<TState>
+    abstract fun transition(state: TState, action: TAction) : IDistribution<TState>
 
-    abstract fun Reward(previousState: TState, action: TAction, state: TState) : Double
+    abstract fun reward(previousState: TState?, action: TAction?, state: TState) : Double
 
-    abstract fun InitialState() : IDistribution<TState>
+    abstract fun initialState() : IDistribution<TState>
 
-    abstract fun IsTerminal(state: TState) : Boolean
+    abstract fun isTerminal(state: TState) : Boolean
+
+    abstract fun actions(state: TState) : Iterable<TAction>
 }
