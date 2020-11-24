@@ -15,10 +15,11 @@ fun main() {
     val solver = MCTSSolver(
             gridworld,
             Random.Default,
-            1000,
+            200,
             40,
-            2.0,
-            0.7
+            1.5,
+            0.7,
+            true
     )
 
     solver.solve()

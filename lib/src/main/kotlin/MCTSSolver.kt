@@ -10,7 +10,8 @@ class MCTSSolver<TState, TAction>(
         private val iterations: Int,
         private val simulationDepthLimit: Int,
         private val explorationConstant: Double,
-        private val rewardDiscountFactor: Double) {
+        private val rewardDiscountFactor: Double,
+        private val verbose: Boolean) {
 
     private var root : StateNode<TAction, TState>? = null
     private var states = mutableListOf<StateNode<TAction, TState>>()
@@ -31,10 +32,6 @@ class MCTSSolver<TState, TAction>(
     }
 
     fun iterateStep() {
-        iterateStep(false)
-    }
-
-    fun iterateStep(verbose: Boolean) {
         if (verbose) {
             println()
             println("New iteration")
@@ -44,16 +41,21 @@ class MCTSSolver<TState, TAction>(
         // Selection
         val bestState = selectNode(root!!)
 
+        if (verbose) {
+            println("Expanding:")
+            displayNode(bestState)
+        }
+
         // Expansion
         val expandedState = expandNode(bestState)
 
         if (verbose) {
-            println("Expanding:")
+            println("Simulating:")
             displayNode(expandedState)
         }
 
         // Simulation
-        val simulatedReward = simulateState(expandedState, verbose)
+        val simulatedReward = simulateState(expandedState)
 
         // Update
         updateNode(expandedState, simulatedReward)
@@ -65,13 +67,13 @@ class MCTSSolver<TState, TAction>(
 
         while (true)
         {
-            currentStateNode.reward = max(currentReward, currentStateNode.reward)
-//            currentStateNode.reward += currentReward
+//            currentStateNode.reward = max(currentReward, currentStateNode.reward)
+            currentStateNode.reward += currentReward
             currentStateNode.n++
 
             var parentActionNode = currentStateNode.parentAction() ?: break
-            parentActionNode.reward = max(currentReward, parentActionNode.reward)
-//            parentActionNode.reward += currentReward
+//            parentActionNode.reward = max(currentReward, parentActionNode.reward)
+            parentActionNode.reward += currentReward
             parentActionNode.n++
 
             currentStateNode = parentActionNode.parentState()
@@ -79,9 +81,9 @@ class MCTSSolver<TState, TAction>(
         }
     }
 
-    private fun simulateState(stateNode: StateNode<TAction, TState>, verbose: Boolean) : Double {
+    private fun simulateState(stateNode: StateNode<TAction, TState>) : Double {
         if (verbose) {
-            println("Simulating:")
+            println("Simulation:")
         }
 
         // If state is terminal, the reward is defined by MDP
@@ -161,7 +163,7 @@ class MCTSSolver<TState, TAction>(
     private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
         var bestNode = states.maxByOrNull { a -> calculateUCT(a) }!!
         if (bestNode.validActions == null) {
-            bestNode.validActions = mdp.actions(stateNode.state).toList()
+            bestNode.validActions = mdp.actions(bestNode.state).toList()
         }
         return bestNode
     }
@@ -212,9 +214,24 @@ class MCTSSolver<TState, TAction>(
     }
 
     fun displayOptimalPath() {
-        var bestNode = states.maxByOrNull { n -> n.reward }!!
-        displayNode(bestNode)
+        if (root == null) return
+
+        println("$root (n: ${root!!.n}, reward: ${root!!.reward}, UCT: ${calculateUCT(root!!)})")
+
+        var node = if (root!!.children.any()) root!!.children.maxByOrNull { a -> calculateUCT(a) } as Node<*> else null
+        var prefix = " └"
+
+        while (node != null) {
+            println("$prefix $node (n: ${node.n}, reward: ${node.reward}, UCT: ${calculateUCT(node)})")
+            node = if (node.children.any()) node.children.maxByOrNull { a -> calculateUCT(a) } as Node<*>? else null
+            prefix = "  $prefix"
+        }
     }
+
+//    fun displayOptimalPath() {
+//        var bestNode = states.maxByOrNull { n -> n.reward }!!
+//        displayNode(bestNode)
+//    }
 
     private fun displayNode(node: NodeBase) {
         if (node.parent != null) {
