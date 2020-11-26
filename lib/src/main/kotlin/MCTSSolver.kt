@@ -38,7 +38,7 @@ class MCTSSolver<TState, TAction>(
         val bestState = selectNode(root!!)
 
         if (verbose) {
-            traceln("Expanding:")
+            traceln("Selected:")
             displayNode(bestState)
         }
 
@@ -46,7 +46,7 @@ class MCTSSolver<TState, TAction>(
         val expandedState = expandNode(bestState)
 
         if (verbose) {
-            traceln("Simulating:")
+            traceln("Expanding:")
             displayNode(expandedState)
         }
 
@@ -265,6 +265,10 @@ class MCTSSolver<TState, TAction>(
     }
 
     private fun displayTree(node: NodeBase, indent: String) {
+        if (node.depth > 5) {
+            return
+        }
+
         val line = StringBuilder()
                 .append(indent)
                 .append(" $node")
