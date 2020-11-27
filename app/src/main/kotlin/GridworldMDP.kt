@@ -1,10 +1,24 @@
-class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double) : MDP<GridworldState, GridworldAction>() {
+import MCTSSolver
+
+class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double, val startingLocation: GridworldState = GridworldState(0, 0, false))  : MDP<GridworldState, GridworldAction>() {
     override fun initialState(): IDistribution<GridworldState> {
-        return UniformDistribution(listOf(GridworldState(0, 0, false)))
+        return UniformDistribution(listOf(startingLocation))
     }
 
     override fun isTerminal(state: GridworldState): Boolean {
         return rewards.any { r -> r.equals(state)}
+    }
+
+    fun visualizeState(): Unit {
+        var stateArray = Array(xSize) { Array(ySize){"-"}}
+        stateArray[this.startingLocation.y][this.startingLocation.x] = "A"
+        for (r in rewards) {
+            if (r.value > 0) stateArray[r.y][r.x] = "*"
+            if (r.value < 0) stateArray[r.y][r.x] = "X"
+        }
+        for (i in stateArray.size -1 downTo 0) {
+            println(stateArray[i].contentToString())
+        }
     }
 
     override fun reward(previousState: GridworldState?, action: GridworldAction?, state: GridworldState): Double {

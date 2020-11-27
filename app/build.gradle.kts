@@ -9,9 +9,10 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenLocal()
     mavenCentral()
+    flatDir {dirs = setOf(file("libs")) } // have to move it into the a library folder
 }
 dependencies {
-    implementation("org.example:lib:1.0-SNAPSHOT")
+    implementation( "org.example:lib:1.0-SNAPSHOT"  )
     testImplementation(kotlin("test-junit"))
 }
 tasks.withType<KotlinCompile>() {
