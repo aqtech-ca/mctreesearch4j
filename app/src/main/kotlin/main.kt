@@ -27,6 +27,6 @@ fun main() {
 
     solver.displayTree()
 
-    solver.displayOptimalPath()
+    // solver.displayOptimalPath()
 
 }
