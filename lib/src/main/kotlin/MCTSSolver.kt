@@ -239,6 +239,15 @@ class MCTSSolver<TState, TAction>(
 //        }
 //    }
 
+    fun getNextOptimalAction(): String {
+        // val actionNode = root.children.maxByOrNull { a -> calculateUCT(a) }
+        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
+        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
+        val optAction = bestNode!!.children.maxByOrNull { a -> calculateUCT(a) }!!.toStringId()
+        
+        return optAction // actionNode.toStringId()
+    }
+
     fun displayOptimalPath() {
         val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
 

@@ -9,7 +9,9 @@ fun main() {
                     GridworldReward(1, 3, -0.5),
                     GridworldReward(3, 3, 1.0),
                     GridworldReward(1, 1, 0.3)),
-            1.0
+            1.0,
+            GridworldState(1, 0, false)
+
     )
 
     // solve
@@ -23,10 +25,12 @@ fun main() {
             false
     )
 
-    solver.buildTree()
+    // solver.buildTree()
 
-    solver.displayTree()
+    // solver.displayTree()
 
     // solver.displayOptimalPath()
+
+    gridworld.visualizeState()
 
 }

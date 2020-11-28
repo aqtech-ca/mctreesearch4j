@@ -6,4 +6,8 @@ internal class ActionNode<TAction, TState>(parent: NodeBase, val action: TAction
     override fun toString(): String {
         return "Action: $action"
     }
+
+    fun toStringId(): String {
+        return "$action"
+    }
 }
