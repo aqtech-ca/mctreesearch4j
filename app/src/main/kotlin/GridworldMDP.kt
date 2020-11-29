@@ -11,11 +11,12 @@ class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldRe
 
     fun visualizeState(): Unit {
         var stateArray = Array(xSize) { Array(ySize){"-"}}
-        stateArray[this.startingLocation.x][this.startingLocation.y] = "C"
+        stateArray[this.startingLocation.y][this.startingLocation.x] = "A"
         for (r in rewards) {
-            stateArray[r.x][r.y] = r.value.toString()
+            if (r.value > 0) stateArray[r.y][r.x] = "*"
+            if (r.value < 0) stateArray[r.y][r.x] = "X"
         }
-        for (i in stateArray.indices) {
+        for (i in stateArray.size -1 downTo 0) {
             println(stateArray[i].contentToString())
         }
     }
