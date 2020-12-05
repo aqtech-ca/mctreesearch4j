@@ -29,10 +29,10 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
                     var solver = MCTSSolver(
                         gridworld,
                         Random.Default,
-                        10000,
+                        500,
                         20,
-                        1.4,
-                        0.9,
+                        0.3,
+                        0.05,
                         false
                     )
                     solver.buildTree()
@@ -49,7 +49,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
     }
     fun visualizeWorldSolve(): Unit {
 
-        var stateArray = Array(xSize) { Array(ySize) { "-" } }
+        var stateArray = Array(ySize) { Array(xSize) { "-" } }
         for ((p, action) in mapOfSolutions) {
             stateArray[p.second][p.first] = action
             for (r in rewards) {
