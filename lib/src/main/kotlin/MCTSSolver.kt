@@ -89,7 +89,7 @@ class MCTSSolver<TState, TAction>(
         }
 
         var simulationRewards = 0.0
-        val simulationIterations = 10
+        val simulationIterations = 1
 
         repeat (simulationIterations) {
             simulationRewards += simulateStateIteration(stateNode.state)
@@ -224,29 +224,9 @@ class MCTSSolver<TState, TAction>(
         displayTree(root!!, "")
     }
 
-//    fun displayOptimalPath() {
-//        if (root == null) return
-//
-//        println("$root (n: ${root!!.n}, reward: ${root!!.reward}, UCT: ${calculateUCT(root!!)})")
-//
-//        var node = if (root!!.children.any()) root!!.children.maxByOrNull { a -> calculateUCT(a) } as Node<*> else null
-//        var prefix = " └"
-//
-//        while (node != null) {
-//            println("$prefix $node (n: ${node.n}, reward: ${node.reward}, UCT: ${calculateUCT(node)})")
-//            node = if (node.children.any()) node.children.maxByOrNull { a -> calculateUCT(a) } as Node<*>? else null
-//            prefix = "  $prefix"
-//        }
-//    }
-
     fun getNextOptimalAction(): String {
-        // val actionNode = root.children.maxByOrNull { a -> calculateUCT(a) }
-        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
-        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
-        val optAction = bestNode!!.parentAction()!!.toStringId()
-        // val optAction = bestNode!!.children.maxByOrNull { a -> calculateUCT(a) }!!.toStringId()
-        
-        return optAction // actionNode.toStringId()
+        val optimalAction = root!!.children.maxByOrNull { c -> c.n }
+        return optimalAction!!.action.toString()
     }
 
     fun displayOptimalPath() {
@@ -275,7 +255,7 @@ class MCTSSolver<TState, TAction>(
     }
 
     private fun displayTree(node: NodeBase, indent: String) {
-        if (node.depth > 5) {
+        if (node.depth > 3) {
             return
         }
 
