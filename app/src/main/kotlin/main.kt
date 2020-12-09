@@ -7,11 +7,11 @@ fun main() {
         8,
         5,
         listOf(
-            GridworldReward(5, 4, -10.0),
+            GridworldReward(5, 4, -0.5),
             // GridworldReward(3, 3, 1.0),
-            GridworldReward(1, 1, 1000.0)
+            GridworldReward(1, 1, 1.0)
         ),
-        1.0)
+        0.85)
 
     gw.getWorldSolve()
     gw.visualizeWorldSolve()

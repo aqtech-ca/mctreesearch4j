@@ -225,17 +225,8 @@ class MCTSSolver<TState, TAction>(
     }
 
     fun getNextOptimalAction(): String {
-        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
-        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
-        var nextNode = bestNode as StateNode<*, *>
-
-        while (nextNode?.parent?.parent?.parent != null) {
-            nextNode = nextNode!!.parent!!.parent as StateNode<*, *>
-        }
-
-        val nextAction = nextNode!!.parent as ActionNode<*, *>
-        
-        return nextAction.action.toString()
+        val optimalAction = root!!.children.maxByOrNull { c -> c.n }
+        return optimalAction!!.action.toString()
     }
 
     fun displayOptimalPath() {
@@ -264,7 +255,7 @@ class MCTSSolver<TState, TAction>(
     }
 
     private fun displayTree(node: NodeBase, indent: String) {
-        if (node.depth > 5) {
+        if (node.depth > 3) {
             return
         }
 

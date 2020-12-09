@@ -27,7 +27,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
                         gridworld,
                         Random.Default,
                         500,
-                        20,
+                        40,
                         1.4,
                         0.9,
                         false
@@ -35,7 +35,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
                     solver.buildTree()
                     println("Solving at [$x, $y]")
                     solver.displayTree()
-                    solver.displayOptimalPath()
+//                    solver.displayOptimalPath()
                     println("Optimal action: ${solver.getNextOptimalAction()}")
                     // gridworld.visualizeState()
                     // println(solver.getNextOptimalAction())
