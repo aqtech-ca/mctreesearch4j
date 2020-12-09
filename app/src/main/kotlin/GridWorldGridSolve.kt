@@ -33,8 +33,10 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
                         false
                     )
                     solver.buildTree()
-                    // solver.displayTree()
-                    // solver.displayOptimalPath()
+                    println("Solving at [$x, $y]")
+                    solver.displayTree()
+                    solver.displayOptimalPath()
+                    println("Optimal action: ${solver.getNextOptimalAction()}")
                     // gridworld.visualizeState()
                     // println(solver.getNextOptimalAction())
                     mapOfSolutions[Pair(x, y)] = actionPrettyMap.get(solver.getNextOptimalAction()).toString()

@@ -243,10 +243,15 @@ class MCTSSolver<TState, TAction>(
         // val actionNode = root.children.maxByOrNull { a -> calculateUCT(a) }
         val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
         val bestNode = bestNodes?.minByOrNull { n -> n.depth }
-        val optAction = bestNode!!.parentAction()!!.toStringId()
-        // val optAction = bestNode!!.children.maxByOrNull { a -> calculateUCT(a) }!!.toStringId()
+        var nextNode = bestNode as StateNode<*, *>
+
+        while (nextNode?.parent?.parent?.parent != null) {
+            nextNode = nextNode!!.parent!!.parent as StateNode<*, *>
+        }
+
+        val nextAction = nextNode!!.parent as ActionNode<*, *>
         
-        return optAction // actionNode.toStringId()
+        return nextAction.action.toString()
     }
 
     fun displayOptimalPath() {
