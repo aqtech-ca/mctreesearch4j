@@ -15,7 +15,4 @@ fun main() {
 
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
-
-
-
 }

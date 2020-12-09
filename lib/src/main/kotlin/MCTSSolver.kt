@@ -89,7 +89,7 @@ class MCTSSolver<TState, TAction>(
         }
 
         var simulationRewards = 0.0
-        val simulationIterations = 10
+        val simulationIterations = 1
 
         repeat (simulationIterations) {
             simulationRewards += simulateStateIteration(stateNode.state)
