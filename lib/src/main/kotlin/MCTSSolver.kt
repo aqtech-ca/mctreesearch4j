@@ -224,23 +224,7 @@ class MCTSSolver<TState, TAction>(
         displayTree(root!!, "")
     }
 
-//    fun displayOptimalPath() {
-//        if (root == null) return
-//
-//        println("$root (n: ${root!!.n}, reward: ${root!!.reward}, UCT: ${calculateUCT(root!!)})")
-//
-//        var node = if (root!!.children.any()) root!!.children.maxByOrNull { a -> calculateUCT(a) } as Node<*> else null
-//        var prefix = " └"
-//
-//        while (node != null) {
-//            println("$prefix $node (n: ${node.n}, reward: ${node.reward}, UCT: ${calculateUCT(node)})")
-//            node = if (node.children.any()) node.children.maxByOrNull { a -> calculateUCT(a) } as Node<*>? else null
-//            prefix = "  $prefix"
-//        }
-//    }
-
     fun getNextOptimalAction(): String {
-        // val actionNode = root.children.maxByOrNull { a -> calculateUCT(a) }
         val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
         val bestNode = bestNodes?.minByOrNull { n -> n.depth }
         var nextNode = bestNode as StateNode<*, *>
