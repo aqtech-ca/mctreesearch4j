@@ -25,7 +25,7 @@ class MCTSSolver<TState, TAction>(
     }
 
     fun initialize() {
-        val initialState = mdp.initialState().randomElement(random)
+        val initialState = mdp.initialState()//.randomElement(random)
         root = createStateNode(null, initialState)
     }
 
@@ -106,7 +106,7 @@ class MCTSSolver<TState, TAction>(
         while(true) {
             val validActions = mdp.actions(currentState)
             val randomAction = validActions.toList().random()
-            val newState = mdp.transition(currentState, randomAction).randomElement(random)
+            val newState = mdp.transition(currentState, randomAction)//.randomElement(random)
 
             trace("-> $randomAction ")
             trace("-> $newState ")
@@ -143,7 +143,7 @@ class MCTSSolver<TState, TAction>(
         val actionNode = createActionNode(stateNode, actionTaken)
 
         // Transition to new state for given action
-        val newState = mdp.transition(stateNode.state, actionTaken).randomElement(random)
+        val newState = mdp.transition(stateNode.state, actionTaken)//.randomElement(random)
         return createStateNode(actionNode, newState)
     }
 
@@ -169,7 +169,7 @@ class MCTSSolver<TState, TAction>(
         // This state has been explored, select best action
         val actionNode = stateNode.children.maxByOrNull { a -> calculateUCT(a) }
 
-        val newState = mdp.transition(stateNode.state, actionNode!!.action).randomElement(random)
+        val newState = mdp.transition(stateNode.state, actionNode!!.action)//.randomElement(random)
 
         val actionState = actionNode.children.firstOrNull { s -> s.state == newState }
                 // New state reached by an explored action

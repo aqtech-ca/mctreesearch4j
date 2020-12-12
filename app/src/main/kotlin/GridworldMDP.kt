@@ -1,8 +1,8 @@
 import MCTSSolver
 
 class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double, val startingLocation: GridworldState = GridworldState(0, 0, false))  : MDP<GridworldState, GridworldAction>() {
-    override fun initialState(): IDistribution<GridworldState> {
-        return UniformDistribution(listOf(startingLocation))
+    override fun initialState(): GridworldState {
+        return startingLocation
     }
 
     override fun isTerminal(state: GridworldState): Boolean {
@@ -32,38 +32,35 @@ class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldRe
         return reward
     }
 
-    override fun transition(state: GridworldState, action: GridworldAction): IDistribution<GridworldState> {
+    override fun transition(state: GridworldState, action: GridworldAction): GridworldState {
         if (state.isTerminal) {
-            return UniformDistribution(listOf(state))
+            return state
         }
         else if (rewards.any { r -> r.equals(state)}) {
-            return UniformDistribution(listOf(GridworldState(state.x, state.y, true)))
+            return GridworldState(state.x, state.y, true)
         }
 
         // if target is out of bounds, return current state
         val targetNeighbour = state.ResolveNeighbour(action, xSize, ySize) ?:
-            return UniformDistribution(listOf(state))
+            return state
 
-        var allNeighbours = mutableListOf<ProbabilisticElement<GridworldState>>()
+        var allNeighbours = mutableListOf<GridworldState>()
 
         for (a in GridworldAction.values().toList().minus(action)) {
             val possibleNeighbour = state.ResolveNeighbour(a, xSize, ySize)
             if (possibleNeighbour != null) {
-                allNeighbours.add(ProbabilisticElement(possibleNeighbour, 0.0))
+                allNeighbours.add(possibleNeighbour)
             }
         }
 
         // compute probability of going into non-target neighbour state
-        val otherProbability = (1 - transitionProbability) / allNeighbours.size
+        // val otherProbability = (1 - transitionProbability) / allNeighbours.size
 
-        for (n in allNeighbours) {
-            n.probability = otherProbability
+        if (Math.random() < transitionProbability){
+            return targetNeighbour
+        } else {
+            return allNeighbours.random()
         }
-
-        // add target neighbour
-        allNeighbours.add(ProbabilisticElement(targetNeighbour, transitionProbability))
-
-        return SparseCategoricalDistribution(allNeighbours)
     }
 
     override fun actions(state: GridworldState): Iterable<GridworldAction> {
