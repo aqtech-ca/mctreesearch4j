@@ -1,6 +1,13 @@
-import MCTSSolver
+package GridWorld
 
-class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double, val startingLocation: GridworldState = GridworldState(0, 0, false))  : MDP<GridworldState, GridworldAction>() {
+import MDP
+
+class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double, val startingLocation: GridworldState = GridworldState(
+    0,
+    0,
+    false
+)
+)  : MDP<GridworldState, GridworldAction>() {
     override fun initialState(): GridworldState {
         return startingLocation
     }

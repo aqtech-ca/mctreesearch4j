@@ -1,4 +1,6 @@
-import GridworldMDP
+package GridWorld
+
+import MCTSSolver
 import kotlin.random.Random
 
 class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double) {
@@ -25,7 +27,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
 
                     var solver = MCTSSolver(
                         gridworld,
-                        Random.Default,
+                        Random,
                         500,
                         40,
                         1.4,
@@ -50,7 +52,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
         for (y in ySize-1 downTo 0) {
             print('[')
             for (x in 0 until xSize) {
-                val reward = rewards.singleOrNull { r -> r == GridworldPosition(x, y)}
+                val reward = rewards.singleOrNull { r -> r == GridworldPosition(x, y) }
 
                 if (reward != null)
                 {
