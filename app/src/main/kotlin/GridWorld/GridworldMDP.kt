@@ -2,7 +2,11 @@ package GridWorld
 
 import MDP
 
-class GridworldMDP(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double, val startingLocation: GridworldState = GridworldState(
+class GridworldMDP(val xSize: Int,
+                   val ySize: Int,
+                   val rewards: List<GridworldReward>,
+                   val transitionProbability: Double,
+                   val startingLocation: GridworldState = GridworldState(
     0,
     0,
     false

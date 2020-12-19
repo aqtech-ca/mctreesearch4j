@@ -7,17 +7,18 @@ class Game2048(){
 
     val positiveGameOverMessage = "So sorry, but you won the game."
     val negativeGameOverMessage = "So sorry, but you lost the game."
+    var gameScore: Int = 2
+
+    var grid = this.spawnNumber(arrayOf(
+        arrayOf(0, 0, 0, 0),
+        arrayOf(0, 0, 0, 0),
+        arrayOf(0, 0, 0, 0),
+        arrayOf(0, 0, 0, 0)
+    ))
 
     // fun main(args: Array<String>) {
     fun main() {
-        val grid = arrayOf(
-            arrayOf(0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0)
-        )
-
-        val gameOverMessage = run2048(grid)
+        val gameOverMessage = run2048(this.grid)
         println(gameOverMessage)
     }
 
@@ -25,10 +26,10 @@ class Game2048(){
         if (isGridSolved(grid)) return positiveGameOverMessage
         else if (isGridFull(grid)) return negativeGameOverMessage
 
-        val populatedGrid = spawnNumber(grid)
-        display(populatedGrid)
+        this.grid = spawnNumber(grid)
+        display(this.grid)
 
-        return run2048(manipulateGrid(populatedGrid, waitForValidInput()))
+        return run2048(manipulateGrid(this.grid, waitForValidInput()))
     }
 
     fun isGridSolved(grid: Array<Array<Int>>): Boolean = grid.any { row -> row.contains(2048) }
@@ -136,6 +137,10 @@ class Game2048(){
 
         return if (row[idxToMatch] == row[idxToCompare]) {
             row[idxToMatch] *= 2
+            if (row[idxToMatch] > this.gameScore){
+                this.gameScore = row[idxToMatch]
+            }
+
             row[idxToCompare] = 0
             merge(row, idxToMatch + 1, idxToMatch + 2)
         } else {
@@ -172,6 +177,8 @@ class Game2048(){
             println("|")
         }
         println("+----+----+----+----+")
+        println("Game Score")
+        println(this.gameScore)
     }
 }
 
