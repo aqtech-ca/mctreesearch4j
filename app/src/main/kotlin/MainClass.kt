@@ -4,6 +4,9 @@ import GridWorld.GridWorldGridSolve
 import GridWorld.GridworldReward
 import Twenty48.Game2048
 
+import Twenty48.Game2048MDP
+import kotlin.random.Random
+
 fun main() {
 
     /*
@@ -22,6 +25,23 @@ fun main() {
     gw.visualizeWorldSolve()
     */
 
-    Game2048().main()
+    // Game2048().main()
+
+    val game2048MDP = Game2048MDP()
+
+    var solver = MCTSSolver(
+        game2048MDP,
+        Random,
+        500,
+        40,
+        1.4,
+        0.9,
+        false
+    )
+    solver.buildTree()
+    // println("Solving at [$x, $y]")
+    solver.displayTree()
+
+
 
 }
