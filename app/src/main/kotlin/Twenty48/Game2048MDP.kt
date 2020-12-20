@@ -5,11 +5,11 @@ import MDP
 class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
 
 
-
     val gameObject = Game2048()
     // val initialGrid = gameObject.grid.map{it.copyOf()}.toTypedArray().copyOf()
     // val currentGameState = Game2048State(initialGrid, gameObject.gameScore.toDouble())
-    val initialGameState = Game2048State(Game2048()) // Incorrect, the bug is the initial state is changing, it should remain fixed
+    val initialGameState = Game2048State(gameObject.grid.map{it.copyOf()}.toTypedArray().copyOf() ) // Incorrect, the bug is the initial state is changing, it should remain fixed
+
 
     override fun initialState(): Game2048State {
         return this.initialGameState
@@ -24,11 +24,12 @@ class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
         // this.gameObject.grid = this.gameObject.spawnNumber(this.gameObject.grid)
         // this.gameObject.grid = this.gameObject.manipulateGrid(state.gameGrid, action.toString())
         this.gameObject.run2048Programatic(this.gameObject.grid, action.toString())
+        // Fix issue with constant mutation, the state needs to be tied to the grid!!
         // val newGrid = this.gameObject.run2048Programatic(this.gameObject.grid, action.toString())
 
         // return Game2048State(newGrid, this.gameObject.gameScore.toDouble())
         // gridworld score also
-        return Game2048State(this.gameObject)
+        return Game2048State(gameObject.grid)
     }
 
     override fun actions(state: Game2048State): Iterable<Game2048Action> {
