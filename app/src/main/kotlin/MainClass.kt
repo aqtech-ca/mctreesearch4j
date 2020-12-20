@@ -33,7 +33,7 @@ fun main() {
         game2048MDP,
         Random,
         1,
-        80,
+        5,
         1.4,
         0.9,
         false

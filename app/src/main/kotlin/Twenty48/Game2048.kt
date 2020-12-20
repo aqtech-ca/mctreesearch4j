@@ -22,6 +22,13 @@ class Game2048(){
         println(gameOverMessage)
     }
 
+    fun run2048Programatic(grid: Array<Array<Int>>, action: String): Array<Array<Int>> {
+
+        this.grid = spawnNumber(grid)
+
+        return manipulateGrid(this.grid, action)
+    }
+
     fun run2048(grid: Array<Array<Int>>): String {
         if (isGridSolved(grid)) return positiveGameOverMessage
         else if (isGridFull(grid)) return negativeGameOverMessage

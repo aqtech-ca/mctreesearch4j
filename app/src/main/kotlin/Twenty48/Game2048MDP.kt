@@ -1,18 +1,15 @@
 package Twenty48
 
-import GridWorld.GridworldAction
-import GridWorld.GridworldState
-import Twenty48.Game2048State
-import Twenty48.Game2048Action
 import MDP
 
-// class Game2048MDP() : MDP<Game2048State, Game2048Action> {
 class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
 
+
+
     val gameObject = Game2048()
-    val initialGrid = gameObject.grid.map{it.copyOf()}.toTypedArray().copyOf() // had to deep copy this lol
+    // val initialGrid = gameObject.grid.map{it.copyOf()}.toTypedArray().copyOf()
     // val currentGameState = Game2048State(initialGrid, gameObject.gameScore.toDouble())
-    val initialGameState = Game2048State(initialGrid, 2.0)
+    val initialGameState = Game2048State(Game2048()) // Incorrect, the bug is the initial state is changing, it should remain fixed
 
     override fun initialState(): Game2048State {
         return this.initialGameState
@@ -24,10 +21,14 @@ class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
     }
 
     override fun transition(state: Game2048State, action: Game2048Action): Game2048State {
-        this.gameObject.grid = this.gameObject.spawnNumber(this.gameObject.grid)
-        this.gameObject.grid = this.gameObject.manipulateGrid(state.gameGrid, action.toString())
+        // this.gameObject.grid = this.gameObject.spawnNumber(this.gameObject.grid)
+        // this.gameObject.grid = this.gameObject.manipulateGrid(state.gameGrid, action.toString())
+        this.gameObject.run2048Programatic(this.gameObject.grid, action.toString())
+        // val newGrid = this.gameObject.run2048Programatic(this.gameObject.grid, action.toString())
+
+        // return Game2048State(newGrid, this.gameObject.gameScore.toDouble())
         // gridworld score also
-        return Game2048State(this.gameObject.grid, this.gameObject.gameScore.toDouble() )
+        return Game2048State(this.gameObject)
     }
 
     override fun actions(state: Game2048State): Iterable<Game2048Action> {
