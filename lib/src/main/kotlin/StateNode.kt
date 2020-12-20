@@ -13,6 +13,8 @@ internal class StateNode<TAction, TState>(
             parent as ActionNode<TAction, TState>
     }
 
+    // Print out the state to visualize (for complex states,)
+
     override fun toString(): String {
         return "State: $state, Max Reward: ${"%.5f".format(maxReward)}"
     }

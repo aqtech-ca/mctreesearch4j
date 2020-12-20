@@ -32,8 +32,8 @@ fun main() {
     var solver = MCTSSolver(
         game2048MDP,
         Random,
-        500,
-        40,
+        1,
+        80,
         1.4,
         0.9,
         false
