@@ -12,6 +12,7 @@ class GridworldMDP(val xSize: Int,
     false
 )
 )  : MDP<GridworldState, GridworldAction>() {
+
     override fun initialState(): GridworldState {
         return startingLocation
     }

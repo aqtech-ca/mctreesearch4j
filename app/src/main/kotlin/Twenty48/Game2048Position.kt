@@ -1,7 +1,9 @@
 package Twenty48
 
-open class GridworldPosition(val grid: Array<Array<Int>>) {
+open class Game2048Position(grid: Array<Array<Int>>) {
+    val grid = grid
     override fun toString(): String {
-        return grid.toString()
+        val strArray = grid.map { "[" + it.joinToString(",") }
+        return strArray.joinToString("], ") + "]"
     }
 }
