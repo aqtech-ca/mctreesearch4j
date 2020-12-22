@@ -12,7 +12,7 @@ repositories {
     flatDir {dirs = setOf(file("libs")) } // have to move it into the a library folder
 }
 dependencies {
-    implementation( "com.mcts:lib:1.0-SNAPSHOT"  )
+    // implementation( "com.mcts:lib:1.0-SNAPSHOT"  )
     testImplementation(kotlin("test-junit"))
 }
 tasks.withType<KotlinCompile>() {

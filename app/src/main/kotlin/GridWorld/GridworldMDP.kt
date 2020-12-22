@@ -1,6 +1,6 @@
 package GridWorld
 
-import MDP
+import Mcts.MDP
 
 class GridworldMDP(val xSize: Int,
                    val ySize: Int,

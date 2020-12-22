@@ -2,6 +2,10 @@ package Twenty48
 
 class Game2048Controller(){
 
+    companion object Game2048Controller {
+
+    }
+
     fun isGridSolved(grid: Array<Array<Int>>): Boolean = grid.any { row -> row.contains(2048) }
     fun isGridFull(grid: Array<Array<Int>>): Boolean = grid.all { row -> !row.contains(0) }
 

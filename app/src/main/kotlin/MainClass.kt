@@ -7,7 +7,10 @@ import GridWorld.GridworldState
 import Twenty48.Game2048
 
 import Twenty48.Game2048MDP
+import Twenty48.Game2048Position
+import Twenty48.Game2048State
 import kotlin.random.Random
+import Mcts.MCTSSolver
 
 fun main() {
 
@@ -54,6 +57,15 @@ fun main() {
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
     */
+    /*
+    val initialGameState = Game2048State(
+        Game2048Position(arrayOf(
+        arrayOf(0, 0, 0, 0),
+        arrayOf(0, 0, 0, 0),
+        arrayOf(0, 0, 0, 0),
+        arrayOf(0, 0, 0, 0)
+    )))
+     */
 
     val game2048MDP = Game2048MDP()
 

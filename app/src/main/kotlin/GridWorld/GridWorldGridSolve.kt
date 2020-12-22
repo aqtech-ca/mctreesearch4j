@@ -1,6 +1,6 @@
 package GridWorld
 
-import MCTSSolver
+import Mcts.MCTSSolver
 import kotlin.random.Random
 
 class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double) {
