@@ -1,18 +1,15 @@
 package GridWorld
 
-import Mcts.MDP
+import MDP
+import ProbabilisticElement
 
-class GridworldMDP(val xSize: Int,
-                   val ySize: Int,
-                   val rewards: List<GridworldReward>,
-                   val transitionProbability: Double,
-                   val startingLocation: GridworldState = GridworldState(
-    0,
-    0,
-    false
-)
-)  : MDP<GridworldState, GridworldAction>() {
 
+class GridworldMDP(
+        private val xSize: Int,
+        private val ySize: Int,
+        private val rewards: List<GridworldReward>,
+        private val transitionProbability: Double,
+        private val startingLocation: GridworldState = GridworldState(0, 0, false))  : MDP<GridworldState, GridworldAction>() {
     override fun initialState(): GridworldState {
         return startingLocation
     }
@@ -21,8 +18,8 @@ class GridworldMDP(val xSize: Int,
         return rewards.any { r -> r.equals(state)}
     }
 
-    fun visualizeState(): Unit {
-        var stateArray = Array(xSize) { Array(ySize){"-"}}
+    fun visualizeState() {
+        val stateArray = Array(xSize) { Array(ySize){"-"}}
         stateArray[this.startingLocation.y][this.startingLocation.x] = "A"
         for (r in rewards) {
             if (r.value > 0) stateArray[r.y][r.x] = "*"
@@ -56,7 +53,7 @@ class GridworldMDP(val xSize: Int,
         val targetNeighbour = state.ResolveNeighbour(action, xSize, ySize) ?:
             return state
 
-        var allNeighbours = mutableListOf<GridworldState>()
+        val allNeighbours = mutableListOf<GridworldState>()
 
         for (a in GridworldAction.values().toList().minus(action)) {
             val possibleNeighbour = state.ResolveNeighbour(a, xSize, ySize)
@@ -66,13 +63,17 @@ class GridworldMDP(val xSize: Int,
         }
 
         // compute probability of going into non-target neighbour state
-        // val otherProbability = (1 - transitionProbability) / allNeighbours.size
+        val otherProbability = (1 - transitionProbability) / allNeighbours.size
+
+        // add target neighbour
+        // allNeighbours.add(targetNeighbour, transitionProbability)
 
         if (Math.random() < transitionProbability){
             return targetNeighbour
         } else {
             return allNeighbours.random()
         }
+
     }
 
     override fun actions(state: GridworldState): Iterable<GridworldAction> {

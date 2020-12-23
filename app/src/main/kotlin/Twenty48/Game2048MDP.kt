@@ -1,6 +1,6 @@
 package Twenty48
 
-import Mcts.MDP
+import MDP
 
 class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
 
@@ -21,10 +21,6 @@ class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
     }
 
     override fun transition(state: Game2048State, action: Game2048Action): Game2048State {
-
-        // val newGamePosition = Game2048Position(tempGrid)
-        // return Game2048State(newGamePosition)
-
         return state.makeMove(action, state.gameGrid)
     }
 

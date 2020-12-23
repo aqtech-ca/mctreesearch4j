@@ -101,7 +101,7 @@ class StatelessSolver<TState, TAction>(
         while(true) {
             val validActions = mdp.actions(currentState)
             val randomAction = validActions.toList().random()
-            val newState = mdp.transition(currentState, randomAction).randomElement(random)
+            val newState = mdp.transition(currentState, randomAction)//.randomElement(random)
 
             trace("-> $randomAction ")
             trace("-> $newState ")
@@ -140,7 +140,7 @@ class StatelessSolver<TState, TAction>(
         val newNode = createStateActionNode(simulationState.node, actionTaken)
 
         // Transition to new state for given action
-        val newState = mdp.transition(simulationState.state, actionTaken).randomElement(random)
+        val newState = mdp.transition(simulationState.state, actionTaken)//.randomElement(random)
 
         return SimulationState(newNode, simulationState.state, newState, mdp.actions(newState))
     }
@@ -168,7 +168,7 @@ class StatelessSolver<TState, TAction>(
 
             // All actions have been explored, choose best one
             val newNode = currentSimulation.node.children.maxByOrNull { a -> calculateUCT(a) } ?: throw Exception("There were no children for explored node")
-            val newState = mdp.transition(currentSimulation.state, newNode.parentAction ?: throw Exception("Parent action expected")).randomElement(random)
+            val newState = mdp.transition(currentSimulation.state, newNode.parentAction ?: throw Exception("Parent action expected"))//.randomElement(random)
 
             currentSimulation = SimulationState(newNode, currentSimulation.state, newState, mdp.actions(newState))
         }
@@ -193,7 +193,7 @@ class StatelessSolver<TState, TAction>(
         val parent = node.parentStateAction()
 
         if (parent == null) {
-            val initialState = mdp.initialState().randomElement(random)
+            val initialState = mdp.initialState()//.randomElement(random)
             return SimulationState(node, null, initialState, mdp.actions(initialState))
         }
         // If the parent node is not null, a parent action must have been specified, otherwise it's an error
@@ -206,7 +206,7 @@ class StatelessSolver<TState, TAction>(
             return parentSimulation
         }
 
-        val state = mdp.transition(parentSimulation.state, parentAction).randomElement(random)
+        val state = mdp.transition(parentSimulation.state, parentAction)//.randomElement(random)
         return SimulationState(node, parentSimulation.state, state, mdp.actions(state))
     }
 
