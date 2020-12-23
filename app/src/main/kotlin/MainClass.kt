@@ -57,15 +57,6 @@ fun main() {
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
     */
-    /*
-    val initialGameState = Game2048State(
-        Game2048Position(arrayOf(
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0)
-    )))
-     */
 
     val game2048MDP = Game2048MDP()
 
@@ -81,6 +72,5 @@ fun main() {
     solver.buildTree()
     // println("Solving at [$x, $y]")
     solver.displayTree()
-
 
 }
