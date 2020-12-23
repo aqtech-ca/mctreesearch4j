@@ -13,7 +13,6 @@ import kotlin.random.Random
 import Mcts.MCTSSolver
 
 fun main() {
-
     /*
     val gwRewards = listOf(
         GridworldReward(5, 4, -0.5),
@@ -32,7 +31,7 @@ fun main() {
     var solver = MCTSSolver(
         gridworld,
         Random,
-        4,
+        200,
         40,
         1.4,
         0.9,
@@ -40,7 +39,9 @@ fun main() {
     )
     solver.buildTree()
     solver.displayTree()
-    */
+
+     */
+
 
     /*
     val gw = GridWorldGridSolve(
@@ -58,13 +59,14 @@ fun main() {
     gw.visualizeWorldSolve()
     */
 
+
     val game2048MDP = Game2048MDP()
 
     var solver = MCTSSolver(
         game2048MDP,
         Random,
-        2,
-        2,
+        1000,
+        999,
         1.4,
         0.9,
         true

@@ -22,20 +22,6 @@ class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
 
     override fun transition(state: Game2048State, action: Game2048Action): Game2048State {
 
-        println("initial game state 1")
-        println(this.initialState())
-        /*
-        this.initialGameState = Game2048State(Game2048Position(arrayOf(
-            arrayOf(0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0),
-            arrayOf(0, 0, 0, 0)
-        ))) // this is a bandaid over the initialState mutation issue
-        */
-        println("initial game state 2")
-        println(this.initialState())
-
-
         // val newGamePosition = Game2048Position(tempGrid)
         // return Game2048State(newGamePosition)
 
