@@ -2,18 +2,16 @@ package Twenty48
 
 class Game2048Controller(){
 
-    companion object Game2048Controller {
-
-    }
-
     fun isGridSolved(grid: Array<Array<Int>>): Boolean = grid.any { row -> row.contains(2048) }
     fun isGridFull(grid: Array<Array<Int>>): Boolean = grid.all { row -> !row.contains(0) }
 
     fun spawnNumber(grid: Array<Array<Int>>): Array<Array<Int>> {
-        val coordinates = locateSpawnCoordinates(grid)
-        val number = generateNumber()
 
-        return updateGrid(grid, coordinates, number).copyOf()
+        val newGrid = grid.copyOf()
+        val coordinates = locateSpawnCoordinates(newGrid)
+        val number = generateNumber()
+        // val number = 2
+        return updateGrid(newGrid, coordinates, number)
     }
 
     fun locateSpawnCoordinates(grid: Array<Array<Int>>): Pair<Int, Int> {
@@ -23,16 +21,26 @@ class Game2048Controller(){
                 if (cell == 0) emptyCells.add(Pair(x, y))
             }
         }
-
         return emptyCells[(Math.random() * (emptyCells.size - 1)).toInt()]
     }
 
     fun generateNumber(): Int = if (Math.random() > 0.10) 2 else 4
 
     fun updateGrid(grid: Array<Array<Int>>, at: Pair<Int, Int>, value: Int): Array<Array<Int>> {
-        val updatedGrid = grid.copyOf()
+        // val updatedGrid = grid.copyOf()
+        var updatedGrid = arrayOf(
+            arrayOf(0, 0, 0, 0),
+            arrayOf(0, 0, 0, 0),
+            arrayOf(0, 0, 0, 0),
+            arrayOf(0, 0, 0, 0)
+        )
+        for (r in 0 until updatedGrid.size) {
+            for (c in 0 until updatedGrid[r].size){
+                updatedGrid[r][c] = grid[r][c]
+            }
+        }
         updatedGrid[at.first][at.second] = value
-        return updatedGrid
+        return updatedGrid.copyOf()
     }
 
     fun isValidInput(input: String): Boolean = arrayOf("up", "left", "right", "down").contains(input)
@@ -45,11 +53,14 @@ class Game2048Controller(){
         else -> throw IllegalArgumentException("Expected one of [up, left, right, down]")
     }
 
-    fun shiftCellsLeft(grid: Array<Array<Int>>): Array<Array<Int>> =
-        grid.map(::mergeAndOrganizeCells).toTypedArray()
+    fun shiftCellsLeft(grid: Array<Array<Int>>): Array<Array<Int>> {
+        return grid.map(::mergeAndOrganizeCells).toTypedArray().copyOf()
+    }
 
-    fun shiftCellsRight(grid: Array<Array<Int>>): Array<Array<Int>> =
-        grid.map { row -> mergeAndOrganizeCells(row.reversed().toTypedArray()).reversed().toTypedArray() }.toTypedArray()
+
+    fun shiftCellsRight(grid: Array<Array<Int>>): Array<Array<Int>> {
+        return grid.map { row -> mergeAndOrganizeCells(row.reversed().toTypedArray()).reversed().toTypedArray() }.toTypedArray().copyOf()
+    }
 
     fun shiftCellsUp(grid: Array<Array<Int>>): Array<Array<Int>> {
         val rows: Array<Array<Int>> = arrayOf(
@@ -91,7 +102,7 @@ class Game2048Controller(){
         return updatedGrid
     }
 
-    fun mergeAndOrganizeCells(row: Array<Int>): Array<Int> = organize(merge(row.copyOf()))
+    fun mergeAndOrganizeCells(row: Array<Int>): Array<Int> = organize(merge(row.copyOf())).copyOf()
 
     fun merge(row: Array<Int>, idxToMatch: Int = 0, idxToCompare: Int = 1): Array<Int> {
         if (idxToMatch >= row.size) return row
