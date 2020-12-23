@@ -2,6 +2,7 @@ internal open class NodeBase(val parent: NodeBase?) {
     val depth: Int
     var n = 0
     var reward = 0.0
+    var maxReward = 0.0
 
     init {
         depth = if (parent == null) {

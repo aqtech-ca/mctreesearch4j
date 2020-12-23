@@ -4,8 +4,6 @@ internal class StateNode<TAction, TState>(
         val validActions: List<TAction>,
         val isTerminal: Boolean) : Node<ActionNode<TAction, TState>>(parent) {
 
-    var maxReward = 0.0
-
     fun parentAction() : ActionNode<TAction, TState>? {
         return if (parent == null)
             null

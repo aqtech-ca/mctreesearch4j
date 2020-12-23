@@ -4,7 +4,7 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 import kotlin.text.StringBuilder
 
-class MCTSSolver<TState, TAction>(
+class StatefulSolver<TState, TAction>(
         private val mdp: MDP<TState, TAction>,
         private val random: Random,
         private val iterations: Int,
@@ -14,7 +14,6 @@ class MCTSSolver<TState, TAction>(
         private val verbose: Boolean) {
 
     private var root : StateNode<TAction, TState>? = null
-    private var stateNodes = mutableListOf<StateNode<TAction, TState>>()
 
     fun buildTree() {
         initialize()
@@ -147,14 +146,6 @@ class MCTSSolver<TState, TAction>(
         return createStateNode(actionNode, newState)
     }
 
-//    private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
-//        // Filter out terminal and expanded nodes
-//        val stateCandidates = stateNodes.filter { s -> !s.isTerminal && s.validActions.size > s.children.size}
-//
-//        // Select state node with highest UCT value
-//        return stateCandidates.maxByOrNull { a -> calculateUCT(a) }!!
-//    }
-
     private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
         // If the node is terminal, return it
         if (mdp.isTerminal(stateNode.state)) {
@@ -193,7 +184,6 @@ class MCTSSolver<TState, TAction>(
         val validActions = mdp.actions(state).toList()
         val isTerminal = mdp.isTerminal(state)
         val stateNode = StateNode(parent, state, validActions, isTerminal)
-        stateNodes.add(stateNode)
 
         parent?.children?.add(stateNode)
 
@@ -224,22 +214,9 @@ class MCTSSolver<TState, TAction>(
         displayTree(root!!, "")
     }
 
-    fun getNextOptimalAction(): String {
+    fun getNextOptimalAction(): TAction {
         val optimalAction = root!!.children.maxByOrNull { c -> c.n }
-        return optimalAction!!.action.toString()
-    }
-
-    fun displayOptimalPath() {
-        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
-
-        println("Best candidates")
-        for (n in bestNodes!!) {
-            println("$n, depth: ${n.depth}")
-        }
-
-        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
-
-        displayNode(bestNode!!)
+        return optimalAction!!.action
     }
 
     private fun displayNode(node: NodeBase) {
