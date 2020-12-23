@@ -4,17 +4,14 @@ import Mcts.MDP
 
 class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
 
-    // private val gameObject = Game2048Controller() // We just use this for its methods
-    val initialGameState: Game2048State = Game2048State(Game2048Position(arrayOf(
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0),
-        arrayOf(0, 0, 0, 0)
-    )))
-
     override fun initialState(): Game2048State {
         // var initialGameState = Game2048State(initialGamePosition
-        return initialGameState // The MCTS solver is mutating the initial game state??
+        return Game2048State(Game2048Position(arrayOf(
+            arrayOf(0, 0, 0, 0),
+            arrayOf(0, 0, 0, 0),
+            arrayOf(0, 0, 0, 0),
+            arrayOf(0, 0, 0, 0)
+        ))) // The MCTS solver is mutating the initial game state??
     }
 
     override fun reward(previousState: Game2048State?, action: Game2048Action?, state: Game2048State): Double {
