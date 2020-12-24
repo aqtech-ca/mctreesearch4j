@@ -27,7 +27,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
                     var solver = StatelessSolver(
                         gridworld,
                         Random,
-                        500,
+                        1000,
                         40,
                         1.4,
                         0.9,
