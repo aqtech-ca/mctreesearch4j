@@ -23,10 +23,17 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+
+            artifact sourcesJar
         }
     }
 }
