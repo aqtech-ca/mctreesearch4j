@@ -10,6 +10,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     flatDir {dirs = setOf(file("libs")) } // have to move it into the a library folder
+
 }
 dependencies {
     implementation( "org.example:lib:1.0-SNAPSHOT"  )
@@ -18,3 +19,4 @@ dependencies {
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "1.8"
 }
+
