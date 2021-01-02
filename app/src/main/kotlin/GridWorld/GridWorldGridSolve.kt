@@ -3,7 +3,16 @@ package GridWorld
 import StatelessSolver
 import kotlin.random.Random
 
-class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double) {
+class GridWorldGridSolve(val xSize: Int,
+                         val ySize: Int,
+                         val rewards: List<GridworldReward>,
+                         val transitionProbability: Double,
+                         val mcIter: Int = 1000,
+                         val simDepth: Int = 40,
+                         val exploreConstant: Double = 1.4,
+                         val rewardDiscount: Double = 0.9,
+                         val verboseBool: Boolean = false) {
+
     var mapOfSolutions = mutableMapOf<Pair<Int, Int>, String>()
 
     fun getWorldSolve() {
@@ -27,18 +36,17 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
                     var solver = StatelessSolver(
                         gridworld,
                         Random,
-                        1000,
-                        40,
-                        1.4,
-                        0.9,
-                        false
+                        mcIter,
+                        simDepth,
+                        exploreConstant,
+                        rewardDiscount,
+                        verboseBool
                     )
 
-                    println("Solving at [$x, $y]")
+                    // println("Solving at [$x, $y]")
                     solver.buildTree()
-                    solver.displayTree()
-
-                    println("Optimal action: ${solver.getNextOptimalAction()}")
+                    // solver.displayTree()
+                    // println("Optimal action: ${solver.getNextOptimalAction()}")
 
                     mapOfSolutions[Pair(x, y)] = solver.getNextOptimalAction().toString()
                 }
