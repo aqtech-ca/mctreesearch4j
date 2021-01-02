@@ -53,25 +53,19 @@ class GridworldMDP(
         val targetNeighbour = state.ResolveNeighbour(action, xSize, ySize) ?:
             return state
 
-        val allNeighbours = mutableListOf<GridworldState>()
+        val nonTargetNeighbours = mutableListOf<GridworldState>()
 
         for (a in GridworldAction.values().toList().minus(action)) {
             val possibleNeighbour = state.ResolveNeighbour(a, xSize, ySize)
             if (possibleNeighbour != null) {
-                allNeighbours.add(possibleNeighbour)
+                nonTargetNeighbours.add(possibleNeighbour)
             }
         }
-
-        // compute probability of going into non-target neighbour state
-        val otherProbability = (1 - transitionProbability) / allNeighbours.size
-
-        // add target neighbour
-        // allNeighbours.add(targetNeighbour, transitionProbability)
 
         if (Math.random() < transitionProbability){
             return targetNeighbour
         } else {
-            return allNeighbours.random()
+            return nonTargetNeighbours.random()
         }
 
     }
