@@ -4,7 +4,7 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 import kotlin.text.StringBuilder
 
-class StatelessSolver<TState, TAction>(
+class AdversarialStatelessSolver<TState, TAction>(
         private val mdp: MDP<TState, TAction>,
         private val random: Random,
         private val iterations: Int,
@@ -33,7 +33,7 @@ class StatelessSolver<TState, TAction>(
         traceln("=============")
 
         // Selection
-        val best = selectNode(root!!)
+        val best = selectBestNode(root!!, simulationDepthLimit)
 
         if (verbose) {
             traceln("Selected:")
@@ -145,33 +145,76 @@ class StatelessSolver<TState, TAction>(
         return SimulationState(newNode, simulationState.state, newState, mdp.actions(newState))
     }
 
-    private fun selectNode(node: StateActionNode<TAction>) : SimulationState<TAction, TState> {
-        // If this node is a leaf node, return it
-        if (node.children.isEmpty()) {
+    private fun selectBestNode(node: StateActionNode<TAction>, depth: Int) : SimulationState<TAction, TState> {
+        // If this node is a leaf node or the limit has been reached, return it
+        if (node.children.isEmpty() || depth == 0) {
             return simulateActions(node)
         }
 
         var currentSimulation = simulateActions(node)
 
-        // Run a simulation greedily
-        while (true) {
-            if (mdp.isTerminal(currentSimulation.state)) {
-                return currentSimulation
-            }
-
-            val exploredActions = currentSimulation.node.children.map { c -> c.parentAction}
-
-            if (currentSimulation.validActions.minus(exploredActions).any()) {
-                // There are unexplored actions
-                return currentSimulation
-            }
-
-            // All actions have been explored, choose best one
-            val newNode = currentSimulation.node.children.maxByOrNull { a -> calculateUCT(a) } ?: throw Exception("There were no children for explored node")
-            val newState = mdp.transition(currentSimulation.state, newNode.parentAction ?: throw Exception("Parent action expected")).randomElement(random)
-
-            currentSimulation = SimulationState(newNode, currentSimulation.state, newState, mdp.actions(newState))
+        if (mdp.isTerminal(currentSimulation.state)) {
+            return currentSimulation
         }
+
+        val exploredActions = currentSimulation.node.children.map { c -> c.parentAction}
+
+        if (currentSimulation.validActions.minus(exploredActions).any()) {
+            // There are unexplored actions
+            return currentSimulation
+        }
+
+        // Select the best result among the children
+        var bestChild : SimulationState<TAction, TState>? = null
+
+        for (child in currentSimulation.node.children) {
+            val simulatedChild = selectWorstNode(child, depth - 1)
+
+            if (bestChild == null) {
+                bestChild = simulatedChild
+            }
+            else if (calculateUCT(simulatedChild.node) > calculateUCT(bestChild.node)) {
+                bestChild = simulatedChild
+            }
+        }
+
+        return bestChild!!
+    }
+
+    private fun selectWorstNode(node: StateActionNode<TAction>, depth: Int) : SimulationState<TAction, TState> {
+        // If this node is a leaf node or the limit has been reached, return it
+        if (node.children.isEmpty() || depth == 0) {
+            return simulateActions(node)
+        }
+
+        var currentSimulation = simulateActions(node)
+
+        if (mdp.isTerminal(currentSimulation.state)) {
+            return currentSimulation
+        }
+
+        val exploredActions = currentSimulation.node.children.map { c -> c.parentAction}
+
+        if (currentSimulation.validActions.minus(exploredActions).any()) {
+            // There are unexplored actions
+            return currentSimulation
+        }
+
+        // Select the worst result among the children
+        var worstChild : SimulationState<TAction, TState>? = null
+
+        for (child in currentSimulation.node.children) {
+            val simulatedChild = selectWorstNode(child, depth - 1)
+
+            if (worstChild == null) {
+                worstChild = simulatedChild
+            }
+            else if (calculateUCT(simulatedChild.node) < calculateUCT(worstChild.node)) {
+                worstChild = simulatedChild
+            }
+        }
+
+        return worstChild!!
     }
 
     // Utilities
@@ -238,19 +281,6 @@ class StatelessSolver<TState, TAction>(
         val optimalAction = root!!.children.maxByOrNull { c -> c.n }
         return optimalAction!!.parentAction ?: throw Exception("No action computed")
     }
-
-//    fun displayOptimalPath() {
-//        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
-//
-//        println("Best candidates")
-//        for (n in bestNodes!!) {
-//            println("$n, depth: ${n.depth}")
-//        }
-//
-//        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
-//
-//        displayNode(bestNode!!)
-//    }
 
     private fun displayNode(node: NodeBase) {
         if (node.parent != null) {
