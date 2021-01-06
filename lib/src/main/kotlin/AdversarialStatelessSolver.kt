@@ -201,20 +201,20 @@ class AdversarialStatelessSolver<TState, TAction>(
         }
 
         // Select the worst result among the children
-        var worstChild : SimulationState<TAction, TState>? = null
+        var bestChild : SimulationState<TAction, TState>? = null
 
         for (child in currentSimulation.node.children) {
             val simulatedChild = selectWorstNode(child, depth - 1)
 
-            if (worstChild == null) {
-                worstChild = simulatedChild
+            if (bestChild == null) {
+                bestChild = simulatedChild
             }
-            else if (calculateUCT(simulatedChild.node) < calculateUCT(worstChild.node)) {
-                worstChild = simulatedChild
+            else if (calculateAdversaryUCT(simulatedChild.node) > calculateAdversaryUCT(bestChild.node)) {
+                bestChild = simulatedChild
             }
         }
 
-        return worstChild!!
+        return bestChild!!
     }
 
     // Utilities
@@ -258,6 +258,11 @@ class AdversarialStatelessSolver<TState, TAction>(
         return node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
     }
 
+    private fun calculateAdversaryUCT(node: NodeBase) : Double {
+        val parentN = node.parent?.n ?: node.n
+        return -node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
+    }
+
     // Debug and Diagnostics
 
     fun traceln(string: String) {
@@ -272,9 +277,9 @@ class AdversarialStatelessSolver<TState, TAction>(
         }
     }
 
-    fun displayTree() {
+    fun displayTree(depth: Int = 3) {
         if (root == null) return
-        displayTree(root!!, "")
+        displayTree(root!!, "", depth)
     }
 
     fun getNextOptimalAction(): TAction {
@@ -294,8 +299,8 @@ class AdversarialStatelessSolver<TState, TAction>(
         println(node)
     }
 
-    private fun displayTree(node: NodeBase, indent: String) {
-        if (node.depth > 3) {
+    private fun displayTree(node: NodeBase, indent: String, depth: Int) {
+        if (node.depth > depth) {
             return
         }
 
@@ -311,9 +316,9 @@ class AdversarialStatelessSolver<TState, TAction>(
                 return
 
             for (i in 0 until node.children.size - 1) {
-                displayTree(node.children[i], generateIndent(indent) + " ├")
+                displayTree(node.children[i], generateIndent(indent) + " ├", depth)
             }
-            displayTree(node.children[node.children.size - 1], generateIndent(indent) + " └")
+            displayTree(node.children[node.children.size - 1], generateIndent(indent) + " └", depth)
         }
     }
 
