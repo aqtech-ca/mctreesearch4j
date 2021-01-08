@@ -12,8 +12,7 @@ class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
     )))
 
     override fun initialState(): Game2048State {
-
-        return  initialGameState// The MCTS solver is mutating the initial game state??
+        return  initialGameState
     }
 
     override fun reward(previousState: Game2048State?, action: Game2048Action?, state: Game2048State): Double {
