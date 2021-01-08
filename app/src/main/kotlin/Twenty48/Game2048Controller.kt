@@ -10,7 +10,6 @@ class Game2048Controller(){
         val newGrid = grid.copyOf()
         val coordinates = locateSpawnCoordinates(newGrid)
         val number = generateNumber()
-        // val number = 2
         return updateGrid(newGrid, coordinates, number)
     }
 
