@@ -1,3 +1,5 @@
+package GridWorld
+
 class GridworldState(x: Int, y: Int, val isTerminal: Boolean) : GridworldPosition(x, y) {
     fun ResolveNeighbour(action: GridworldAction, xSize: Int, ySize: Int) : GridworldState? {
         return when (action) {

@@ -1,4 +1,6 @@
-import GridworldMDP
+package GridWorld
+
+import StatelessSolver
 import kotlin.random.Random
 
 class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<GridworldReward>, val transitionProbability: Double) {
@@ -24,7 +26,7 @@ class GridWorldGridSolve(val xSize: Int, val ySize: Int, val rewards: List<Gridw
 
                     var solver = StatelessSolver(
                         gridworld,
-                        Random.Default,
+                        Random,
                         500,
                         40,
                         1.4,

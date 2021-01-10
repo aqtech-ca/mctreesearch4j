@@ -1,5 +1,7 @@
+import GridWorld.GridWorldGridSolve
+import GridWorld.GridworldReward
+import GridWorld.GridworldState
 import kotlin.random.Random
-import GridWorldGridSolve
 
 fun main() {
 
@@ -11,7 +13,8 @@ fun main() {
             // GridworldReward(3, 3, 1.0),
             GridworldReward(1, 1, 1.0)
         ),
-        0.85)
+        0.85
+    )
 
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
