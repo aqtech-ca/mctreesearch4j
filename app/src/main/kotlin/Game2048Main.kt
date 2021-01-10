@@ -15,12 +15,6 @@ fun main() {
             arrayOf(0, 0, 0, 0)
     )))
     */
-    val initialGameState = Game2048State(Game2048Position(arrayOf(
-            arrayOf(0, 0, 2, 0),
-            arrayOf(2, 2, 0, 0),
-            arrayOf(64, 64, 2, 2),
-            arrayOf(128, 256, 512, 1024)
-    )))
 
     var testGrid = arrayOf(
             arrayOf(0, 0, 2, 0),
@@ -28,6 +22,8 @@ fun main() {
             arrayOf(64, 64, 2, 2),
             arrayOf(128, 256, 512, 1024)
     )
+
+    val initialGameState = Game2048State(Game2048Position(testGrid))
 
     val game2048MDP = Game2048MDP(initialGameState)
 
