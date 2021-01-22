@@ -71,7 +71,7 @@ class GridWorldTests {
 
     }
 
-    @Test fun gridWorldTests() {
+    @Test fun gridWorldTestOpenSpace() {
         // The world solves should be 95% accurate
         // Run 10 times, and get the average
         var openWorldErrors = mutableListOf(this.testGridWorld(this.worldFeaturesOpenSpace, this.correctSolutionsOpenSpace))
@@ -81,12 +81,12 @@ class GridWorldTests {
 
         assertTrue(openWorldErrors.average() < 0.1, "Error percentage for grid world solution, (open space) " + openWorldErrors.average().toString() + " must be less than: 0.05")
     }
-    @Test fun game2048Tests() {
+    @Test fun gridWorldTestWall() {
         var wallErrorValues = mutableListOf(this.testGridWorld(this.worldFeaturesWall, this.correctSolutionsWall))
         for (i in 1..9){
             wallErrorValues.add(this.testGridWorld(this.worldFeaturesWall, this.correctSolutionsWall))
         }
-        
+
         assertTrue(wallErrorValues.average() < 0.1 , "Error percentage for grid world solution, (wall) " + wallErrorValues.average() + " must be less than: 0.05")
     }
 }

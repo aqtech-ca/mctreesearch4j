@@ -60,18 +60,20 @@ class Game2048Tests {
 
     }
 
-    @Test fun game2048ests() {
+    @Test fun game2048testSenario1() {
         // The world solves should be 95% accurate
         val scenario1Score = this.testGame2048(this.scenarioGrid1)
-        val scenario2Score = this.testGame2048(this.scenarioGrid2)
+
         assertTrue(scenario1Score != null, "2048 score is not null.")
         if (scenario1Score != null) {
-            assertTrue(scenario1Score >= 2048 , "Scenario1 reached a suboptimal solution of socre: " + scenario1Score.toString() )
+            assertTrue(scenario1Score >= 2048, "Scenario1 reached a suboptimal solution of socre: " + scenario1Score.toString())
         }
-
+    }
+    @Test fun game2048testScenario2() {
+        val scenario2Score = this.testGame2048(this.scenarioGrid2)
         assertTrue(scenario2Score != null, "2048 score is not null.")
         if (scenario2Score != null) {
-            assertTrue(scenario2Score >= 2048 , "Scenario2 reached a suboptimal solution of socre: " + scenario1Score.toString() )
+            assertTrue(scenario2Score >= 2048 , "Scenario2 reached a suboptimal solution of socre: " + scenario2Score.toString() )
         }
     }
 }
