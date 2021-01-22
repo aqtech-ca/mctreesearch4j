@@ -2,14 +2,16 @@ package Twenty48
 
 import MDP
 
-class Game2048MDP(): MDP<Game2048State, Game2048Action>() {
+class Game2048MDP(val initialGameState: Game2048State ) : MDP<Game2048State, Game2048Action>() {
 
+    /*
     val initialGameState = Game2048State(Game2048Position(arrayOf(
         arrayOf(0, 0, 0, 0),
         arrayOf(0, 0, 0, 0),
         arrayOf(0, 0, 0, 0),
         arrayOf(0, 0, 0, 0)
     )))
+    */
 
     override fun initialState(): Game2048State {
         return  initialGameState
