@@ -1,6 +1,6 @@
 import Twenty48.Game2048MDP
 import kotlin.random.Random
-import StatefulSolver
+import StatelessSolver
 import Twenty48.Game2048Position
 import Twenty48.Game2048State
 import Twenty48.Game2048Controller
@@ -45,7 +45,7 @@ fun main() {
 
     println("optimal Horizon")
     val solList = solver.getOptimalHorizon().map { it.toString() }
-    println(solList )
+    println(solList)
 
     // simply replay the 2048 game using the solution
     var gc = Game2048Controller()
