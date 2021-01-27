@@ -145,9 +145,9 @@ class AdversarialStatelessSolver<TState, TAction>(
         return SimulationState(newNode, simulationState.state, newState, mdp.actions(newState))
     }
 
-    private fun selectBestNode(node: StateActionNode<TAction>, depth: Int) : SimulationState<TAction, TState> {
+    private fun selectBestNode(node: StateActionNode<TAction>, depthLimit: Int) : SimulationState<TAction, TState> {
         // If this node is a leaf node or the limit has been reached, return it
-        if (node.children.isEmpty() || depth == 0) {
+        if (node.children.isEmpty() || node.depth >= depthLimit) {
             return simulateActions(node)
         }
 
@@ -165,56 +165,20 @@ class AdversarialStatelessSolver<TState, TAction>(
         }
 
         // Select the best result among the children
-        var bestChild : SimulationState<TAction, TState>? = null
+        var bestChild = simulateActions(currentSimulation.node.children.first())
+        var bestChildUCT = calculateUCT(bestChild.node)
 
-        for (child in currentSimulation.node.children) {
-            val simulatedChild = selectWorstNode(child, depth - 1)
+        for (child in currentSimulation.node.children.drop(1)) {
+            val simulatedChild = simulateActions(child)
+            val simulatedUCT = calculateUCT(simulatedChild.node)
 
-            if (bestChild == null) {
+            if (simulatedUCT > bestChildUCT) {
                 bestChild = simulatedChild
-            }
-            else if (calculateUCT(simulatedChild.node) > calculateUCT(bestChild.node)) {
-                bestChild = simulatedChild
-            }
-        }
-
-        return bestChild!!
-    }
-
-    private fun selectWorstNode(node: StateActionNode<TAction>, depth: Int) : SimulationState<TAction, TState> {
-        // If this node is a leaf node or the limit has been reached, return it
-        if (node.children.isEmpty() || depth == 0) {
-            return simulateActions(node)
-        }
-
-        var currentSimulation = simulateActions(node)
-
-        if (mdp.isTerminal(currentSimulation.state)) {
-            return currentSimulation
-        }
-
-        val exploredActions = currentSimulation.node.children.map { c -> c.parentAction}
-
-        if (currentSimulation.validActions.minus(exploredActions).any()) {
-            // There are unexplored actions
-            return currentSimulation
-        }
-
-        // Select the worst result among the children
-        var bestChild : SimulationState<TAction, TState>? = null
-
-        for (child in currentSimulation.node.children) {
-            val simulatedChild = selectWorstNode(child, depth - 1)
-
-            if (bestChild == null) {
-                bestChild = simulatedChild
-            }
-            else if (calculateAdversaryUCT(simulatedChild.node) > calculateAdversaryUCT(bestChild.node)) {
-                bestChild = simulatedChild
+                bestChildUCT = simulatedUCT
             }
         }
 
-        return bestChild!!
+        return selectBestNode(bestChild.node, depthLimit)
     }
 
     // Utilities
@@ -255,12 +219,11 @@ class AdversarialStatelessSolver<TState, TAction>(
 
     private fun calculateUCT(node: NodeBase) : Double {
         val parentN = node.parent?.n ?: node.n
-        return node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
-    }
 
-    private fun calculateAdversaryUCT(node: NodeBase) : Double {
-        val parentN = node.parent?.n ?: node.n
-        return -node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
+        return if (node.depth % 2 == 1)
+            node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
+        else
+            -node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
     }
 
     // Debug and Diagnostics

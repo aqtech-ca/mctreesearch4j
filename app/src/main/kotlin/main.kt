@@ -120,7 +120,7 @@ fun main() {
     )
 
     adversarial.buildTree()
-    adversarial.displayTree(10)
+    adversarial.displayTree()
 
     println("Optimal action: ${adversarial.getNextOptimalAction()}")
 }
