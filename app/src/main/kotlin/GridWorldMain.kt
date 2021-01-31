@@ -16,6 +16,8 @@ fun main() {
         0.85
     )
 
-    gw.getWorldSolve()
+    // gw.getWorldSolve()
+    var rewardTracker = gw.getSingleCellSolve(7,3)
+    println(rewardTracker.toString())
     gw.visualizeWorldSolve()
 }
