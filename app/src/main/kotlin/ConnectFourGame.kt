@@ -7,42 +7,49 @@ import kotlin.random.Random
 
 class ConnectFourGame {
     private val boardSize = 7
-    private val player = Player("Player", "o")
-    private val adversary = Player("Computer", "x")
-    private val controller = MainController(listOf(player, adversary), boardSize)
     private val input = Scanner(System.`in`)
 
     fun run() {
+        val player = Player("Player", "o")
+        val computer = Player("Computer", "x")
         val moves = mutableListOf<Int>()
 
         println("Playing Connect 4 as \"o\" against Computer as \"x\"")
+        var playerOrder = 0
+        do {
+            print("Play as player 1 or 2? ")
+            playerOrder = input.nextInt()
+        } while (playerOrder != 1 && playerOrder != 2)
 
-        while (controller.getGameInformation().gameState == GameState.RUNNING) {
+        val controller = MainController(if (playerOrder == 1) listOf(player, computer) else listOf(computer, player), boardSize)
+        var gameInfo = controller.getGameInformation()
+
+        while (gameInfo.gameState == GameState.RUNNING) {
             // display board state
             printBoard(controller.getGameInformation().board)
 
-            if (moves.size % 2 == 0) {
-                moves.add(getPlayerMove())
+            if (gameInfo.currentPlayer.name == player.name) {
+                moves.add(getPlayerMove(controller))
             }
             else {
-                moves.add(getComputerMove(moves))
+                moves.add(getComputerMove(controller, moves))
             }
+            gameInfo = controller.getGameInformation()
         }
 
         printBoard(controller.getGameInformation().board)
-        val gameEndInfo = controller.getGameInformation()
-        if (gameEndInfo.gameState == GameState.RUNNING) {
+        if (gameInfo.gameState == GameState.RUNNING) {
             println("Game ended: draw")
         }
         else {
-            println("Game ended: ${gameEndInfo.winner?.name} won")
+            println("Game ended: ${gameInfo.winner?.name} won")
         }
     }
 
-    private fun getComputerMove(moves : List<Int>) : Int {
+    private fun getComputerMove(controller: MainController, moves : List<Int>) : Int {
         println("Computer is thinking...")
 
-        val game = ConnectFourMDP(ConnectFourState(moves), false)
+        val game = ConnectFourMDP(ConnectFourState(moves), moves.size%2 == 0)
         val stateless = StatelessSolver(
                 game,
                 Random.Default,
@@ -60,7 +67,7 @@ class ConnectFourGame {
         return move
     }
 
-    private fun getPlayerMove() : Int {
+    private fun getPlayerMove(controller: MainController) : Int {
         while (true) {
             print("Enter move: ")
 
