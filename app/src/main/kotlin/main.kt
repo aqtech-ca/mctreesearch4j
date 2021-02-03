@@ -1,6 +1,12 @@
 import kotlin.random.Random
 
 fun main() {
+
+    val game = ConnectFourGame()
+    game.run()
+
+    return
+
 //    val gw = GridWorldGridSolve(
 //        8,
 //        5,

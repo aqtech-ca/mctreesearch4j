@@ -3,10 +3,11 @@ import de.magoeke.kotlin.connectfour.models.GameState
 import de.magoeke.kotlin.connectfour.models.Player
 
 class ConnectFourMDP(
-    private val startingState: ConnectFourState = ConnectFourState(emptyList())
+    private val startingState: ConnectFourState = ConnectFourState(emptyList()),
+    private val optimizeForPlayerOne: Boolean = true
 )  : MDP<ConnectFourState, Int>() {
-    private val player = Player("Player", "1")
-    private val adversary = Player("Adversary", "2")
+    private val player = Player("Player1", "1")
+    private val adversary = Player("Player2", "2")
     private val boardSize = 7
 
     override fun actions(state: ConnectFourState): Iterable<Int> {
@@ -57,9 +58,11 @@ class ConnectFourMDP(
         // Get game result
         val gameInfo = controller.getGameInformation()
 
+        val playerCorrectionFactor = if (optimizeForPlayerOne) 1.0 else -1.0
+
         return when (gameInfo.gameState) {
             GameState.DRAW -> 0.0
-            GameState.WON -> if (gameInfo.winner?.name == player.name) 1.0 else - 1.0
+            GameState.WON -> if (gameInfo.winner?.name == player.name) playerCorrectionFactor else -playerCorrectionFactor
             GameState.RUNNING -> 0.0
         }
     }
