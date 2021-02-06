@@ -31,8 +31,8 @@ class ConnectFourMDP(
         return validActions
     }
 
-    override fun initialState(): IDistribution<ConnectFourState> {
-        return UniformDistribution(listOf(startingState))
+    override fun initialState(): ConnectFourState {
+        return startingState
     }
 
     override fun isTerminal(state: ConnectFourState): Boolean {
@@ -67,11 +67,11 @@ class ConnectFourMDP(
         }
     }
 
-    override fun transition(state: ConnectFourState, action: Int): IDistribution<ConnectFourState> {
+    override fun transition(state: ConnectFourState, action: Int): ConnectFourState {
         // New state consists of adding the new step to the existing state
         val newSteps = state.steps.toMutableList()
         newSteps.add(action)
 
-        return UniformDistribution(listOf(ConnectFourState(newSteps)))
+        return ConnectFourState(newSteps)
     }
 }

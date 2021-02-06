@@ -238,9 +238,9 @@ class StatelessSolver<TState, TAction>(
         return getNextOptimalActionInternal(root)!!
     }
 
-    private fun getNextOptimalActionInternal(node: StateActionNode<TAction>?): TAction? {
-        val optimalAction = node!!.children.maxByOrNull { c -> c.n }
-        return optimalAction!!.parentAction
+    private fun getNextOptimalActionInternal(node: StateActionNode<TAction>?): TAction {
+        val optimalAction = root!!.children.maxByOrNull { c -> c.n }
+    	return optimalAction!!.parentAction ?: throw Exception("No action computed")
     }
 
     fun getOptimalHorizon(): List<TAction> {
