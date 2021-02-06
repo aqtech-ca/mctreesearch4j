@@ -1,11 +1,17 @@
+package GridWorld
+
+import MDP
+import ProbabilisticElement
+
+
 class GridworldMDP(
         private val xSize: Int,
         private val ySize: Int,
         private val rewards: List<GridworldReward>,
         private val transitionProbability: Double,
         private val startingLocation: GridworldState = GridworldState(0, 0, false))  : MDP<GridworldState, GridworldAction>() {
-    override fun initialState(): IDistribution<GridworldState> {
-        return UniformDistribution(listOf(startingLocation))
+    override fun initialState(): GridworldState {
+        return startingLocation
     }
 
     override fun isTerminal(state: GridworldState): Boolean {
@@ -35,38 +41,33 @@ class GridworldMDP(
         return reward
     }
 
-    override fun transition(state: GridworldState, action: GridworldAction): IDistribution<GridworldState> {
+    override fun transition(state: GridworldState, action: GridworldAction): GridworldState {
         if (state.isTerminal) {
-            return UniformDistribution(listOf(state))
+            return state
         }
         else if (rewards.any { r -> r.equals(state)}) {
-            return UniformDistribution(listOf(GridworldState(state.x, state.y, true)))
+            return GridworldState(state.x, state.y, true)
         }
 
         // if target is out of bounds, return current state
         val targetNeighbour = state.ResolveNeighbour(action, xSize, ySize) ?:
-            return UniformDistribution(listOf(state))
+            return state
 
-        val allNeighbours = mutableListOf<ProbabilisticElement<GridworldState>>()
+        val nonTargetNeighbours = mutableListOf<GridworldState>()
 
         for (a in GridworldAction.values().toList().minus(action)) {
             val possibleNeighbour = state.ResolveNeighbour(a, xSize, ySize)
             if (possibleNeighbour != null) {
-                allNeighbours.add(ProbabilisticElement(possibleNeighbour, 0.0))
+                nonTargetNeighbours.add(possibleNeighbour)
             }
         }
 
-        // compute probability of going into non-target neighbour state
-        val otherProbability = (1 - transitionProbability) / allNeighbours.size
-
-        for (n in allNeighbours) {
-            n.probability = otherProbability
+        if (Math.random() < transitionProbability){
+            return targetNeighbour
+        } else {
+            return nonTargetNeighbours.random()
         }
 
-        // add target neighbour
-        allNeighbours.add(ProbabilisticElement(targetNeighbour, transitionProbability))
-
-        return SparseCategoricalDistribution(allNeighbours)
     }
 
     override fun actions(state: GridworldState): Iterable<GridworldAction> {
