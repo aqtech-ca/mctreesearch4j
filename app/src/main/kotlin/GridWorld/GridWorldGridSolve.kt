@@ -14,35 +14,33 @@ class GridWorldGridSolve(val xSize: Int,
                          val verboseBool: Boolean = false) {
 
     var mapOfSolutions = mutableMapOf<Pair<Int, Int>, String>()
-    var rewardLocations = mutableListOf<Pair<Int, Int>>()
 
-    init {
+    fun getWorldSolve() {
+
+        var rewardLocations = mutableListOf<Pair<Int, Int>>()
         for (r in rewards) {
             rewardLocations.add( Pair(r.x, r.y))
         }
-    }
-
-    fun getWorldSolve() {
 
         for (x in 0 until xSize) {
             for (y in 0 until ySize) {
                 if (Pair(x, y) !in rewardLocations){
                     var gridworld = GridworldMDP(
-                        xSize,
-                        ySize,
-                        rewards,
-                        transitionProbability,
-                        GridworldState(x, y, false)
+                            xSize,
+                            ySize,
+                            rewards,
+                            transitionProbability,
+                            GridworldState(x, y, false)
                     )
 
                     var solver = StatelessSolver(
-                        gridworld,
-                        Random,
-                        mcIter,
-                        simDepth,
-                        exploreConstant,
-                        rewardDiscount,
-                        verboseBool
+                            gridworld,
+                            Random,
+                            mcIter,
+                            simDepth,
+                            exploreConstant,
+                            rewardDiscount,
+                            verboseBool
                     )
 
                     // println("Solving at [$x, $y]")
@@ -51,47 +49,10 @@ class GridWorldGridSolve(val xSize: Int,
                     // println("Optimal action: ${solver.getNextOptimalAction()}")
 
                     mapOfSolutions[Pair(x, y)] = solver.getNextOptimalAction().toString()
-                    //println("root reward")
-                    //println(solver.getBestRewardFromRoot())
-
                 }
             }
         }
     }
-
-    fun getSingleCellSolve(x: Int, y: Int): List<Double>{
-        if (Pair(x, y) !in rewardLocations){
-            var gridworld = GridworldMDP(
-                    xSize,
-                    ySize,
-                    rewards,
-                    transitionProbability,
-                    GridworldState(x, y, false)
-            )
-
-            var solver = StatelessSolver(
-                    gridworld,
-                    Random,
-                    mcIter,
-                    simDepth,
-                    exploreConstant,
-                    rewardDiscount,
-                    verboseBool
-            )
-
-            // println("Solving at [$x, $y]")
-            var rewardTracker = solver.buildTree()
-            // solver.displayTree()
-            // println("Optimal action: ${solver.getNextOptimalAction()}")
-
-            solver.getNextOptimalAction().toString()
-            // println("root reward")
-            // println(solver.getBestRewardFromRoot())
-            return rewardTracker
-        }
-        return mutableListOf<Double>()
-    }
-
 
     fun visualizeWorldSolve(): Unit {
 
