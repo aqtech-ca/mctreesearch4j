@@ -16,11 +16,7 @@ repositories {
 
 }
 dependencies {
-    implementation( "org.example:lib:1.0-SNAPSHOT"  )
-}
-
-dependencies {
-    implementation( "org.example:lib:1.0-SNAPSHOT" )
+    implementation( "com.mcts:lib:1.0-SNAPSHOT" )
     implementation( "de.magoeke.kotlin:connectfour:1.0-SNAPSHOT" )
     testImplementation(kotlin("test-junit"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")
