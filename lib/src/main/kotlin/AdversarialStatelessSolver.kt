@@ -4,7 +4,7 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 import kotlin.text.StringBuilder
 
-class StatelessSolver<TState, TAction>(
+class AdversarialStatelessSolver<TState, TAction>(
         private val mdp: MDP<TState, TAction>,
         private val random: Random,
         private val iterations: Int,
@@ -33,7 +33,7 @@ class StatelessSolver<TState, TAction>(
         traceln("=============")
 
         // Selection
-        val best = selectNode(root!!)
+        val best = selectBestNode(root!!, simulationDepthLimit)
 
         if (verbose) {
             traceln("Selected:")
@@ -101,7 +101,7 @@ class StatelessSolver<TState, TAction>(
         while(true) {
             val validActions = mdp.actions(currentState)
             val randomAction = validActions.toList().random()
-            val newState = mdp.transition(currentState, randomAction)
+            val newState = mdp.transition(currentState, randomAction)//.randomElement(random)
 
             trace("-> $randomAction ")
             trace("-> $newState ")
@@ -140,38 +140,45 @@ class StatelessSolver<TState, TAction>(
         val newNode = createStateActionNode(simulationState.node, actionTaken)
 
         // Transition to new state for given action
-        val newState = mdp.transition(simulationState.state, actionTaken)
+        val newState = mdp.transition(simulationState.state, actionTaken)//.randomElement(random)
 
         return SimulationState(newNode, simulationState.state, newState, mdp.actions(newState))
     }
 
-    private fun selectNode(node: StateActionNode<TAction>) : SimulationState<TAction, TState> {
-        // If this node is a leaf node, return it
-        if (node.children.isEmpty()) {
+    private fun selectBestNode(node: StateActionNode<TAction>, depthLimit: Int) : SimulationState<TAction, TState> {
+        // If this node is a leaf node or the limit has been reached, return it
+        if (node.children.isEmpty() || node.depth >= depthLimit) {
             return simulateActions(node)
         }
 
         var currentSimulation = simulateActions(node)
 
-        // Run a simulation greedily
-        while (true) {
-            if (mdp.isTerminal(currentSimulation.state)) {
-                return currentSimulation
-            }
-
-            val exploredActions = currentSimulation.node.children.map { c -> c.parentAction}
-
-            if (currentSimulation.validActions.minus(exploredActions).any()) {
-                // There are unexplored actions
-                return currentSimulation
-            }
-
-            // All actions have been explored, choose best one
-            val newNode = currentSimulation.node.children.maxByOrNull { a -> calculateUCT(a) } ?: throw Exception("There were no children for explored node")
-            val newState = mdp.transition(currentSimulation.state, newNode.parentAction ?: throw Exception("Parent action expected"))
-
-            currentSimulation = SimulationState(newNode, currentSimulation.state, newState, mdp.actions(newState))
+        if (mdp.isTerminal(currentSimulation.state)) {
+            return currentSimulation
         }
+
+        val exploredActions = currentSimulation.node.children.map { c -> c.parentAction}
+
+        if (currentSimulation.validActions.minus(exploredActions).any()) {
+            // There are unexplored actions
+            return currentSimulation
+        }
+
+        // Select the best result among the children
+        var bestChild = simulateActions(currentSimulation.node.children.first())
+        var bestChildUCT = calculateUCT(bestChild.node)
+
+        for (child in currentSimulation.node.children.drop(1)) {
+            val simulatedChild = simulateActions(child)
+            val simulatedUCT = calculateUCT(simulatedChild.node)
+
+            if (simulatedUCT > bestChildUCT) {
+                bestChild = simulatedChild
+                bestChildUCT = simulatedUCT
+            }
+        }
+
+        return selectBestNode(bestChild.node, depthLimit)
     }
 
     // Utilities
@@ -193,7 +200,7 @@ class StatelessSolver<TState, TAction>(
         val parent = node.parentStateAction()
 
         if (parent == null) {
-            val initialState = mdp.initialState()
+            val initialState = mdp.initialState()//.randomElement(random)
             return SimulationState(node, null, initialState, mdp.actions(initialState))
         }
         // If the parent node is not null, a parent action must have been specified, otherwise it's an error
@@ -206,13 +213,17 @@ class StatelessSolver<TState, TAction>(
             return parentSimulation
         }
 
-        val state = mdp.transition(parentSimulation.state, parentAction)
+        val state = mdp.transition(parentSimulation.state, parentAction)//.randomElement(random)
         return SimulationState(node, parentSimulation.state, state, mdp.actions(state))
     }
 
     private fun calculateUCT(node: NodeBase) : Double {
         val parentN = node.parent?.n ?: node.n
-        return node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
+
+        return if (node.depth % 2 == 1)
+            node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
+        else
+            -node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
     }
 
     // Debug and Diagnostics
@@ -229,52 +240,15 @@ class StatelessSolver<TState, TAction>(
         }
     }
 
-    fun displayTree() {
+    fun displayTree(depth: Int = 3) {
         if (root == null) return
-        displayTree(root!!, "")
+        displayTree(root!!, "", depth)
     }
 
     fun getNextOptimalAction(): TAction {
-        return getNextOptimalActionInternal(root)!!
+        val optimalAction = root!!.children.maxByOrNull { c -> c.n }
+        return optimalAction!!.parentAction ?: throw Exception("No action computed")
     }
-
-    private fun getNextOptimalActionInternal(node: StateActionNode<TAction>?): TAction? {
-        val optimalAction = node!!.children.maxByOrNull { c -> c.n }
-        if (optimalAction != null){
-            return optimalAction!!.parentAction ?: throw Exception("No action computed")
-        } else {
-            return null
-        }
-
-    }
-
-    fun getOptimalHorizon(): List<TAction> {
-        val optimalHorizonArr = mutableListOf<TAction>()
-        var node = root
-
-        while (node != null){
-            val optimalAction = getNextOptimalActionInternal(node)
-            if (optimalAction != null) {
-                optimalHorizonArr.add(optimalAction)
-            }
-            node = node!!.children.maxByOrNull { c -> c.n }
-        }
-
-        return optimalHorizonArr
-    }
-
-//    fun displayOptimalPath() {
-//        val bestNodes = stateNodes.groupBy { s -> s.maxReward }.maxByOrNull { kvp -> kvp.key }?.value
-//
-//        println("Best candidates")
-//        for (n in bestNodes!!) {
-//            println("$n, depth: ${n.depth}")
-//        }
-//
-//        val bestNode = bestNodes?.minByOrNull { n -> n.depth }
-//
-//        displayNode(bestNode!!)
-//    }
 
     private fun displayNode(node: NodeBase) {
         if (node.parent != null) {
@@ -288,8 +262,8 @@ class StatelessSolver<TState, TAction>(
         println(node)
     }
 
-    private fun displayTree(node: NodeBase, indent: String) {
-        if (node.depth > 3) {
+    private fun displayTree(node: NodeBase, indent: String, depth: Int) {
+        if (node.depth > depth) {
             return
         }
 
@@ -305,9 +279,9 @@ class StatelessSolver<TState, TAction>(
                 return
 
             for (i in 0 until node.children.size - 1) {
-                displayTree(node.children[i], generateIndent(indent) + " ├")
+                displayTree(node.children[i], generateIndent(indent) + " ├", depth)
             }
-            displayTree(node.children[node.children.size - 1], generateIndent(indent) + " └")
+            displayTree(node.children[node.children.size - 1], generateIndent(indent) + " └", depth)
         }
     }
 

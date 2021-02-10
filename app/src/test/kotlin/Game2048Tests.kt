@@ -69,6 +69,7 @@ class Game2048Tests {
             assertTrue(scenario1Score >= 2048, "Scenario1 reached a suboptimal solution of socre: " + scenario1Score.toString())
         }
     }
+
     @Test fun game2048testScenario2() {
         val scenario2Score = this.testGame2048(this.scenarioGrid2)
         assertTrue(scenario2Score != null, "2048 score is not null.")
@@ -76,4 +77,6 @@ class Game2048Tests {
             assertTrue(scenario2Score >= 2048 , "Scenario2 reached a suboptimal solution of socre: " + scenario2Score.toString() )
         }
     }
+
+
 }
