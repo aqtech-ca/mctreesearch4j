@@ -18,7 +18,7 @@ class StatefulSolver<TState, TAction>(
     fun buildTree() {
         initialize()
 
-        for (i in 0..iterations) {
+        for (i in 0 until iterations) {
             iterateStep()
         }
     }

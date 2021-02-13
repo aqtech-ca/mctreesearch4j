@@ -1,6 +1,7 @@
 import PushYourLuck.PushYourLuckMDP
 import kotlin.random.Random
 import StatelessSolver
+import java.io.File
 
 
 fun main() {
@@ -26,12 +27,23 @@ fun main() {
     var solver = StatelessSolver(
             pylMDP,
             Random,
-            49,
-            50,
-            1.4,
-            0.9,
-            true
+            999,
+            15,
+            2.4,
+            0.99,
+            false
     )
-    solver.buildTree()
+    var rewardTracker =solver.buildTree()
     solver.displayTree()
+
+    val optimalHorizon = solver.getOptimalHorizon()
+    println(optimalHorizon.toString())
+    println(optimalHorizon.size)
+    print(rewardTracker)
+
+
+    // val outputFileName = "outputs/PYL_rewards${iters.toString()}.txt"
+    // Runtime.getRuntime().exec("touch $outputFileName")
+    // File(outputFileName).writeText(rewardTracker.joinToString(","))
+
 }

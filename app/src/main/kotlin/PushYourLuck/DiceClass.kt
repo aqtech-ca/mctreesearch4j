@@ -6,13 +6,13 @@ import kotlin.random.Random
 class DiceClass(val nDice: Int,
                 val nSides: Int,
                 var markedSides: MutableList<MutableList<Boolean>> = Array(nDice){ i -> Array(nSides){i -> false}.toMutableList() }.toMutableList(),
-                var cumReward: Double = 0.0){
+                var cumReward: Double = 0.0
+                ){
 
     init {
         println("Initializing dice!")
-
-
     }
+
     val diceConfig = Array(nDice){ i -> Array(nSides){i -> i + 1}.toList() }.toList()
 
     fun roll(): MutableList<MutableList<Boolean>> {
@@ -37,9 +37,9 @@ class DiceClass(val nDice: Int,
     }
 
     fun cashOut(): Double {
-        for (d_ind in 0 until diceConfig.size){
+        for (d_ind in diceConfig.indices){
             if (markedSides[d_ind] != Array(nSides){i -> false}.toMutableList() ){
-                var runningSum = 1.0
+                var runningSum = 0.001
                 for (s_ind in 0 until diceConfig[d_ind].size){
                     if (markedSides[d_ind][s_ind]){
                         runningSum *= diceConfig[d_ind][s_ind]
@@ -47,7 +47,10 @@ class DiceClass(val nDice: Int,
                 }
                 cumReward += runningSum
             }
+
         }
+        // Reset the dice
+        markedSides = Array(nDice){ i -> Array(nSides){i -> false}.toMutableList() }.toMutableList()
         return cumReward
     }
 
