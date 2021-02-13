@@ -1,5 +1,7 @@
 # mctreesearch4j
 
+![Static](https://img.shields.io/static/v1?label=docs&message=latest&color=blue&style=flat-square)
+
 An robust Implementation of the Monte Carlo Tree Search Algorithm for the JVM
 
 ## Objective
