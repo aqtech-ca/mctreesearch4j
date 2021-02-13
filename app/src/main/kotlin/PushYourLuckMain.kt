@@ -33,7 +33,7 @@ fun main() {
             0.99,
             false
     )
-    var rewardTracker =solver.buildTree()
+    var rewardTracker = solver.buildTree()
     solver.displayTree()
 
     val optimalHorizon = solver.getOptimalHorizon()

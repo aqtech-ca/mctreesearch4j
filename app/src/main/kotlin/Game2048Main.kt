@@ -31,13 +31,13 @@ fun main() {
     var solver = StatelessSolver(
         game2048MDP,
         Random,
-        500,
+        999,
         10,
         1.4,
         0.9,
         true
     )
-    solver.buildTree()
+    var rewardTracker = solver.buildTree()
     solver.displayTree()
 
     println("optimalAction")
@@ -55,5 +55,7 @@ fun main() {
     }
     println(Game2048State(Game2048Position(testGrid)).toString())
     println(Game2048State(Game2048Position(testGrid)).score.toString())
+
+    print(rewardTracker)
 
 }
