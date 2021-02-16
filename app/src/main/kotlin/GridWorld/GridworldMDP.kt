@@ -7,7 +7,7 @@ class GridworldMDP(
         private val ySize: Int,
         private val rewards: List<GridworldReward>,
         private val transitionProbability: Double,
-        private val startingLocation: GridworldState = GridworldState(0, 0, false))  : MDP<GridworldState, GridworldAction>() {
+        private val startingLocation: GridworldState = GridworldState(0, 0, false)) : MDP<GridworldState, GridworldAction>() {
     override fun initialState(): GridworldState {
         return startingLocation
     }
