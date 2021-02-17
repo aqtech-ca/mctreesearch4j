@@ -7,10 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,7 +20,6 @@ import java.awt.Point
 
 class ReversiGame {
     fun run() {
-        val blockCount = mutableStateOf(0)
         val aiPlayer = mutableStateOf(ReversiSquare.EMPTY)
         val state = ReversiState(8)
         val viewModel = ReversiViewModel(state)
@@ -44,7 +40,6 @@ class ReversiGame {
                             Column(Modifier.weight(1.0f)) {
                                 for (r in 0..7) {
                                     val square by remember { viewModel.board[r][c] }
-                                    var count by remember { blockCount }
 
                                     IconButton(
                                         modifier = Modifier
@@ -55,12 +50,7 @@ class ReversiGame {
                                         enabled = square == ReversiSquare.FEASIBLE || square == ReversiSquare.EMPTY,
                                         onClick = {
                                             println("row: $r col: $c")
-                                            if (count < 5) {
-                                                count++
-                                                state.squares[r][c] = ReversiSquare.BLOCKED
-                                                viewModel.update()
-                                            }
-                                            else if (ReversiController.executeMove(state, Point(r, c))) {
+                                            if (ReversiController.executeMove(state, Point(r, c))) {
                                                 if (state.currentPlayer != ReversiSquare.EMPTY) {
                                                     while (state.currentPlayer == ai) {
                                                         println("AI is thinking")
@@ -99,7 +89,6 @@ class ReversiGame {
                                         when (square) {
                                             ReversiSquare.DARK -> Icon(Icons.Rounded.Phone,null)
                                             ReversiSquare.LIGHT -> Icon(Icons.Rounded.Star,null)
-                                            ReversiSquare.BLOCKED -> Icon(Icons.Rounded.Close,null)
                                             ReversiSquare.FEASIBLE -> Icon(Icons.Rounded.Info, null)
                                             else -> {}
                                         }

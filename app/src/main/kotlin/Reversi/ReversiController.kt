@@ -99,8 +99,7 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
 
         // Unflippable
         if (square == ReversiSquare.FEASIBLE
-            || square == ReversiSquare.EMPTY
-            || square == ReversiSquare.BLOCKED) {
+            || square == ReversiSquare.EMPTY) {
             return emptyList()
         }
 
