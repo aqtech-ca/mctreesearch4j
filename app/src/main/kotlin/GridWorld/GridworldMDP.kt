@@ -1,8 +1,6 @@
 package GridWorld
 
 import MDP
-import ProbabilisticElement
-
 
 class GridworldMDP(
         private val xSize: Int,
