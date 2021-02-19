@@ -5,7 +5,6 @@ import MDP
 class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, PushYourLuckAction>(){
 
     var diceObject = DiceClass(nDice = nDice, nSides = nSides)
-    var currentReward = 0.0
 
     override fun initialState(): PushYourLuckState {
         return PushYourLuckState(diceObject.markedSides)
@@ -16,7 +15,7 @@ class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, P
         if (action == PushYourLuckAction.ROLL){
             return PushYourLuckState(diceObject.roll())
         } else if (action == PushYourLuckAction.CASHOUT) {
-            currentReward = diceObject.cashOut()
+            var dummy = diceObject.cashOut()
             return PushYourLuckState(diceObject.markedSides)
         } else {
             throw IllegalArgumentException("Expected one of [cashout, roll]")
@@ -24,7 +23,7 @@ class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, P
     }
 
     override fun reward(previousState: PushYourLuckState?, action: PushYourLuckAction?, state: PushYourLuckState) : Double {
-        return currentReward
+        return diceObject.cumReward
     }
 
     override fun isTerminal(state: PushYourLuckState) : Boolean {

@@ -28,7 +28,7 @@ fun main() {
             pylMDP,
             Random,
             999,
-            8,
+            88,
             0.5,
             0.99,
             false

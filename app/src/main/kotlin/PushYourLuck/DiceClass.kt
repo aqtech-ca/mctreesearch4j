@@ -9,9 +9,6 @@ class DiceClass(val nDice: Int,
                 var cumReward: Double = 0.0
                 ){
 
-    init {
-        println("Initializing dice!")
-    }
 
     val diceConfig = Array(nDice){ i -> Array(nSides){i -> i + 1}.toList() }.toList()
 

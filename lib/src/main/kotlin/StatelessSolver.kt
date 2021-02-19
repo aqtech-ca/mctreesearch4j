@@ -259,7 +259,7 @@ class StatelessSolver<TState, TAction>(
     }
 
     fun getOptimalHorizon(): List<TAction> {
-        var optimalHorizonArr = mutableListOf<TAction>()
+        val optimalHorizonArr = mutableListOf<TAction>()
         var node = root
 
         while (node != null){
