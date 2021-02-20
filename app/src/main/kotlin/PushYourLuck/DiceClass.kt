@@ -5,7 +5,7 @@ import kotlin.random.Random
 
 class DiceClass(val nDice: Int,
                 val nSides: Int,
-                var markedSides: MutableList<MutableList<Boolean>> = Array(nDice){ i -> Array(nSides){i -> false}.toMutableList() }.toMutableList(),
+                var markedSides: MutableList<MutableList<Boolean>> = MutableList(nDice){MutableList(nSides){false}},
                 var cumReward: Double = 0.0
                 ){
 
@@ -47,7 +47,7 @@ class DiceClass(val nDice: Int,
 
         }
         // Reset the dice
-        markedSides = Array(nDice){ i -> Array(nSides){i -> false}.toMutableList() }.toMutableList()
+        markedSides = MutableList(nDice){MutableList(nSides){false}}
         return cumReward
     }
 

@@ -1,6 +1,6 @@
 package PushYourLuck
 
-open class PushYourLuckState(diceMarkedSides: MutableList<MutableList<Boolean>>) {
-    var state = diceMarkedSides
+
+open class PushYourLuckState(var state: MutableList<MutableList<Boolean>>) {
 
 }

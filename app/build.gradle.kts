@@ -21,7 +21,6 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.1.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.3")
 }
 
 tasks.named<Test>("test") {
