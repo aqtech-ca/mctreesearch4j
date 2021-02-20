@@ -11,14 +11,10 @@ class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, P
     }
 
     override fun transition(state: PushYourLuckState, action: PushYourLuckAction) : PushYourLuckState {
-
-        if (action == PushYourLuckAction.ROLL){
-            return PushYourLuckState(diceObject.roll())
-        } else if (action == PushYourLuckAction.CASHOUT) {
-            var dummy = diceObject.cashOut()
-            return PushYourLuckState(diceObject.markedSides)
-        } else {
-            throw IllegalArgumentException("Expected one of [cashout, roll]")
+        return when {
+            action === PushYourLuckAction.ROLL -> PushYourLuckState(diceObject.roll())
+            action === PushYourLuckAction.CASHOUT -> {diceObject.cashOut(); PushYourLuckState(diceObject.markedSides) }
+            else -> throw IllegalArgumentException("Expected one of [cashout, roll]")
         }
     }
 
