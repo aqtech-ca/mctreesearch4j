@@ -23,7 +23,7 @@ class DiceClass(val nDice: Int,
 
         for (d in markedSides.indices) {
             var rollInd = diceRollResults[d]
-            if (diceRollResults.filter{it == 1}.size > 1){
+            if (diceRollResults.filter{it == diceRollResults[d]}.size > 1){
                 markedSides[d].set(rollInd, false)
             } else {
                 markedSides[d].set(rollInd, !markedSides[d][rollInd])
