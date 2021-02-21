@@ -36,7 +36,7 @@ class DiceClass(val nDice: Int,
     fun cashOut(): Double {
         for (d_ind in diceConfig.indices){
             if (markedSides[d_ind] != Array(nSides){i -> false}.toMutableList() ){
-                var runningSum = 0.01
+                var runningSum = 1.0
                 for (s_ind in 0 until diceConfig[d_ind].size){
                     if (markedSides[d_ind][s_ind]){
                         runningSum *= diceConfig[d_ind][s_ind]
