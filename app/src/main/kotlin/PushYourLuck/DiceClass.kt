@@ -6,7 +6,7 @@ import kotlin.random.Random
 class DiceClass(val nDice: Int,
                 val nSides: Int,
                 var markedSides: MutableList<MutableList<Boolean>> = MutableList(nDice){MutableList(nSides){false}},
-                var cumReward: Double = 0.0
+                var instantReward: Double = 0.0
                 ){
 
 
@@ -42,13 +42,13 @@ class DiceClass(val nDice: Int,
                         runningSum *= diceConfig[d_ind][s_ind]
                     }
                 }
-                cumReward = runningSum
+                instantReward = runningSum
             }
 
         }
         // Reset the dice
         markedSides = MutableList(nDice){MutableList(nSides){false}}
-        return cumReward
+        return this.instantReward
     }
 
 }

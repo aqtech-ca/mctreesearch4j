@@ -19,7 +19,7 @@ class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, P
     }
 
     override fun reward(previousState: PushYourLuckState?, action: PushYourLuckAction?, state: PushYourLuckState) : Double {
-        return diceObject.cumReward
+        return diceObject.instantReward
     }
 
     override fun isTerminal(state: PushYourLuckState) : Boolean {
