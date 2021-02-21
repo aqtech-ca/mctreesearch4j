@@ -6,9 +6,8 @@ import de.magoeke.kotlin.connectfour.models.GameState
 import de.magoeke.kotlin.connectfour.models.Player
 
 class ConnectFourMDP(
-        private val startingState: ConnectFourState = ConnectFourState(emptyList()),
-        private val optimizeForPlayerOne: Boolean = true
-)  : MDP<ConnectFourState, Int>() {
+    private val startingState: ConnectFourState = ConnectFourState(emptyList()),
+    private val optimizeForPlayerOne: Boolean = true)  : MDP<ConnectFourState, Int>() {
     private val player = Player("Player1", "1")
     private val adversary = Player("Player2", "2")
     private val boardSize = 7

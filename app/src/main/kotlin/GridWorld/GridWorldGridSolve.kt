@@ -26,21 +26,21 @@ class GridWorldGridSolve(val xSize: Int,
             for (y in 0 until ySize) {
                 if (Pair(x, y) !in rewardLocations){
                     var gridworld = GridworldMDP(
-                            xSize,
-                            ySize,
-                            rewards,
-                            transitionProbability,
-                            GridworldState(x, y, false)
+                        xSize,
+                        ySize,
+                        rewards,
+                        transitionProbability,
+                        GridworldState(x, y, false)
                     )
 
                     var solver = StatelessSolver(
-                            gridworld,
-                            Random,
-                            mcIter,
-                            simDepth,
-                            exploreConstant,
-                            rewardDiscount,
-                            verboseBool
+                        gridworld,
+                        Random,
+                        mcIter,
+                        simDepth,
+                        exploreConstant,
+                        rewardDiscount,
+                        verboseBool
                     )
 
                     // println("Solving at [$x, $y]")
