@@ -5,6 +5,7 @@ import java.io.File
 import kotlin.math.ln
 import kotlin.math.sqrt
 
+
 fun main() {
     /*
     val dice = DiceClass(3, 6)
@@ -23,29 +24,33 @@ fun main() {
 
      */
 
-    val pylMDP = PushYourLuckMDP(nDice = 3, nSides = 6)
+    val pylMDP = PushYourLuckMDP(nDice = 1, nSides = 6)
 
     var solver = StatelessSolver(
             pylMDP,
             Random,
-            9999,
-            35,
-            0.5,
+            99,
+            45,
+            1.7,
             0.99,
             false
     )
 
     var rewardTracker = solver.buildTree()
     solver.displayTree()
-
     val optimalHorizon = solver.getOptimalHorizon()
     println(optimalHorizon.toString())
     println(optimalHorizon.size)
-    print(rewardTracker)
 
+    // Write data
+    val path = System.getProperty("user.dir")
+    println("Working Directory = $path")
 
-    // val outputFileName = "outputs/PYL_rewards${iters.toString()}.txt"
-    // Runtime.getRuntime().exec("touch $outputFileName")
-    // File(outputFileName).writeText(rewardTracker.joinToString(","))
+    val fileName = "outputs/pyl_output.txt"
+    val outputFile = File(fileName)
+
+    outputFile.printWriter().use { out ->
+        out.println(rewardTracker.joinToString(", "))
+    }
 
 }
