@@ -28,8 +28,8 @@ fun main() {
     var solver = StatelessSolver(
             pylMDP,
             Random,
-            999,
-            88,
+            9999,
+            35,
             0.5,
             0.99,
             false
