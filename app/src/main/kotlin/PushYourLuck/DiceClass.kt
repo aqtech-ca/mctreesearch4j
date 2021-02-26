@@ -35,8 +35,8 @@ class DiceClass(val nDice: Int,
 
     fun cashOut(): Double {
         for (d_ind in diceConfig.indices){
-            if (markedSides[d_ind] != MutableList(nSides){false}){
-            // if (!listOf(false).containsAll(markedSides[d_ind])){
+            if (markedSides[d_ind].any{ it }){
+                // logic ia any side of the dice is market, indicated by bool true
                 var runningProduct = 1.0
                 for (s_ind in 0 until diceConfig[d_ind].size){
                     if (markedSides[d_ind][s_ind]){
@@ -45,7 +45,6 @@ class DiceClass(val nDice: Int,
                 }
                 instantReward = runningProduct
             }
-
         }
         // Reset the dice
         markedSides = MutableList(nDice){MutableList(nSides){false}}
