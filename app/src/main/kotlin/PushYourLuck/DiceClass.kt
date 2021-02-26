@@ -37,13 +37,13 @@ class DiceClass(val nDice: Int,
         for (d_ind in diceConfig.indices){
             if (markedSides[d_ind] != MutableList(nSides){false}){
             // if (!listOf(false).containsAll(markedSides[d_ind])){
-                var runningSum = 1.0
+                var runningProduct = 1.0
                 for (s_ind in 0 until diceConfig[d_ind].size){
                     if (markedSides[d_ind][s_ind]){
-                        runningSum *= diceConfig[d_ind][s_ind]
+                        runningProduct *= diceConfig[d_ind][s_ind]
                     }
                 }
-                instantReward = runningSum
+                instantReward = runningProduct
             }
 
         }
