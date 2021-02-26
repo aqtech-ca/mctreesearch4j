@@ -38,7 +38,7 @@ class DiceClass(val nDice: Int,
             if (markedSides[d_ind].any{ it }){
                 // logic ia any side of the dice is market, indicated by bool true
                 var runningProduct = 1.0
-                for (s_ind in 0 until diceConfig[d_ind].size){
+                for (s_ind in diceConfig[d_ind].indices){
                     if (markedSides[d_ind][s_ind]){
                         runningProduct *= diceConfig[d_ind][s_ind]
                     }
