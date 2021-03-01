@@ -1,6 +1,6 @@
 package me.john_
 
-import ConnectFourGame
+import ConnectFour.ConnectFourGame
 
 fun main() {
     val game = ConnectFourGame()

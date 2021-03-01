@@ -1,3 +1,6 @@
+package ConnectFour
+
+import StatelessSolver
 import de.magoeke.kotlin.connectfour.controllers.impl.MainController
 import de.magoeke.kotlin.connectfour.models.Board
 import de.magoeke.kotlin.connectfour.models.GameState
@@ -49,10 +52,10 @@ class ConnectFourGame {
     private fun getComputerMove(controller: MainController, moves : List<Int>) : Int {
         println("Computer is thinking...")
 
-        val game = ConnectFourMDP(ConnectFourState(moves), moves.size%2 == 0)
+        val game = ConnectFourMDP(ConnectFourState(moves), moves.size % 2 == 0)
         val stateless = StatelessSolver(
                 game,
-                Random.Default,
+                Random,
                 800,
                 50,
                 1.4,

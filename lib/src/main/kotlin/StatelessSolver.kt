@@ -15,12 +15,22 @@ class StatelessSolver<TState, TAction>(
 
     private var root : StateActionNode<TAction>? = null
 
-    fun buildTree() {
+    fun buildTree(): MutableList<Double> {
         initialize()
 
-        for (i in 0 until iterations) {
+        var rewardTracker = mutableListOf<Double>()
+
+        for (i in 0..iterations) {
             iterateStep()
+
+            println(root!!.children.toString())
+            println(root!!.children.maxByOrNull { a -> calculateUCT(a)} )
+            var ns = root!!.children.maxByOrNull { a -> calculateUCT(a)}!!.n
+            var explorationFactor = explorationConstant*sqrt(ln(i.toDouble())/ns)
+            rewardTracker.add(explorationFactor)
+
         }
+        return rewardTracker
     }
 
     fun initialize() {

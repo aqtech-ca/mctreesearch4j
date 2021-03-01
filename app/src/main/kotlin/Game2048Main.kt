@@ -4,6 +4,7 @@ import StatelessSolver
 import Twenty48.Game2048Position
 import Twenty48.Game2048State
 import Twenty48.Game2048Controller
+import java.io.File
 
 fun main() {
 
@@ -31,13 +32,13 @@ fun main() {
     var solver = StatelessSolver(
         game2048MDP,
         Random,
-        500,
+        999,
         10,
         1.4,
         0.9,
         true
     )
-    solver.buildTree()
+    var rewardTracker = solver.buildTree()
     solver.displayTree()
 
     println("optimalAction")
@@ -55,5 +56,16 @@ fun main() {
     }
     println(Game2048State(Game2048Position(testGrid)).toString())
     println(Game2048State(Game2048Position(testGrid)).score.toString())
+
+    // Write data
+    val path = System.getProperty("user.dir")
+    println("Working Directory = $path")
+
+    val fileName = "outputs/g2058_output.txt"
+    val outputFile = File(fileName)
+
+    outputFile.printWriter().use { out ->
+        out.println(rewardTracker.joinToString(", "))
+    }
 
 }
