@@ -1,7 +1,8 @@
 package me.john_
 
-import Reversi.*
+import ConnectFour.ConnectFourGame
 
 fun main() {
-    ReversiGame().run()
+    val game = ConnectFourGame()
+    game.run()
 }
