@@ -13,16 +13,27 @@ fun main() {
             GridworldReward(1, 1, 1.0)
     )
 
+    val worldFeaturesWall = listOf(
+        GridworldReward(5, 3, -0.1),
+        GridworldReward(5, 2, -0.1),
+        GridworldReward(5, 1, -0.1),
+        GridworldReward(5, 0, -0.1),
+        GridworldReward(1, 1, 1.0)
+    )
+
     val gw = GridWorldGridSolve(
             8,
             5,
-            setRewards,
+            worldFeaturesWall,
             0.85
     )
+
+
 
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
 
+    /*
     // Solve single
     var gridworld = GridworldMDP(
             xSize = 8,
@@ -54,5 +65,7 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(rewardTracker.joinToString(", "))
     }
+
+     */
 
 }
