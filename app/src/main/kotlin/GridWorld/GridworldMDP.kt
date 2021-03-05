@@ -31,16 +31,19 @@ class GridworldMDP(
 
     override fun reward(previousState: GridworldState?, action: GridworldAction?, state: GridworldState): Double {
         var reward = 0.0
+        val maxManhattan = xSize * ySize
 
         // Heuristic formula
         // Adjustment factor is reward * manhattan_distance from reward (+ or -)
         var manhattanSum = 0.0
         for (r in rewards) {
             if (r.equals(state)) {
+                // reward += r.value * (1 - (Math.abs(r.x - state.x) + Math.abs(r.y - state.y)) / maxManhattan)
                 reward += r.value
             }
             if (r.value != 0.0){
-                // manhattanSum += -1.0*r.value*((Math.abs(r.x - state.x)) + (Math.abs(r.y - state.y)))
+                manhattanSum += r.value * (1 - (Math.abs(r.x - state.x) + Math.abs(r.y - state.y) / maxManhattan))
+                // Adjust to be scaled to the max distance.
             }
         }
         reward += manhattanSum
