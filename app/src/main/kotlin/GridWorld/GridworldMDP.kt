@@ -1,6 +1,7 @@
 package GridWorld
 
 import MDP
+import de.magoeke.kotlin.connectfour.models.GameState
 import java.lang.Math
 
 class GridworldMDP(
@@ -12,6 +13,8 @@ class GridworldMDP(
     override fun initialState(): GridworldState {
         return startingLocation
     }
+
+    var lastAction: GridworldAction? = null
 
     override fun isTerminal(state: GridworldState): Boolean {
         return rewards.any { r -> r.equals(state)}
@@ -42,8 +45,8 @@ class GridworldMDP(
                 reward += r.value
             }
             if (r.value != 0.0){
-                manhattanSum += r.value * (1 - (Math.abs(r.x - state.x) + Math.abs(r.y - state.y) / maxManhattan))
                 // Adjust to be scaled to the max distance.
+                manhattanSum += r.value * (1 - (Math.abs(r.x - state.x) + Math.abs(r.y - state.y) / maxManhattan))
             }
         }
         reward += manhattanSum
@@ -51,6 +54,8 @@ class GridworldMDP(
     }
 
     override fun transition(state: GridworldState, action: GridworldAction): GridworldState {
+        lastAction = action
+
         if (state.isTerminal) {
             return state
         }
@@ -80,7 +85,24 @@ class GridworldMDP(
     }
 
     override fun actions(state: GridworldState): Iterable<GridworldAction> {
-        return GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
+        // Heuristic, don't go backwards
+
+        return if (lastAction != null) {
+            GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null && a != mirrorAction(lastAction!!) }
+        } else {
+            GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
+        }
+
+        // return legalActions.filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
+    }
+
+    fun mirrorAction(action: GridworldAction): GridworldAction {
+        return when(action) {
+            GridworldAction.LEFT -> GridworldAction.RIGHT
+            GridworldAction.RIGHT -> GridworldAction.LEFT
+            GridworldAction.UP -> GridworldAction.DOWN
+            GridworldAction.DOWN -> GridworldAction.UP
+        }
     }
 
 }

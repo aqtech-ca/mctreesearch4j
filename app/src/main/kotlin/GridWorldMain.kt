@@ -7,11 +7,7 @@ import kotlin.random.Random
 
 fun main() {
 
-    val setRewards = listOf(
-            GridworldReward(5, 4, -0.5),
-            // GridworldReward(3, 3, 1.0),
-            GridworldReward(1, 1, 1.0)
-    )
+
 
     val worldFeaturesWall = listOf(
         GridworldReward(5, 3, -0.1),
@@ -33,14 +29,20 @@ fun main() {
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
 
-    /*
+
+    val setRewards = listOf(
+        GridworldReward(5, 4, -0.5),
+        // GridworldReward(3, 3, 1.0),
+        GridworldReward(1, 1, 1.0)
+    )
+
     // Solve single
     var gridworld = GridworldMDP(
             xSize = 8,
             ySize = 5,
             rewards = setRewards,
             transitionProbability = 0.8,
-            startingLocation = GridworldState(2, 2, false)
+            startingLocation = GridworldState(4, 4, false)
     )
 
     var gwSolver = StatelessSolver(
@@ -54,6 +56,7 @@ fun main() {
     )
     val rewardTracker = gwSolver.buildTree()
     gwSolver.displayTree()
+    println(gwSolver.getOptimalHorizon())
 
     // Write data
     val path = System.getProperty("user.dir")
@@ -65,7 +68,5 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(rewardTracker.joinToString(", "))
     }
-
-     */
 
 }
