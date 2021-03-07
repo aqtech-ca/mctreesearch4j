@@ -36,11 +36,9 @@ class GridworldMDP(
         val maxManhattan = xSize * ySize
 
         // Heuristic formula
-        // Adjustment factor is reward * manhattan_distance from reward (+ or -)
         var manhattanSum = 0.0
         for (r in rewards) {
             if (r.equals(state)) {
-                // reward += r.value * (1 - (Math.abs(r.x - state.x) + Math.abs(r.y - state.y)) / maxManhattan)
                 reward += r.value
             }
             if (r.value != 0.0){
