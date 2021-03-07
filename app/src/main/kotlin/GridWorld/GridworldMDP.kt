@@ -1,7 +1,6 @@
 package GridWorld
 
 import MDP
-import de.magoeke.kotlin.connectfour.models.GameState
 import java.lang.Math
 
 class GridworldMDP(
