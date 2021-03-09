@@ -3,7 +3,6 @@ import GridWorld.GridworldMDP
 import GridWorld.GridworldReward
 import GridWorld.GridworldState
 import java.io.File
-import kotlin.random.Random
 
 fun main() {
 
@@ -32,16 +31,14 @@ fun main() {
             startingLocation = GridworldState(2, 2, false)
     )
 
-    var gwSolver = StatelessSolver(
+    var gwSolver = ExtendedStatelessSolver(
             gridworld,
-            Random,
             999,
-            50,
             1.4,
             0.9,
             false
     )
-    val rewardTracker = gwSolver.buildTree()
+    gwSolver.constructTree(50)
     gwSolver.displayTree()
 
     // Write data
@@ -52,7 +49,7 @@ fun main() {
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
-        out.println(rewardTracker.joinToString(", "))
+        out.println(gwSolver.rewardHistory.joinToString(", "))
     }
 
 }

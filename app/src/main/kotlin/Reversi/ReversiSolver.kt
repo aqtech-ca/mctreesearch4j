@@ -9,15 +9,13 @@ class ReversiSolver(private val initialState: ReversiState) {
         val game = ReversiMDP(state)
         val statefulSolver = StatefulSolver(
             game,
-            Random.Default,
             2000,
-            60,
             1.4,
             0.9,
             false
         )
 
-        statefulSolver.buildTree()
-        return statefulSolver.getNextOptimalAction()
+        statefulSolver.constructTree(60)
+        return statefulSolver.extractOptimalAction()
     }
 }

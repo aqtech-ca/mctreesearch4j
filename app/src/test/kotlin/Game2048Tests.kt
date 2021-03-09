@@ -1,5 +1,6 @@
 package Twenty48
 
+import ExtendedStatelessSolver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import kotlin.random.Random
@@ -28,20 +29,18 @@ class Game2048Tests {
         val initialGameState = Game2048State(Game2048Position(testGrid))
         val game2048MDP = Game2048MDP(initialGameState)
 
-        var solver = StatelessSolver(
+        var solver = ExtendedStatelessSolver(
                 game2048MDP,
-                Random,
                 500,
-                10,
                 1.4,
                 0.9,
                 true
         )
-        solver.buildTree()
+        solver.constructTree(10)
         solver.displayTree()
 
         println("optimalAction")
-        println(solver.getNextOptimalAction().toString())
+        println(solver.extractOptimalAction().toString())
 
         println("optimal Horizon")
         val solList = solver.getOptimalHorizon().map { it.toString() }

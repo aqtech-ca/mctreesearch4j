@@ -1,6 +1,6 @@
 import kotlin.math.max
 
-class StatelessSolver<TState, TAction>(
+open class StatelessSolver<TState, TAction>(
         private val mdp: MDP<TState, TAction>,
         private val simulationDepthLimit: Int,
         explorationConstant: Double,

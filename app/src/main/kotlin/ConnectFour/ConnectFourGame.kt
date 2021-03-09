@@ -55,16 +55,14 @@ class ConnectFourGame {
         val game = ConnectFourMDP(ConnectFourState(moves), moves.size % 2 == 0)
         val stateless = StatelessSolver(
                 game,
-                Random,
                 800,
-                50,
                 1.4,
                 0.9,
                 false
         )
 
-        stateless.buildTree()
-        val move = stateless.getNextOptimalAction()
+        stateless.constructTree(50)
+        val move = stateless.extractOptimalAction()
 
         controller.turn(move)
         return move
