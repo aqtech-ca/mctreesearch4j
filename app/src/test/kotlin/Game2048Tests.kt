@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import kotlin.random.Random
 import StatelessSolver
+import kotlin.test.assertNotNull
 
 class Game2048Tests {
 
@@ -22,7 +23,7 @@ class Game2048Tests {
             arrayOf(0, 0, 0, 0)
     )
 
-    fun testGame2048(inputGrid: Array<Array<Int>>  ): Int? {
+    fun testGame2048(inputGrid: Array<Array<Int>>) {
 
         var testGrid = inputGrid.copyOf()
 
@@ -36,7 +37,7 @@ class Game2048Tests {
                 0.9,
                 true
         )
-        solver.constructTree(10)
+        solver.constructTree(200)
         solver.displayTree()
 
         println("optimalAction")
@@ -53,29 +54,24 @@ class Game2048Tests {
             testGrid = gc.manipulateGrid(testGrid, a)
         }
         println(Game2048State(Game2048Position(testGrid)).toString())
-        println(Game2048State(Game2048Position(testGrid)).score.toString())
 
-        return Game2048State(Game2048Position(testGrid)).score
+        val score = Game2048State(Game2048Position(testGrid)).score
+        println(score)
 
+        assertNotNull(score, "2048 score is not null.")
+
+        if (score < 2048)
+        {
+            assertTrue(score >= 2048, "Scenario reached a suboptimal solution of score: $score")
+        }
     }
 
     @Test fun game2048testSenario1() {
-        // The world solves should be 95% accurate
-        val scenario1Score = this.testGame2048(this.scenarioGrid1)
+        this.testGame2048(this.scenarioGrid1)
 
-        assertTrue(scenario1Score != null, "2048 score is not null.")
-        if (scenario1Score != null) {
-            assertTrue(scenario1Score >= 2048, "Scenario1 reached a suboptimal solution of socre: " + scenario1Score.toString())
-        }
     }
 
     @Test fun game2048testScenario2() {
-        val scenario2Score = this.testGame2048(this.scenarioGrid2)
-        assertTrue(scenario2Score != null, "2048 score is not null.")
-        if (scenario2Score != null) {
-            assertTrue(scenario2Score >= 2048 , "Scenario2 reached a suboptimal solution of socre: " + scenario2Score.toString() )
-        }
+        this.testGame2048(this.scenarioGrid2)
     }
-
-
 }
