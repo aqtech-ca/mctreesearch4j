@@ -14,9 +14,9 @@ class ExtendedStatelessSolver<TState, TAction>(
         for (i in 0..iterations) {
             iterateStep()
 
-            val bestChild = _root.getChildren().maxByOrNull { c -> calculateUCT(c)}
+            val bestChild = root.getChildren().maxByOrNull { c -> calculateUCT(c)}
 
-            println(_root.getChildren().toString())
+            println(root.getChildren().toString())
             println(bestChild)
 
             val ns = bestChild?.n ?: continue
@@ -28,7 +28,7 @@ class ExtendedStatelessSolver<TState, TAction>(
 
     fun getOptimalHorizon(): List<TAction> {
         val optimalHorizonArr = mutableListOf<TAction>()
-        var node = _root
+        var node = root
 
         while (true){
             node = node.getChildren().maxByOrNull { c -> c.n } ?: break

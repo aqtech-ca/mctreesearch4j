@@ -1,7 +1,4 @@
-import GridWorld.GridWorldGridSolve
-import GridWorld.GridworldMDP
-import GridWorld.GridworldReward
-import GridWorld.GridworldState
+import GridWorld.*
 import java.io.File
 
 fun main() {

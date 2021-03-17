@@ -1,7 +1,5 @@
 package Twenty48
 
-import Twenty48.Game2048
-
 open class Game2048State(gamePosition: Game2048Position) {
     private val gameObject = Game2048Controller() // We just use this for its methods
 

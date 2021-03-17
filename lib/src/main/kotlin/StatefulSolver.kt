@@ -8,7 +8,7 @@ open class StatefulSolver<TState, TAction>(
     verbose: Boolean
 ) : SolverBase<TAction, StateNode<TState, TAction>>(verbose, explorationConstant) {
 
-    override var _root = createNode(null, null, mdp.initialState())
+    override var root = createNode(null, null, mdp.initialState())
 
     override fun selectNode(node: StateNode<TState, TAction>): StateNode<TState, TAction> {
         // If the node is terminal, return it
@@ -18,8 +18,10 @@ open class StatefulSolver<TState, TAction>(
 
         val exploredActions = node.exploredActions()
 
+        assert(node.validActions.size >= exploredActions.size)
+
         // This state has not been fully explored
-        if (node.validActions.size != exploredActions.size) {
+        if (node.validActions.size > exploredActions.size) {
             return node
         }
 

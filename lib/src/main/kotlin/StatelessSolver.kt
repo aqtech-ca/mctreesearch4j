@@ -8,7 +8,11 @@ open class StatelessSolver<TState, TAction>(
         verbose: Boolean)
     : SolverBase<TAction, StatelessActionNode<TState, TAction>>(verbose, explorationConstant) {
 
-    override var _root = StatelessActionNode<TState, TAction>(null, null)
+    override var root = StatelessActionNode<TState, TAction>(null, null)
+
+    init {
+        simulateActions(root)
+    }
 
     override fun selectNode(node: StatelessActionNode<TState, TAction>) : StatelessActionNode<TState, TAction> {
         // If this node is a leaf node, return it
@@ -16,7 +20,7 @@ open class StatelessSolver<TState, TAction>(
             return node
         }
 
-        val currentNode = node
+        var currentNode = node
         simulateActions(node)
 
         // Run a simulation greedily
@@ -34,13 +38,13 @@ open class StatelessSolver<TState, TAction>(
             }
 
             // All actions have been explored, choose best one
-            val newNode = currentChildren.maxByOrNull { a -> calculateUCT(a) } ?: throw Exception("There were no children for explored node")
-            simulateActions(newNode)
+            currentNode = currentChildren.maxByOrNull { a -> calculateUCT(a) } ?: throw Exception("There were no children for explored node")
+            simulateActions(currentNode)
         }
     }
 
     override fun expandNode(node: StatelessActionNode<TState, TAction>): StatelessActionNode<TState, TAction> {
-        // If the node is terminal, return it
+        // If the node is terminal, return it, except root node
         if (mdp.isTerminal(node.state)) {
             return node
         }

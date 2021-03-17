@@ -7,7 +7,7 @@ class StatelessActionNode<TState, TAction>(
 
     var state: TState
         get() {
-            return _state ?: throw Exception("Simulation not run")
+            return _state ?: throw Exception("Simulation not run at depth: $depth")
         }
         set(value) {
             _state = value

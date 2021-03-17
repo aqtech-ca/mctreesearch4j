@@ -4,36 +4,28 @@ import kotlin.math.sqrt
 abstract class SolverBase<TAction, TNode>(
     protected val verbose: Boolean,
     protected val explorationConstant: Double
-) : ISolver<TAction> where TNode : Node<TAction, TNode> {
+) where TNode : Node<TAction, TNode> {
 
-    protected abstract var _root: TNode
+    protected abstract var root: TNode
 
     abstract fun selectNode(node: TNode) : TNode
     abstract fun expandNode(node: TNode) : TNode
     abstract fun runSimulation(node: TNode) : Double
     abstract fun updateNode(node: TNode, reward: Double)
 
-    open fun endTreeConstruction() : Boolean {
-        return false
-    }
-
-    override fun constructTree(iterations: Int) {
+    open fun constructTree(iterations: Int) {
         for (i in 0..iterations) {
             iterateStep()
-
-            if (endTreeConstruction()) {
-                break
-            }
         }
     }
 
-    override fun iterateStep() {
+    open fun iterateStep() {
         traceln("")
         traceln("New iteration")
         traceln("=============")
 
         // Selection
-        val best = selectNode(_root)
+        val best = selectNode(root)
 
         if (verbose) {
             traceln("Selected:")
@@ -70,8 +62,8 @@ abstract class SolverBase<TAction, TNode>(
 
     // Policy extraction
 
-    override fun extractOptimalAction(): TAction {
-        return extractOptimalAction(_root)!!
+    open fun extractOptimalAction(): TAction {
+        return extractOptimalAction(root)!!
     }
 
     private fun extractOptimalAction(node: TNode?): TAction? {
@@ -105,7 +97,7 @@ abstract class SolverBase<TAction, TNode>(
     }
 
     fun displayTree() {
-        displayTree(_root, "")
+        displayTree(root, "")
     }
 
     private fun displayTree(node: TNode?, indent: String) {

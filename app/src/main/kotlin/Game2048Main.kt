@@ -1,7 +1,4 @@
-import Twenty48.Game2048MDP
-import Twenty48.Game2048Position
-import Twenty48.Game2048State
-import Twenty48.Game2048Controller
+import Twenty48.*
 import java.io.File
 
 fun main() {
