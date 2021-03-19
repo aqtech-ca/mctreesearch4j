@@ -15,15 +15,14 @@ abstract class SolverBase<TAction, TNode>(
 
     open fun constructTree(iterations: Int) {
         for (i in 0..iterations) {
+            traceln("")
+            traceln("New iteration $i")
+            traceln("=============")
             iterateStep()
         }
     }
 
     open fun iterateStep() {
-        traceln("")
-        traceln("New iteration")
-        traceln("=============")
-
         // Selection
         val best = selectNode(root)
 
@@ -84,7 +83,11 @@ abstract class SolverBase<TAction, TNode>(
         }
     }
 
-    private fun displayNode(node: TNode) {
+    protected open fun formatNode(node: TNode) : String {
+        return node.toString()
+    }
+
+    fun displayNode(node: TNode) {
         if (node.parent != null) {
             displayNode(node.parent)
         }
@@ -93,25 +96,25 @@ abstract class SolverBase<TAction, TNode>(
             print(" ".repeat((node.depth - 1)*2) + " └")
         }
 
-        println(node)
+        println(formatNode(node))
     }
 
-    fun displayTree() {
-        displayTree(root, "")
+    fun displayTree(depthLimit: Int = 3) {
+        displayTree(depthLimit, root, "")
     }
 
-    private fun displayTree(node: TNode?, indent: String) {
+    private fun displayTree(depthLimit: Int, node: TNode?, indent: String) {
         if (node == null) {
             return
         }
 
-        if (node.depth > 3) {
+        if (node.depth > depthLimit) {
             return
         }
 
         val line = StringBuilder()
                 .append(indent)
-                .append(" $node")
+                .append(" ${formatNode(node)}")
                 .append(" (n: ${node.n}, reward: ${"%.5f".format(node.reward)}, UCT: ${"%.5f".format(calculateUCT(node))})")
 
         println(line.toString())
@@ -123,9 +126,9 @@ abstract class SolverBase<TAction, TNode>(
         }
 
         for (child in children.take(children.size - 1)) {
-            displayTree(child, generateIndent(indent) + " ├")
+            displayTree(depthLimit, child, generateIndent(indent) + " ├")
         }
-        displayTree(children.last(), generateIndent(indent) + " └")
+        displayTree(depthLimit, children.last(), generateIndent(indent) + " └")
     }
 
     private fun generateIndent(indent: String) : String {

@@ -40,4 +40,36 @@ class ReversiState : Cloneable {
     public override fun clone(): ReversiState {
         return ReversiState(this)
     }
+
+    public override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true;
+        }
+
+        if (!(other is ReversiState))
+        {
+            return false
+        }
+
+        if (this.currentPlayer != other.currentPlayer) {
+            return false
+        }
+
+        if (this.size != other.size) {
+            return false
+        }
+
+        for (row in squares.indices) {
+            for (col in squares[row].indices) {
+                val square = squares[row][col]
+                if (square == ReversiSquare.DARK || square == ReversiSquare.LIGHT) {
+                    if (other.squares[row][col] != square) {
+                        return false
+                    }
+                }
+            }
+        }
+
+        return true
+    }
 }
