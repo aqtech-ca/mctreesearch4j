@@ -18,7 +18,6 @@ class ReversiGame {
         val state = ReversiState(8)
         val viewModel = ReversiViewModel(state)
         val lastAIMove = mutableStateOf(Point(-1, -1))
-        var solver: ReversiSolver? = null
 
         Window(
             title = "Reversi",
@@ -48,7 +47,7 @@ class ReversiGame {
                                                 if (state.currentPlayer != ReversiSquare.EMPTY) {
                                                     while (state.currentPlayer == ai) {
                                                         println("AI is thinking")
-                                                        lastMove = solver?.getMove(state.clone())!!
+                                                        lastMove = ReversiSolver(state.clone()).getMove()
                                                         ReversiController.executeMove(state, lastMove)
                                                     }
                                                     println("Next player: ${state.currentPlayer}")
@@ -101,8 +100,7 @@ class ReversiGame {
                             val currentState = state.clone()
 
                             ai = state.currentPlayer
-                            solver = ReversiSolver(currentState)
-                            lastMove = solver?.getMove(currentState)!!
+                            lastMove = ReversiSolver(state.clone()).getMove()
                             ReversiController.executeMove(state, lastMove)
 
                             viewModel.update()
