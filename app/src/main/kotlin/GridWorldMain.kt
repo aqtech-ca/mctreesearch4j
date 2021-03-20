@@ -4,9 +4,11 @@ import java.io.File
 fun main() {
 
     val setRewards = listOf(
-            GridworldReward(5, 4, -0.5),
-            // GridworldReward(3, 3, 1.0),
-            GridworldReward(1, 1, 1.0)
+        GridworldReward(5, 3, -0.1),
+        GridworldReward(5, 2, -0.1),
+        GridworldReward(5, 1, -0.1),
+        GridworldReward(5, 0, -0.1),
+        GridworldReward(1, 1, 1.0)
     )
 
     val gw = GridWorldGridSolve(
@@ -18,6 +20,8 @@ fun main() {
 
     gw.getWorldSolve()
     gw.visualizeWorldSolve()
+
+    /*
 
     // Solve single
     var gridworld = GridworldMDP(
@@ -48,5 +52,7 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(gwSolver.rewardHistory.joinToString(", "))
     }
+
+     */
 
 }

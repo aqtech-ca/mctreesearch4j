@@ -8,6 +8,9 @@ class GridworldMDP(
         private val rewards: List<GridworldReward>,
         private val transitionProbability: Double,
         private val startingLocation: GridworldState = GridworldState(0, 0, false)) : MDP<GridworldState, GridworldAction>() {
+
+    var lastAction: GridworldAction? = null
+
     override fun initialState(): GridworldState {
         return startingLocation
     }
@@ -30,17 +33,25 @@ class GridworldMDP(
 
     override fun reward(previousState: GridworldState?, action: GridworldAction?, state: GridworldState): Double {
         var reward = 0.0
+        val maxManhattan = xSize * ySize
+
+        // Heuristic formula
+        var manhattanSum = 0.0
         for (r in rewards) {
             if (r.equals(state)) {
                 reward += r.value
             }
+            if (r.value != 0.0){
+                // Adjust to be scaled to the max distance.
+                manhattanSum += r.value * (1 - (Math.abs(r.x - state.x) + Math.abs(r.y - state.y) / maxManhattan))
+            }
         }
-
         return reward
     }
 
     override fun transition(state: GridworldState, action: GridworldAction): GridworldState {
         if (state.isTerminal) {
+            lastAction = null
             return state
         }
         else if (rewards.any { r -> r.equals(state)}) {
@@ -69,7 +80,25 @@ class GridworldMDP(
     }
 
     override fun actions(state: GridworldState): Iterable<GridworldAction> {
-        return GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
+        // Heuristic, don't go backwards
+        var lastAction = null
+
+        return if (lastAction != null) {
+            GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null && a != mirrorAction(lastAction!!) }
+        } else {
+            GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
+        }
+
+        // return legalActions.filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
+    }
+
+    fun mirrorAction(action: GridworldAction): GridworldAction {
+        return when(action) {
+            GridworldAction.LEFT -> GridworldAction.RIGHT
+            GridworldAction.RIGHT -> GridworldAction.LEFT
+            GridworldAction.UP -> GridworldAction.DOWN
+            GridworldAction.DOWN -> GridworldAction.UP
+        }
     }
 
 }
