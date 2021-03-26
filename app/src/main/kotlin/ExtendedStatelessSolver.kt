@@ -8,7 +8,7 @@ class ExtendedStatelessSolver<TState, TAction>(
         verbose: Boolean
 ) : StatelessSolver<TState, TAction>(mdp, simulationDepthLimit, explorationConstant, rewardDiscountFactor, verbose) {
 
-    val rewardHistory = mutableListOf<Double>()
+    val explorationTermHistory = mutableListOf<Double>()
 
     override fun constructTree(iterations: Int) {
         for (i in 0..iterations) {
@@ -22,7 +22,7 @@ class ExtendedStatelessSolver<TState, TAction>(
             val ns = bestChild?.n ?: continue
             val explorationFactor = explorationConstant*sqrt(ln(i.toDouble())/ns)
 
-            rewardHistory.add(explorationFactor)
+            explorationTermHistory.add(explorationFactor)
         }
     }
 

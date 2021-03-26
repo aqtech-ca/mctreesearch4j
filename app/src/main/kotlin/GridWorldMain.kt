@@ -31,11 +31,11 @@ fun main() {
     var gwSolver = ExtendedStatelessSolver(
             gridworld,
             999,
-            1.4,
-            0.9,
+            0.28,
+            0.95,
             false
     )
-    gwSolver.constructTree(50)
+    gwSolver.constructTree(999)
     gwSolver.displayTree()
 
     // Write data
@@ -46,7 +46,7 @@ fun main() {
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
-        out.println(gwSolver.rewardHistory.joinToString(", "))
+        out.println(gwSolver.explorationTermHistory.joinToString(", "))
     }
 
 }

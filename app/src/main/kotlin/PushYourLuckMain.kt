@@ -24,13 +24,13 @@ fun main() {
 
     var solver = ExtendedStatelessSolver(
             pylMDP,
-            99,
-            1.7,
+            999,
+            0.07,
             0.99,
             false
     )
 
-    solver.constructTree(45)
+    solver.constructTree(999)
     solver.displayTree()
     val optimalHorizon = solver.getOptimalHorizon()
     println(optimalHorizon.toString())
@@ -44,7 +44,7 @@ fun main() {
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
-        out.println(solver.rewardHistory.joinToString(", "))
+        out.println(solver.explorationTermHistory.joinToString(", "))
     }
 
 }

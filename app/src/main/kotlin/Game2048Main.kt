@@ -31,7 +31,7 @@ fun main() {
         0.9,
         true
     )
-    solver.constructTree(10)
+    solver.constructTree(999)
     solver.displayTree()
 
     println("optimalAction")
@@ -54,11 +54,11 @@ fun main() {
     val path = System.getProperty("user.dir")
     println("Working Directory = $path")
 
-    val fileName = "outputs/g2058_output.txt"
+    val fileName = "outputs/g2048_output.txt"
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
-        out.println(solver.rewardHistory.joinToString(", "))
+        out.println(solver.explorationTermHistory.joinToString(", "))
     }
 
 }
