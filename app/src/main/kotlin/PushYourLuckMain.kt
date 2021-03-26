@@ -1,9 +1,5 @@
 import PushYourLuck.PushYourLuckMDP
-import kotlin.random.Random
-import StatelessSolver
 import java.io.File
-import kotlin.math.ln
-import kotlin.math.sqrt
 
 
 fun main() {
@@ -26,17 +22,15 @@ fun main() {
 
     val pylMDP = PushYourLuckMDP(nDice = 1, nSides = 6)
 
-    var solver = StatelessSolver(
+    var solver = ExtendedStatelessSolver(
             pylMDP,
-            Random,
-            99,
-            45,
-            1.7,
+            999,
+            0.07,
             0.99,
             false
     )
 
-    var rewardTracker = solver.buildTree()
+    solver.constructTree(999)
     solver.displayTree()
     val optimalHorizon = solver.getOptimalHorizon()
     println(optimalHorizon.toString())
@@ -50,7 +44,7 @@ fun main() {
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
-        out.println(rewardTracker.joinToString(", "))
+        out.println(solver.explorationTermHistory.joinToString(", "))
     }
 
 }

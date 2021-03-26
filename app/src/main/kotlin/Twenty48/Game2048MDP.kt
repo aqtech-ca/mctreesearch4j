@@ -1,6 +1,7 @@
 package Twenty48
 
 import MDP
+import kotlin.math.log2
 
 class Game2048MDP(val initialGameState: Game2048State ) : MDP<Game2048State, Game2048Action>() {
 
@@ -18,7 +19,7 @@ class Game2048MDP(val initialGameState: Game2048State ) : MDP<Game2048State, Gam
     }
 
     override fun reward(previousState: Game2048State?, action: Game2048Action?, state: Game2048State): Double {
-        return state.score!!.toDouble()
+        return log2(state.score!!.toDouble())
     }
 
     override fun transition(state: Game2048State, action: Game2048Action): Game2048State {

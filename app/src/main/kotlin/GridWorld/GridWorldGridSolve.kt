@@ -1,7 +1,6 @@
 package GridWorld
 
 import StatelessSolver
-import kotlin.random.Random
 
 class GridWorldGridSolve(val xSize: Int,
                          val ySize: Int,
@@ -35,20 +34,18 @@ class GridWorldGridSolve(val xSize: Int,
 
                     var solver = StatelessSolver(
                         gridworld,
-                        Random,
                         mcIter,
-                        simDepth,
                         exploreConstant,
                         rewardDiscount,
                         verboseBool
                     )
 
                     // println("Solving at [$x, $y]")
-                    solver.buildTree()
+                    solver.constructTree(simDepth)
                     // solver.displayTree()
                     // println("Optimal action: ${solver.getNextOptimalAction()}")
 
-                    mapOfSolutions[Pair(x, y)] = solver.getNextOptimalAction().toString()
+                    mapOfSolutions[Pair(x, y)] = solver.extractOptimalAction().toString()
                 }
             }
         }

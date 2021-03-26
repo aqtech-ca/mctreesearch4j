@@ -1,21 +1,15 @@
 package Reversi
 
 import androidx.compose.desktop.Window
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.*
 import java.awt.Point
 
 class ReversiGame {
@@ -24,7 +18,6 @@ class ReversiGame {
         val state = ReversiState(8)
         val viewModel = ReversiViewModel(state)
         val lastAIMove = mutableStateOf(Point(-1, -1))
-        var solver: ReversiSolver? = null
 
         Window(
             title = "Reversi",
@@ -54,7 +47,7 @@ class ReversiGame {
                                                 if (state.currentPlayer != ReversiSquare.EMPTY) {
                                                     while (state.currentPlayer == ai) {
                                                         println("AI is thinking")
-                                                        lastMove = solver?.getMove(state.clone())!!
+                                                        lastMove = ReversiSolver(state.clone()).getMove()
                                                         ReversiController.executeMove(state, lastMove)
                                                     }
                                                     println("Next player: ${state.currentPlayer}")
@@ -107,8 +100,7 @@ class ReversiGame {
                             val currentState = state.clone()
 
                             ai = state.currentPlayer
-                            solver = ReversiSolver(currentState)
-                            lastMove = solver?.getMove(currentState)!!
+                            lastMove = ReversiSolver(state.clone()).getMove()
                             ReversiController.executeMove(state, lastMove)
 
                             viewModel.update()

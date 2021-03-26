@@ -1,105 +1,84 @@
-import kotlin.math.ln
 import kotlin.math.max
-import kotlin.math.sqrt
-import kotlin.random.Random
-import kotlin.text.StringBuilder
 
-class StatefulSolver<TState, TAction>(
-        private val mdp: MDP<TState, TAction>,
-        private val random: Random,
-        private val iterations: Int,
-        private val simulationDepthLimit: Int,
-        private val explorationConstant: Double,
-        private val rewardDiscountFactor: Double,
-        private val verbose: Boolean) {
+open class StatefulSolver<TState, TAction>(
+    private val mdp: MDP<TState, TAction>,
+    private val simulationDepthLimit: Int,
+    explorationConstant: Double,
+    private val rewardDiscountFactor: Double,
+    verbose: Boolean
+) : SolverBase<TAction, StateNode<TState, TAction>>(verbose, explorationConstant) {
 
-    private var root : StateNode<TAction, TState>? = null
+    override var root = createNode(null, null, mdp.initialState())
 
-    fun buildTree() {
-        initialize()
-
-        for (i in 0 until iterations) {
-            iterateStep()
-        }
-    }
-
-    fun initialize() {
-        val initialState = mdp.initialState()
-        root = createStateNode(null, initialState)
-    }
-
-    fun iterateStep() {
-        traceln("")
-        traceln("New iteration")
-        traceln("=============")
-
-        // Selection
-        val bestState = selectNode(root!!)
-
-        if (verbose) {
-            traceln("Selected:")
-            displayNode(bestState)
+    override fun selectNode(node: StateNode<TState, TAction>): StateNode<TState, TAction> {
+        // If the node is terminal, return it
+        if (mdp.isTerminal(node.state)) {
+            return node
         }
 
-        // Expansion
-        val expandedState = expandNode(bestState)
+        val exploredActions = node.exploredActions()
 
-        if (verbose) {
-            traceln("Expanding:")
-            displayNode(expandedState)
+        assert(node.validActions.size >= exploredActions.size)
+
+        // This state has not been fully explored
+        if (node.validActions.size > exploredActions.size) {
+            return node
         }
 
-        // Simulation
-        val simulatedReward = simulateState(expandedState)
+        // This state has been explored, select best action
+        var bestAction = exploredActions.first()
+        var bestActionScore : Double? = null
 
-        traceln("Simulated Reward: $simulatedReward")
+        for (action in exploredActions) {
+            val childrenOfAction = node.getChildren(action)
+            val actionN = childrenOfAction.sumOf { c -> c.n }
+            val actionReward = childrenOfAction.sumOf { c -> c.reward }
+            val actionScore = calculateUCT(node.n, actionN, actionReward, explorationConstant)
 
-        // Update
-        updateNode(expandedState, simulatedReward)
-    }
-
-    private fun updateNode(stateNode: StateNode<TAction, TState>, simulatedReward: Double) {
-        var currentStateNode = stateNode
-        var currentReward = simulatedReward
-
-        while (true)
-        {
-            currentStateNode.maxReward = max(currentReward, currentStateNode.maxReward)
-            currentStateNode.reward += currentReward
-            currentStateNode.n++
-
-            val parentActionNode = currentStateNode.parentAction() ?: break
-            parentActionNode.reward += currentReward
-            parentActionNode.n++
-
-            currentStateNode = parentActionNode.parentState()
-            currentReward *= rewardDiscountFactor
+            if (bestActionScore == null || actionScore > bestActionScore) {
+                bestAction = action
+                bestActionScore = actionScore
+            }
         }
+
+        val newState = mdp.transition(node.state, bestAction)
+
+        val actionState = node.getChildren(bestAction).firstOrNull { s -> s.state == newState }
+        // New state reached by an explored action
+                ?: return createNode(node, bestAction, newState)
+
+
+        // Existing state reached by an explored action
+        return selectNode(actionState)
     }
 
-    private fun simulateState(stateNode: StateNode<TAction, TState>) : Double {
+    override fun expandNode(node: StateNode<TState, TAction>): StateNode<TState, TAction> {
+        // If the node is terminal, return it
+        if (node.isTerminal) {
+            return node
+        }
+
+        // Expand an unexplored action
+        val unexploredActions = node.validActions.minus(node.getChildren().map { c -> c.inducingAction }).distinct()
+        val actionTaken = unexploredActions.random() ?: throw Exception("No unexplored actions available")
+
+        // Transition to new state for given action
+        val newState = mdp.transition(node.state, actionTaken)
+        return createNode(node, actionTaken, newState)
+    }
+
+    override fun runSimulation(node: StateNode<TState, TAction>): Double {
         traceln("Simulation:")
 
         // If state is terminal, the reward is defined by MDP
-        if (mdp.isTerminal(stateNode.state)) {
+        if (mdp.isTerminal(node.state)) {
             traceln("Terminal state reached")
 
-            return mdp.reward(stateNode.parentAction()?.parentState()?.state, stateNode.parentAction()?.action, stateNode.state)
+            return mdp.reward(node.parent?.state, node.inducingAction, node.state)
         }
 
-        var simulationRewards = 0.0
-        val simulationIterations = 1
-
-        repeat (simulationIterations) {
-            simulationRewards += simulateStateIteration(stateNode.state)
-        }
-
-        return simulationRewards/simulationIterations
-    }
-
-    private fun simulateStateIteration(state: TState) : Double {
         var depth = 0
-        var currentState = state
+        var currentState = node.state
         var discount = rewardDiscountFactor
 
         while(true) {
@@ -118,11 +97,11 @@ class StatefulSolver<TState, TAction>(
             }
 
             currentState = newState
-            depth += 2
+            depth++
             discount *= rewardDiscountFactor
 
             if (depth > simulationDepthLimit) {
-                val reward = mdp.reward(state, randomAction, newState) * discount
+                val reward = mdp.reward(currentState, randomAction, newState) * discount
                 traceln("-> Depth limit reached: $reward")
 
                 return reward
@@ -130,131 +109,30 @@ class StatefulSolver<TState, TAction>(
         }
     }
 
-    private fun expandNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
-        // If the node is terminal, return it
-        if (stateNode.isTerminal) {
-            return stateNode
+    override fun updateNode(node: StateNode<TState, TAction>, reward: Double) {
+        var currentStateNode = node
+        var currentReward = reward
+
+        while (true)
+        {
+            currentStateNode.maxReward = max(currentReward, currentStateNode.maxReward)
+            currentStateNode.reward += currentReward
+            currentStateNode.n++
+
+            currentStateNode = currentStateNode.parent ?: break
+            currentReward *= rewardDiscountFactor
         }
-
-        // Expand an unexplored action
-        val unexploredActions = stateNode.validActions.minus(stateNode.children.map { c -> c.action })
-        val actionTaken = unexploredActions.random()
-        val actionNode = createActionNode(stateNode, actionTaken)
-
-        // Transition to new state for given action
-        val newState = mdp.transition(stateNode.state, actionTaken)
-        return createStateNode(actionNode, newState)
-    }
-
-    private fun selectNode(stateNode: StateNode<TAction, TState>) : StateNode<TAction, TState> {
-        // If the node is terminal, return it
-        if (mdp.isTerminal(stateNode.state)) {
-            return stateNode
-        }
-
-        // This state has not been fully explored
-        if (stateNode.validActions!!.size != stateNode.children.size) {
-            return stateNode
-        }
-
-        // This state has been explored, select best action
-        val actionNode = stateNode.children.maxByOrNull { a -> calculateUCT(a) }
-
-        val newState = mdp.transition(stateNode.state, actionNode!!.action)
-
-        val actionState = actionNode.children.firstOrNull { s -> s.state == newState }
-                // New state reached by an explored action
-                ?: return createStateNode(actionNode, newState)
-
-
-        // Existing state reached by an explored action
-        return selectNode(actionState)
     }
 
     // Utilities
 
-    private fun createActionNode(parent: StateNode<TAction, TState>, action: TAction) : ActionNode<TAction, TState> {
-        val actionNode = ActionNode<TAction, TState>(parent, action)
-        parent.children.add(actionNode)
-
-        return actionNode
-    }
-
-    private fun createStateNode(parent: ActionNode<TAction, TState>?, state: TState) : StateNode<TAction, TState> {
+    private fun createNode(parent: StateNode<TState, TAction>?, inducingAction: TAction?, state: TState) : StateNode<TState, TAction> {
         val validActions = mdp.actions(state).toList()
         val isTerminal = mdp.isTerminal(state)
-        val stateNode = StateNode(parent, state, validActions, isTerminal)
+        val stateNode = StateNode(parent, inducingAction, state, validActions, isTerminal)
 
-        parent?.children?.add(stateNode)
+        parent?.addChild(stateNode)
 
         return stateNode
-    }
-
-    private fun calculateUCT(node: NodeBase) : Double {
-        val parentN = node.parent?.n ?: node.n
-        return node.reward/node.n + explorationConstant*sqrt(ln(parentN.toDouble())/node.n)
-    }
-
-    // Debug and Diagnostics
-
-    fun traceln(string: String) {
-        if (verbose) {
-            println(string)
-        }
-    }
-
-    fun trace(string: String) {
-        if (verbose) {
-            print(string)
-        }
-    }
-
-    fun displayTree() {
-        if (root == null) return
-        displayTree(root!!, "")
-    }
-
-    fun getNextOptimalAction(): TAction {
-        val optimalAction = root!!.children.maxByOrNull { c -> c.n }
-        return optimalAction!!.action
-    }
-
-    private fun displayNode(node: NodeBase) {
-        if (node.parent != null) {
-            displayNode(node.parent)
-        }
-
-        if (node.depth > 0) {
-            print(" ".repeat((node.depth - 1)*2) + " └")
-        }
-
-        println(node)
-    }
-
-    private fun displayTree(node: NodeBase, indent: String) {
-        if (node.depth > 3) {
-            return
-        }
-
-        val line = StringBuilder()
-                .append(indent)
-                .append(" $node")
-                .append(" (n: ${node.n}, reward: ${"%.5f".format(node.reward)}, UCT: ${"%.5f".format(calculateUCT(node))})")
-
-        println(line.toString())
-
-        if (node is Node<*>) {
-            if (!node.children.any())
-                return
-
-            for (i in 0 until node.children.size - 1) {
-                displayTree(node.children[i], generateIndent(indent) + " ├")
-            }
-            displayTree(node.children[node.children.size - 1], generateIndent(indent) + " └")
-        }
-    }
-
-    private fun generateIndent(indent: String) : String {
-        return indent.replace('├', '│').replace('└', ' ')
     }
 }

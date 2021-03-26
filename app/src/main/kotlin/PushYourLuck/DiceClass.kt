@@ -1,6 +1,5 @@
 package PushYourLuck
 
-import StatelessSolver
 import kotlin.random.Random
 
 class DiceClass(val nDice: Int,

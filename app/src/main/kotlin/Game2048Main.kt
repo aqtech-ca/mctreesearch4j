@@ -1,9 +1,4 @@
-import Twenty48.Game2048MDP
-import kotlin.random.Random
-import StatelessSolver
-import Twenty48.Game2048Position
-import Twenty48.Game2048State
-import Twenty48.Game2048Controller
+import Twenty48.*
 import java.io.File
 
 fun main() {
@@ -29,20 +24,18 @@ fun main() {
     val game2048MDP = Game2048MDP(initialGameState)
 
 
-    var solver = StatelessSolver(
+    var solver = ExtendedStatelessSolver(
         game2048MDP,
-        Random,
         999,
-        10,
         1.4,
         0.9,
         true
     )
-    var rewardTracker = solver.buildTree()
+    solver.constructTree(999)
     solver.displayTree()
 
     println("optimalAction")
-    println(solver.getNextOptimalAction().toString())
+    println(solver.extractOptimalAction().toString())
 
     println("optimal Horizon")
     val solList = solver.getOptimalHorizon().map { it.toString() }
@@ -61,11 +54,11 @@ fun main() {
     val path = System.getProperty("user.dir")
     println("Working Directory = $path")
 
-    val fileName = "outputs/g2058_output.txt"
+    val fileName = "outputs/g2048_output.txt"
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
-        out.println(rewardTracker.joinToString(", "))
+        out.println(solver.explorationTermHistory.joinToString(", "))
     }
 
 }
