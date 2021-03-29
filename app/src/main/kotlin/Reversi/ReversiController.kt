@@ -22,10 +22,10 @@ fun executeMove(state: ReversiState, move: Point) : Boolean {
 
         val nextPlayer = getOpponent(state.currentPlayer)
 
-        if (resolveFeasibleMoves(state, nextPlayer).isNotEmpty()) {
+        if (anyFeasibleMoves(state, nextPlayer)) {
             state.currentPlayer = nextPlayer
         }
-        else if (resolveFeasibleMoves(state).isEmpty()) {
+        else if (!anyFeasibleMoves(state, state.currentPlayer)) {
             state.currentPlayer = ReversiSquare.EMPTY
         }
     }
@@ -39,14 +39,10 @@ fun resolveFeasibleMoves(state: ReversiState) : List<Point> {
 
 fun resolveFeasibleMoves(state: ReversiState, player: ReversiSquare) : List<Point> {
     val moves = mutableListOf<Point>()
-    for (r in 0 until state.size) {
-        for (c in 0 until state.size) {
-            if (getAllFlips(state, Point(r, c), player).isNotEmpty()) {
-                state.squares[r][c] = ReversiSquare.FEASIBLE
+    for (r in state.squares.indices) {
+        for (c in state.squares.indices) {
+            if (anyFlips(state, Point(r, c), player)) {
                 moves.add(Point(r, c))
-            }
-            else if (state.squares[r][c] == ReversiSquare.FEASIBLE) {
-                state.squares[r][c] = ReversiSquare.EMPTY
             }
         }
     }
@@ -54,9 +50,73 @@ fun resolveFeasibleMoves(state: ReversiState, player: ReversiSquare) : List<Poin
     return moves
 }
 
+fun anyFeasibleMoves(state: ReversiState, player: ReversiSquare) : Boolean {
+    for (r in 0 until state.size) {
+        for (c in 0 until state.size) {
+            if (anyFlips(state, Point(r, c), player)) {
+                return true
+            }
+        }
+    }
+
+    return false
+}
+
+private fun anyFlips(state: ReversiState, move: Point, player: ReversiSquare) : Boolean {
+    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY) {
+        return false
+    }
+
+    if (anyFlips(state, move, player) { p -> north(p) }) return true
+    if (anyFlips(state, move, player) { p -> north(p) ; east(p) }) return true
+    if (anyFlips(state, move, player) { p -> east(p) }) return true
+    if (anyFlips(state, move, player) { p -> south(p) ; east(p) }) return true
+    if (anyFlips(state, move, player) { p -> south(p) }) return true
+    if (anyFlips(state, move, player) { p -> south(p) ; west(p) }) return true
+    if (anyFlips(state, move, player) { p -> west(p) }) return true
+    if (anyFlips(state, move, player) { p -> north(p) ; west(p) }) return true
+
+    return false
+}
+
+private fun anyFlips(state: ReversiState, origin: Point, player: ReversiSquare, nextPoint: (p: Point) -> Unit) : Boolean {
+    var flipped = false
+    var current = Point(origin)
+    nextPoint(current)
+
+    while (true) {
+        // Out of bounds
+        if (current.x < 0
+            || current.y < 0
+            || current.x >= state.size
+            || current.y >= state.size) {
+
+            return false
+        }
+
+        val square = state.squares[current.x][current.y]
+
+        // Unflippable
+        if (square == ReversiSquare.EMPTY) {
+            return false
+        }
+
+        // Flipping has completed
+        if (square == player) {
+            break
+        }
+
+        // Flipped the current square
+        flipped = true
+
+        nextPoint(current)
+    }
+
+    return flipped
+}
+
 private fun getAllFlips(state: ReversiState, move: Point, player: ReversiSquare) : List<Point> {
-    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY &&
-        state.squares[move.x][move.y] != ReversiSquare.FEASIBLE ) {
+    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY ) {
         return emptyList()
     }
 
@@ -72,22 +132,6 @@ private fun getAllFlips(state: ReversiState, move: Point, player: ReversiSquare)
     flips.addAll(getFlips(state, move, player) { p -> north(p) ; west(p) })
 
     return flips
-}
-
-private fun north(p: Point) : Unit {
-    p.x--
-}
-
-private fun east(p: Point) : Unit {
-    p.y++
-}
-
-private fun south(p: Point) : Unit {
-    p.x++
-}
-
-private fun west(p: Point) : Unit {
-    p.y--
 }
 
 private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, nextPoint: (p: Point) -> Unit) : List<Point> {
@@ -108,8 +152,7 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
         val square = state.squares[current.x][current.y]
 
         // Unflippable
-        if (square == ReversiSquare.FEASIBLE
-            || square == ReversiSquare.EMPTY) {
+        if (square == ReversiSquare.EMPTY) {
             return emptyList()
         }
 
@@ -129,4 +172,20 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
     }
 
     return flips ?: emptyList()
+}
+
+private fun north(p: Point) : Unit {
+    p.x--
+}
+
+private fun east(p: Point) : Unit {
+    p.y++
+}
+
+private fun south(p: Point) : Unit {
+    p.x++
+}
+
+private fun west(p: Point) : Unit {
+    p.y--
 }

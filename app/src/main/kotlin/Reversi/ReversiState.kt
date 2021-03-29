@@ -17,11 +17,6 @@ class ReversiState : Cloneable {
         squares[size/2 - 1][size/2] = ReversiSquare.DARK
         squares[size/2][size/2 - 1] = ReversiSquare.DARK
 
-        squares[size/2][size/2 + 1] = ReversiSquare.FEASIBLE
-        squares[size/2 + 1][size/2] = ReversiSquare.FEASIBLE
-        squares[size/2 - 2][size/2 - 1] = ReversiSquare.FEASIBLE
-        squares[size/2 - 1][size/2 - 2] = ReversiSquare.FEASIBLE
-
         this.size = size
         currentPlayer = ReversiSquare.DARK
     }

@@ -2,6 +2,7 @@ package me.john_
 
 import Reversi.*
 import java.awt.Point
+import kotlin.system.measureTimeMillis
 
 private class ReversiPlayer(val getMove: (ReversiState) -> Point, val name: String)
 
@@ -54,11 +55,15 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
 fun main() {
 //    ReversiGame().run()
 
-    var iterations = 2
-    var players = listOf(
+    val elapsedMillis = measureTimeMillis {
+        var iterations = 5
+        var players = listOf(
             ReversiPlayer({s -> ReversiSolverMinimax(s).getMove()}, "Minimax"),
             ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Vanilla") )
 
-    simulate(players, iterations)
-    simulate(players.reversed(), iterations)
+        simulate(players, iterations)
+        simulate(players.reversed(), iterations)
+    }
+
+    println("Simulation took $elapsedMillis ms")
 }
