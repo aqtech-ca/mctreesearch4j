@@ -62,29 +62,38 @@ private fun getAllFlips(state: ReversiState, move: Point, player: ReversiSquare)
 
     val flips = mutableListOf<Point>()
 
-    // North
-    flips.addAll(getFlips(state, move, player)  { p -> Point(p.x - 1, p.y) })
-    // NorthEast
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x - 1, p.y + 1) })
-    // East
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x, p.y + 1) })
-    // SouthEast
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x + 1, p.y + 1) })
-    // South
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x + 1, p.y) })
-    // SouthWest
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x + 1, p.y - 1) })
-    // West
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x, p.y - 1) })
-    // NorthWest
-    flips.addAll(getFlips(state, move, player) { p -> Point(p.x - 1, p.y - 1) })
+    flips.addAll(getFlips(state, move, player) { p -> north(p) })
+    flips.addAll(getFlips(state, move, player) { p -> north(p) ; east(p) })
+    flips.addAll(getFlips(state, move, player) { p -> east(p) })
+    flips.addAll(getFlips(state, move, player) { p -> south(p) ; east(p) })
+    flips.addAll(getFlips(state, move, player) { p -> south(p) })
+    flips.addAll(getFlips(state, move, player) { p -> south(p) ; west(p) })
+    flips.addAll(getFlips(state, move, player) { p -> west(p) })
+    flips.addAll(getFlips(state, move, player) { p -> north(p) ; west(p) })
 
     return flips
 }
 
-private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, nextPoint: (p: Point) -> Point) : List<Point> {
-    val flips = mutableListOf<Point>()
-    var current = nextPoint(origin)
+private fun north(p: Point) : Unit {
+    p.x--
+}
+
+private fun east(p: Point) : Unit {
+    p.y++
+}
+
+private fun south(p: Point) : Unit {
+    p.x++
+}
+
+private fun west(p: Point) : Unit {
+    p.y--
+}
+
+private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, nextPoint: (p: Point) -> Unit) : List<Point> {
+    var flips : MutableList<Point>? = null
+    var current = Point(origin)
+    nextPoint(current)
 
     while (true) {
         // Out of bounds
@@ -92,6 +101,7 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
             || current.y < 0
             || current.x >= state.size
             || current.y >= state.size) {
+
             return emptyList()
         }
 
@@ -109,10 +119,14 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
         }
 
         // Flip the current square
+        if (flips == null)
+        {
+            flips = mutableListOf()
+        }
         flips.add(Point(current))
 
-        current = nextPoint(current)
+        nextPoint(current)
     }
 
-    return flips
+    return flips ?: emptyList()
 }

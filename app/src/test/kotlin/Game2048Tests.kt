@@ -24,7 +24,6 @@ class Game2048Tests {
     )
 
     fun testGame2048(inputGrid: Array<Array<Int>>) {
-
         var testGrid = inputGrid.copyOf()
 
         val initialGameState = Game2048State(Game2048Position(testGrid))

@@ -1,11 +1,10 @@
 package Reversi
 
 import StateNode
-import StatefulSolver
 import java.awt.Point
 
-class ReversiSolver(initialState: ReversiState)
-    : StatefulSolver<ReversiState, Point>(ReversiMDP(initialState), 2000, 1.4, 0.9, false) {
+class ReversiSolverMinimax(initialState: ReversiState)
+    : ReversiSolverBase(initialState) {
 
     override fun iterateStep() {
 //        displayTree(4)
@@ -14,9 +13,7 @@ class ReversiSolver(initialState: ReversiState)
 
     override fun selectNode(node: StateNode<ReversiState, Point>): StateNode<ReversiState, Point> {
         val adversarial = adversarialSelect(node)
-        val greedy = super.selectNode(adversarial)
-
-        return greedy
+        return super.selectNode(adversarial)
     }
 
     private fun adversarialSelect(node: StateNode<ReversiState, Point>): StateNode<ReversiState, Point> {
@@ -25,11 +22,7 @@ class ReversiSolver(initialState: ReversiState)
             return node
         }
 
-        return node.getChildren().map { c -> adversarialSelect(c) }.maxByOrNull { n -> adversarialUCT(n, node.depth % 2 == 0) }!!
-    }
-
-    override fun formatNode(node: StateNode<ReversiState, Point>): String {
-        return "Depth: ${node.depth} Action: ${node.inducingAction}, Max Reward: ${"%.5f".format(node.maxReward)}"
+        return node.getChildren().map { c -> adversarialSelect(c) }.maxByOrNull { n -> adversarialUCT(n, node.depth % 2 == 0) } ?: node
     }
 
     private fun adversarialUCT(node: StateNode<ReversiState, Point>, max: Boolean): Double {
@@ -41,8 +34,7 @@ class ReversiSolver(initialState: ReversiState)
         return  calculateUCT(parentN, node.n, reward, explorationConstant)
     }
 
-    fun getMove() : Point {
-        constructTree(5000)
-        return extractOptimalAction()
+    override fun formatNode(node: StateNode<ReversiState, Point>): String {
+        return "Depth: ${node.depth} Action: ${node.inducingAction}, Max Reward: ${"%.5f".format(node.maxReward)}"
     }
 }
