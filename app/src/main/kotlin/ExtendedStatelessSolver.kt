@@ -10,6 +10,21 @@ class ExtendedStatelessSolver<TState, TAction>(
 
     val explorationTermHistory = mutableListOf<Double>()
 
+    // Convergence on all exploration terms
+    val allExplorationTermHistory = mutableListOf<List<Double>>()
+
+    // Convergence on all rewards
+    val allRewardsHistory = mutableListOf<List<Double>>()
+
+    // Convergence on all visits
+    val childNCount = mutableListOf<List<Int>>()
+
+    // record id of all actions
+    val allActions = mutableListOf<Iterable<TAction>>()
+
+    // record of inducing optimal action
+    val optimalActionId = mutableListOf<TAction>()
+
     override fun constructTree(iterations: Int) {
         for (i in 0..iterations) {
             iterateStep()
@@ -23,6 +38,12 @@ class ExtendedStatelessSolver<TState, TAction>(
             val explorationFactor = explorationConstant*sqrt(ln(i.toDouble())/ns)
 
             explorationTermHistory.add(explorationFactor)
+
+            allExplorationTermHistory.add(root.getChildren().map{ child -> explorationConstant*sqrt( ln(i.toDouble())/child.n )  })
+            allRewardsHistory.add(root.getChildren().map{ child -> child.reward /child.n })
+            childNCount.add(root.getChildren().map{ child -> child.n })
+            allActions.add(root.getChildren().map {child -> child.inducingAction!!})
+            optimalActionId.add(bestChild.inducingAction!!)
         }
     }
 

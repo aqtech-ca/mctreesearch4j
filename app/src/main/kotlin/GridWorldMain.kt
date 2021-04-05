@@ -31,7 +31,7 @@ fun main() {
     var gwSolver = ExtendedStatelessSolver(
             gridworld,
             999,
-            0.28,
+            0.28*10,
             0.95,
             false
     )
@@ -42,11 +42,13 @@ fun main() {
     val path = System.getProperty("user.dir")
     println("Working Directory = $path")
 
-    val fileName = "outputs/gw_output.txt"
-    val outputFile = File(fileName)
+    val allActionsOutputFile = File("outputs/gw_output_all_actions.txt")
 
-    outputFile.printWriter().use { out ->
-        out.println(gwSolver.explorationTermHistory.joinToString(", "))
-    }
+    File("outputs/gw_output_allExplorationTermHistory.txt").printWriter().use { out -> out.println(gwSolver.allExplorationTermHistory.joinToString(", ")) }
+    File("outputs/gw_output_allRewardsHistory.txt").printWriter().use { out -> out.println(gwSolver.allRewardsHistory.joinToString(", ")) }
+    File("outputs/gw_output_allActions.txt").printWriter().use { out -> out.println(gwSolver.allActions.joinToString(", ")) }
+    File("outputs/gw_output_optimalActionId.txt").printWriter().use { out -> out.println(gwSolver.optimalActionId.joinToString(", ")) }
+
+    File("outputs/gw_output_childNCount.txt").printWriter().use { out -> out.println(gwSolver.childNCount.joinToString(", ")) }
 
 }
