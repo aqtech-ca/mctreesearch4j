@@ -27,7 +27,7 @@ fun main() {
     var solver = ExtendedStatelessSolver(
         game2048MDP,
         999,
-        1.4,
+        1.4*5,
         0.9,
         true
     )
@@ -54,11 +54,19 @@ fun main() {
     val path = System.getProperty("user.dir")
     println("Working Directory = $path")
 
+    /*
     val fileName = "outputs/g2048_output.txt"
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
         out.println(solver.explorationTermHistory.joinToString(", "))
     }
+     */
+
+    File("outputs/g2048_output_allExplorationTermHistory.txt").printWriter().use { out -> out.println(solver.allExplorationTermHistory.joinToString(", ")) }
+    File("outputs/g2048_output_allRewardsHistory.txt").printWriter().use { out -> out.println(solver.allRewardsHistory.joinToString(", ")) }
+    File("outputs/g2048_output_allActions.txt").printWriter().use { out -> out.println(solver.allActions.joinToString(", ")) }
+    File("outputs/g2048_output_optimalActionId.txt").printWriter().use { out -> out.println(solver.optimalActionId.joinToString(", ")) }
+    File("outputs/g2048_output_childNCount.txt").printWriter().use { out -> out.println(solver.childNCount.joinToString(", ")) }
 
 }

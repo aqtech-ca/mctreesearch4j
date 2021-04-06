@@ -48,7 +48,6 @@ fun main() {
     File("outputs/gw_output_allRewardsHistory.txt").printWriter().use { out -> out.println(gwSolver.allRewardsHistory.joinToString(", ")) }
     File("outputs/gw_output_allActions.txt").printWriter().use { out -> out.println(gwSolver.allActions.joinToString(", ")) }
     File("outputs/gw_output_optimalActionId.txt").printWriter().use { out -> out.println(gwSolver.optimalActionId.joinToString(", ")) }
-
     File("outputs/gw_output_childNCount.txt").printWriter().use { out -> out.println(gwSolver.childNCount.joinToString(", ")) }
 
 }

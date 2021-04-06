@@ -24,13 +24,13 @@ fun main() {
 
     var solver = ExtendedStatelessSolver(
             pylMDP,
-            999,
-            0.07,
-            0.99,
+            99,
+            0.05,
+            0.6,
             false
     )
 
-    solver.constructTree(999)
+    solver.constructTree(499)
     solver.displayTree()
     val optimalHorizon = solver.getOptimalHorizon()
     println(optimalHorizon.toString())
@@ -40,11 +40,19 @@ fun main() {
     val path = System.getProperty("user.dir")
     println("Working Directory = $path")
 
+    /*
     val fileName = "outputs/pyl_output.txt"
     val outputFile = File(fileName)
 
     outputFile.printWriter().use { out ->
         out.println(solver.explorationTermHistory.joinToString(", "))
     }
+     */
+
+    File("outputs/gPYL_output_allExplorationTermHistory.txt").printWriter().use { out -> out.println(solver.allExplorationTermHistory.joinToString(", ")) }
+    File("outputs/gPYL_output_allRewardsHistory.txt").printWriter().use { out -> out.println(solver.allRewardsHistory.joinToString(", ")) }
+    File("outputs/gPYL_output_allActions.txt").printWriter().use { out -> out.println(solver.allActions.joinToString(", ")) }
+    File("outputs/gPYL_output_optimalActionId.txt").printWriter().use { out -> out.println(solver.optimalActionId.joinToString(", ")) }
+    File("outputs/gPYL_output_childNCount.txt").printWriter().use { out -> out.println(solver.childNCount.joinToString(", ")) }
 
 }
