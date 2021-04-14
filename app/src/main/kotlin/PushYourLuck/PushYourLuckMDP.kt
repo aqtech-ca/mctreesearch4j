@@ -1,6 +1,7 @@
 package PushYourLuck
 
 import MDP
+import kotlin.random.Random
 
 class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, PushYourLuckAction>(){
 

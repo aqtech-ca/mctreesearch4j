@@ -30,7 +30,8 @@ fun main() {
             false
     )
 
-    solver.constructTree(499)
+
+    solver.constructTree(50)
     solver.displayTree()
     val optimalHorizon = solver.getOptimalHorizon()
     println(optimalHorizon.toString())

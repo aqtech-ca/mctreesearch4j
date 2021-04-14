@@ -33,6 +33,8 @@ class DiceClass(val nDice: Int,
     }
 
     fun cashOut(): Double {
+        instantReward = 0.0
+
         for (d_ind in diceConfig.indices){
             if (markedSides[d_ind].any{ it }){
                 // logic ia any side of the dice is market, indicated by bool true
@@ -42,7 +44,7 @@ class DiceClass(val nDice: Int,
                         runningProduct *= diceConfig[d_ind][s_ind]
                     }
                 }
-                instantReward = runningProduct
+                instantReward += runningProduct
             }
         }
         // Reset the dice

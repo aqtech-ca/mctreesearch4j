@@ -25,7 +25,7 @@ fun main() {
             ySize = 5,
             rewards = setRewards,
             transitionProbability = 0.8,
-            startingLocation = GridworldState(2, 2, false)
+            startingLocation = GridworldState(4, 4, false)
     )
 
     var gwSolver = ExtendedStatelessSolver(
