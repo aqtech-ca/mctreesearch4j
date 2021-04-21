@@ -26,7 +26,7 @@ class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, P
         return false
     }
 
-    override fun actions(state: PushYourLuckState) : Iterable<PushYourLuckAction> {
-        return sequenceOf(PushYourLuckAction.ROLL, PushYourLuckAction.CASHOUT).asIterable()
+    override fun actions(state: PushYourLuckState) : Collection<PushYourLuckAction> {
+        return sequenceOf(PushYourLuckAction.ROLL, PushYourLuckAction.CASHOUT).toList()
     }
 }

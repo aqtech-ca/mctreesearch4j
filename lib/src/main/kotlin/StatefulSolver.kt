@@ -71,7 +71,7 @@ open class StatefulSolver<TState, TAction>(
         traceln("Simulation:")
 
         // If state is terminal, the reward is defined by MDP
-        if (mdp.isTerminal(node.state)) {
+        if (node.isTerminal) {
             traceln("Terminal state reached")
 
             return mdp.reward(node.parent?.state, node.inducingAction, node.state)
@@ -83,15 +83,17 @@ open class StatefulSolver<TState, TAction>(
 
         while(true) {
             val validActions = mdp.actions(currentState)
-            val randomAction = validActions.toList().random()
+            val randomAction = validActions.random()
             val newState = mdp.transition(currentState, randomAction)
 
-            trace("-> $randomAction ")
-            trace("-> $newState ")
+            if (verbose)
+            {
+                trace("-> $randomAction ")
+                trace("-> $newState ")
+            }
 
             if (mdp.isTerminal(newState)) {
                 val reward = mdp.reward(currentState, randomAction, newState) * discount
-                traceln("-> Terminal state reached : $reward")
 
                 return reward
             }
@@ -102,7 +104,6 @@ open class StatefulSolver<TState, TAction>(
 
             if (depth > simulationDepthLimit) {
                 val reward = mdp.reward(currentState, randomAction, newState) * discount
-                traceln("-> Depth limit reached: $reward")
 
                 return reward
             }

@@ -4,7 +4,7 @@ import MDP
 import java.awt.Point
 
 class ReversiMDP(private val initialState: ReversiState) : MDP<ReversiState, Point>(){
-    override fun actions(state: ReversiState): Iterable<Point> {
+    override fun actions(state: ReversiState): Collection<Point> {
         return ReversiController.resolveFeasibleMoves(state)
     }
 

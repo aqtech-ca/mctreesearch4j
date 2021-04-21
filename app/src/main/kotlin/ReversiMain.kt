@@ -1,6 +1,11 @@
 package me.john_
 
+import GridWorld.GridWorldGridSolve
+import GridWorld.GridworldMDP
+import GridWorld.GridworldReward
+import GridWorld.GridworldState
 import Reversi.*
+import StatefulSolver
 import java.awt.Point
 import kotlin.system.measureTimeMillis
 
@@ -39,13 +44,19 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
         }
 
         if (dark > light) {
-            println("${first.name} won by $dark to $light")
+            if (i % 10 == 0) {
+                println("${first.name} won by $dark to $light")
+            }
             darkWins++
         } else if (dark < light) {
-            println("${second.name} won by $light to $dark")
+            if (i % 10 == 0) {
+                println("${second.name} won by $light to $dark")
+            }
             lightWins++
         } else {
-            println("Tied $dark to $light")
+            if (i % 10 == 0) {
+                println("Tied $dark to $light")
+            }
         }
     }
 
@@ -56,13 +67,45 @@ fun main() {
 //    ReversiGame().run()
 
     val elapsedMillis = measureTimeMillis {
-        var iterations = 5
-        var players = listOf(
-            ReversiPlayer({s -> ReversiSolverMinimax(s).getMove()}, "Minimax"),
-            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Vanilla") )
+//        var iterations = 100
+//        var players = listOf(
+//            ReversiPlayer({s -> ReversiSolverMinimax(s).getMove()}, "Minimax"),
+//            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
+//
+//        simulate(players, iterations)
+//        simulate(players.reversed(), iterations)
 
-        simulate(players, iterations)
-        simulate(players.reversed(), iterations)
+        val setRewards = listOf(
+            GridworldReward(49, 87, -0.5),
+            // GridworldReward(3, 3, 1.0),
+            GridworldReward(39, 1, 1.0)
+        )
+
+//        var gridworld = GridworldMDP(
+//            xSize = 10,
+//            ySize = 10,
+//            rewards = setRewards,
+//            transitionProbability = 0.8,
+//            startingLocation = GridworldState(2, 2, false)
+//        )
+//
+//        var gwSolver = StatefulSolver(
+//            gridworld,
+//            99,
+//            0.28,
+//            0.95,
+//            false
+//        )
+//        gwSolver.constructTree(999999)
+
+        val gw = GridWorldGridSolve(
+            50,
+            50,
+            setRewards,
+            0.85
+        )
+
+        gw.getWorldSolve()
     }
 
     println("Simulation took $elapsedMillis ms")

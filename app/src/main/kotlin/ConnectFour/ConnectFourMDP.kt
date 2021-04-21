@@ -12,7 +12,7 @@ class ConnectFourMDP(
     private val adversary = Player("Player2", "2")
     private val boardSize = 7
 
-    override fun actions(state: ConnectFourState): Iterable<Int> {
+    override fun actions(state: ConnectFourState): Collection<Int> {
         val validActions = mutableListOf<Int>()
 
         for (playerAction in 0..boardSize) {

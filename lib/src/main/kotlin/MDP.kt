@@ -7,5 +7,5 @@ abstract class MDP<TState, TAction> {
 
     abstract fun isTerminal(state: TState) : Boolean
 
-    abstract fun actions(state: TState) : Iterable<TAction>
+    abstract fun actions(state: TState) : Collection<TAction>
 }

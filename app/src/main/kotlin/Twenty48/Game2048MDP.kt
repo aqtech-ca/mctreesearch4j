@@ -26,11 +26,11 @@ class Game2048MDP(val initialGameState: Game2048State ) : MDP<Game2048State, Gam
         return state.makeMove(action, state.gameGrid)
     }
 
-    override fun actions(state: Game2048State): Iterable<Game2048Action> {
+    override fun actions(state: Game2048State): Collection<Game2048Action> {
         return sequenceOf(Game2048Action.valueOf("up"),
             Game2048Action.valueOf("down"),
             Game2048Action.valueOf("left"),
-            Game2048Action.valueOf("right")).asIterable()
+            Game2048Action.valueOf("right")).toList()
     }
 
     override fun isTerminal(state: Game2048State): Boolean {

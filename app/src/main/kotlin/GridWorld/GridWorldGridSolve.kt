@@ -1,6 +1,7 @@
 package GridWorld
 
 import StatelessSolver
+import StatefulSolver
 
 class GridWorldGridSolve(val xSize: Int,
                          val ySize: Int,
@@ -32,7 +33,7 @@ class GridWorldGridSolve(val xSize: Int,
                         GridworldState(x, y, false)
                     )
 
-                    var solver = StatelessSolver(
+                    var solver = StatefulSolver(
                         gridworld,
                         mcIter,
                         exploreConstant,
