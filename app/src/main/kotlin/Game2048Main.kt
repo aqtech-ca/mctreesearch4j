@@ -23,7 +23,6 @@ fun main() {
 
     val game2048MDP = Game2048MDP(initialGameState)
 
-
     var solver = ExtendedStatelessSolver(
         game2048MDP,
         999,

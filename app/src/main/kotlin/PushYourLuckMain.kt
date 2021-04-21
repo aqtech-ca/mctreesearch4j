@@ -20,6 +20,8 @@ fun main() {
 
      */
 
+    val t1 = System.nanoTime()
+
     val pylMDP = PushYourLuckMDP(nDice = 1, nSides = 6)
 
     var solver = ExtendedStatelessSolver(
@@ -55,5 +57,8 @@ fun main() {
     File("outputs/gPYL_output_allActions.txt").printWriter().use { out -> out.println(solver.allActions.joinToString(", ")) }
     File("outputs/gPYL_output_optimalActionId.txt").printWriter().use { out -> out.println(solver.optimalActionId.joinToString(", ")) }
     File("outputs/gPYL_output_childNCount.txt").printWriter().use { out -> out.println(solver.childNCount.joinToString(", ")) }
+
+
+
 
 }

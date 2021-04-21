@@ -8,9 +8,9 @@ fun main() {
 
     var solver = ExtendedStatelessSolver(
         sgMDP,
-            5,
+            1,
             0.07,
-            0.6,
+            1.0,
             false
     )
 

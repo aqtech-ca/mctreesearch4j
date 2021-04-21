@@ -17,6 +17,7 @@ class SimpleGameMDP(): MDP<SimpleGameState, SimpleGameAction>(){
             else -> throw IllegalArgumentException("Expected one of [ACTION1, ACTION2]")
         }
     }
+    // reset mu1 to 0 each time.
 
     override fun reward(previousState: SimpleGameState?, action: SimpleGameAction?, state: SimpleGameState) : Double {
         return when {
