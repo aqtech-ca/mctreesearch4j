@@ -67,11 +67,11 @@ fun main() {
 
     val depthList = (0 .. 100).map {it * 100}
     val iterList = (0 .. 5).map {it * 10.toDouble().pow(it).toInt() }
-    // println(depthList)
-    // println(benchmarkRuntimeDepth(depthList))
+    println(depthList)
+    println(benchmarkRuntimeDepth(depthList))
 
-    println(iterList)
-    println(benchmarkRuntimeMCIter(iterList))
+    // println(iterList)
+    // println(benchmarkRuntimeMCIter(iterList))
 
 }
 

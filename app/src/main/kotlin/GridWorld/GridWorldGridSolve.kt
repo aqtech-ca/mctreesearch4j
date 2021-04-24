@@ -34,14 +34,14 @@ class GridWorldGridSolve(val xSize: Int,
 
                     var solver = StatelessSolver(
                         gridworld,
-                        mcIter,
+                        simDepth,
                         exploreConstant,
                         rewardDiscount,
                         verboseBool
                     )
 
                     // println("Solving at [$x, $y]")
-                    solver.constructTree(simDepth)
+                    solver.constructTree(mcIter)
                     // solver.displayTree()
                     // println("Optimal action: ${solver.getNextOptimalAction()}")
 
