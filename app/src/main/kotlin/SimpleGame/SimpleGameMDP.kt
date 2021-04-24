@@ -4,16 +4,14 @@ import MDP
 
 class SimpleGameMDP(): MDP<SimpleGameState, SimpleGameAction>(){
 
-    var mu1Var = 0.0
-
     override fun initialState(): SimpleGameState {
         return SimpleGameState()
     }
 
     override fun transition(state: SimpleGameState, action: SimpleGameAction) : SimpleGameState {
         return when {
-            action === SimpleGameAction.ACTION1 -> {mu1Var += 0.5; SimpleGameState(mu1Var, 0.0)}
-            action === SimpleGameAction.ACTION2 -> {SimpleGameState(mu1Var, 0.0) }
+            action === SimpleGameAction.ACTION1 -> {SimpleGameState(state.mu1 + 0.5, state.mu2)}
+            action === SimpleGameAction.ACTION2 -> {SimpleGameState(state.mu1, state.mu2) }
             else -> throw IllegalArgumentException("Expected one of [ACTION1, ACTION2]")
         }
     }
