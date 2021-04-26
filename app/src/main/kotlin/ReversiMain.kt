@@ -1,9 +1,5 @@
 package me.john_
 
-import GridWorld.GridWorldGridSolve
-import GridWorld.GridworldMDP
-import GridWorld.GridworldReward
-import GridWorld.GridworldState
 import Reversi.*
 import StatefulSolver
 import java.awt.Point
@@ -74,38 +70,6 @@ fun main() {
 //
 //        simulate(players, iterations)
 //        simulate(players.reversed(), iterations)
-
-        val setRewards = listOf(
-            GridworldReward(49, 87, -0.5),
-            // GridworldReward(3, 3, 1.0),
-            GridworldReward(39, 1, 1.0)
-        )
-
-//        var gridworld = GridworldMDP(
-//            xSize = 10,
-//            ySize = 10,
-//            rewards = setRewards,
-//            transitionProbability = 0.8,
-//            startingLocation = GridworldState(2, 2, false)
-//        )
-//
-//        var gwSolver = StatefulSolver(
-//            gridworld,
-//            99,
-//            0.28,
-//            0.95,
-//            false
-//        )
-//        gwSolver.constructTree(999999)
-
-        val gw = GridWorldGridSolve(
-            50,
-            50,
-            setRewards,
-            0.85
-        )
-
-        gw.getWorldSolve()
     }
 
     println("Simulation took $elapsedMillis ms")
