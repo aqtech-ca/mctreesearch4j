@@ -15,9 +15,12 @@ abstract class SolverBase<TAction, TNode>(
 
     open fun constructTree(iterations: Int) {
         for (i in 0..iterations) {
-            traceln("")
-            traceln("New iteration $i")
-            traceln("=============")
+            if (verbose)
+            {
+                traceln("")
+                traceln("New iteration $i")
+                traceln("=============")
+            }
             iterateStep()
         }
     }

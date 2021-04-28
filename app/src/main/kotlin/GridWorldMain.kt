@@ -48,5 +48,4 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(gwSolver.explorationTermHistory.joinToString(", "))
     }
-
 }

@@ -40,14 +40,14 @@ class ReversiGame {
                                             .fillMaxSize()
                                             .border(BorderStroke(0.1f.dp, Color(0xFF6200EE)))
                                             .background(Color(if (r == lastMove.x && c == lastMove.y) 0xFF8cee00 else 0xFFefe6fd)),
-                                        enabled = square == ReversiSquare.FEASIBLE || square == ReversiSquare.EMPTY,
+                                        enabled = square == ReversiSquare.EMPTY,
                                         onClick = {
                                             println("row: $r col: $c")
                                             if (ReversiController.executeMove(state, Point(r, c))) {
                                                 if (state.currentPlayer != ReversiSquare.EMPTY) {
                                                     while (state.currentPlayer == ai) {
                                                         println("AI is thinking")
-                                                        lastMove = ReversiSolver(state.clone()).getMove()
+                                                        lastMove = ReversiSolverMinimax(state.clone()).getMove()
                                                         ReversiController.executeMove(state, lastMove)
                                                     }
                                                     println("Next player: ${state.currentPlayer}")
@@ -82,7 +82,6 @@ class ReversiGame {
                                         when (square) {
                                             ReversiSquare.DARK -> Icon(Icons.Rounded.Phone,null)
                                             ReversiSquare.LIGHT -> Icon(Icons.Rounded.Star,null)
-                                            ReversiSquare.FEASIBLE -> Icon(Icons.Rounded.Info, null)
                                             else -> {}
                                         }
                                     }
@@ -100,7 +99,7 @@ class ReversiGame {
                             val currentState = state.clone()
 
                             ai = state.currentPlayer
-                            lastMove = ReversiSolver(state.clone()).getMove()
+                            lastMove = ReversiSolverMinimax(state.clone()).getMove()
                             ReversiController.executeMove(state, lastMove)
 
                             viewModel.update()

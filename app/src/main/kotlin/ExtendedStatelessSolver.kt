@@ -1,4 +1,5 @@
-import kotlin.math.*
+import kotlin.math.ln
+import kotlin.math.sqrt
 
 class ExtendedStatelessSolver<TState, TAction>(
         mdp: MDP<TState, TAction>,
