@@ -1,11 +1,13 @@
+package mcts
+
 import kotlin.math.max
 
 open class StatelessSolver<TState, TAction>(
-        private val mdp: MDP<TState, TAction>,
-        private val simulationDepthLimit: Int,
-        explorationConstant: Double,
-        private val rewardDiscountFactor: Double,
-        verbose: Boolean)
+    private val mdp: MDP<TState, TAction>,
+    private val simulationDepthLimit: Int,
+    explorationConstant: Double,
+    private val rewardDiscountFactor: Double,
+    verbose: Boolean)
     : SolverBase<TAction, StatelessActionNode<TState, TAction>>(verbose, explorationConstant) {
 
     override var root = StatelessActionNode<TState, TAction>(null, null)

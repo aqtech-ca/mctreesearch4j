@@ -1,6 +1,6 @@
 package Reversi
 
-import MDP
+import mcts.MDP
 import java.awt.Point
 
 class ReversiMDP(private val initialState: ReversiState) : MDP<ReversiState, Point>(){

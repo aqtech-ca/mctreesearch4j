@@ -1,9 +1,11 @@
+package mcts
+
 class StateNode<TState, TAction>(
-        parent: StateNode<TState, TAction>?,
-        inducingAction: TAction?,
-        val state: TState,
-        val validActions: Collection<TAction>,
-        val isTerminal: Boolean) : Node<TAction, StateNode<TState, TAction>>(parent, inducingAction) {
+    parent: StateNode<TState, TAction>?,
+    inducingAction: TAction?,
+    val state: TState,
+    val validActions: Collection<TAction>,
+    val isTerminal: Boolean) : Node<TAction, StateNode<TState, TAction>>(parent, inducingAction) {
 
     private val children = mutableMapOf<TAction, MutableCollection<StateNode<TState, TAction>>>()
 

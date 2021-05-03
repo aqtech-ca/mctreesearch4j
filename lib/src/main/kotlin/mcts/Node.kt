@@ -1,3 +1,5 @@
+package mcts
+
 abstract class Node<TAction, TSelf>(
     val parent: TSelf?,
     val inducingAction: TAction?

@@ -1,7 +1,7 @@
 package Reversi
 
-import StateNode
-import StatelessActionNode
+import mcts.StateNode
+import mcts.StatelessActionNode
 import java.awt.Point
 
 class ReversiSolverMinimax(initialState: ReversiState)
