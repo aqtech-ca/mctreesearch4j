@@ -102,7 +102,7 @@ abstract class SolverBase<TAction, TNode>(
         println(formatNode(node))
     }
 
-    fun displayTree(depthLimit: Int = 3) {
+    fun displayTree(node: TNode = root, depthLimit: Int = 3) {
         displayTree(depthLimit, root, "")
     }
 
