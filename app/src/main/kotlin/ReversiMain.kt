@@ -63,13 +63,13 @@ fun main() {
 //    ReversiGame().run()
 
     val elapsedMillis = measureTimeMillis {
-//        var iterations = 100
-//        var players = listOf(
-//            ReversiPlayer({s -> ReversiSolverMinimax(s).getMove()}, "Minimax"),
-//            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
-//
-//        simulate(players, iterations)
-//        simulate(players.reversed(), iterations)
+        var iterations = 100
+        var players = listOf(
+            ReversiPlayer({s -> ReversiSolverMaxSelect(s).getMove()}, "SelectMax"),
+            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
+
+        simulate(players, iterations)
+        simulate(players.reversed(), iterations)
     }
 
     println("Simulation took $elapsedMillis ms")
