@@ -1,6 +1,6 @@
 package Twenty48
 
-import MDP
+import mcts.MDP
 import kotlin.math.log2
 
 class Game2048MDP(val initialGameState: Game2048State ) : MDP<Game2048State, Game2048Action>() {

@@ -1,6 +1,8 @@
+package mcts
+
 class StatelessActionNode<TState, TAction>(
-        parent: StatelessActionNode<TState, TAction>?,
-        inducingAction: TAction?) : Node<TAction, StatelessActionNode<TState, TAction>>(parent, inducingAction) {
+    parent: StatelessActionNode<TState, TAction>?,
+    inducingAction: TAction?) : Node<TAction, StatelessActionNode<TState, TAction>>(parent, inducingAction) {
 
     private var _state: TState? = null
     private var _validActions: Iterable<TAction>? = null

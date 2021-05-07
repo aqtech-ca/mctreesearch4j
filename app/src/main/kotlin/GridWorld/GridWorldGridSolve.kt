@@ -1,7 +1,7 @@
 package GridWorld
 
-import StatelessSolver
-import StatefulSolver
+import mcts.StatelessSolver
+import mcts.StatefulSolver
 
 class GridWorldGridSolve(val xSize: Int,
                          val ySize: Int,

@@ -1,7 +1,7 @@
 package me.john_
 
 import Reversi.*
-import StatefulSolver
+import mcts.StatefulSolver
 import java.awt.Point
 import kotlin.system.measureTimeMillis
 
@@ -60,7 +60,7 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
 }
 
 fun main() {
-//    ReversiGame().run()
+    ReversiGame().run()
 
     val elapsedMillis = measureTimeMillis {
 //        var iterations = 100

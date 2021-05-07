@@ -1,3 +1,5 @@
+package mcts
+
 import kotlin.math.max
 
 open class StatefulSolver<TState, TAction>(

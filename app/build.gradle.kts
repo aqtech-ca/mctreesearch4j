@@ -38,3 +38,5 @@ compose.desktop {
         mainClass = "ReversiMainKt"
     }
 }
+
+

@@ -1,6 +1,6 @@
 package ConnectFour
 
-import StatelessSolver
+import mcts.StatelessSolver
 import de.magoeke.kotlin.connectfour.controllers.impl.MainController
 import de.magoeke.kotlin.connectfour.models.Board
 import de.magoeke.kotlin.connectfour.models.GameState

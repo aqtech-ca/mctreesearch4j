@@ -1,5 +1,7 @@
 import kotlin.math.ln
 import kotlin.math.sqrt
+import mcts.MDP
+import mcts.StatelessSolver
 
 class ExtendedStatelessSolver<TState, TAction>(
         mdp: MDP<TState, TAction>,

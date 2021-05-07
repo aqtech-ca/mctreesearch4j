@@ -1,6 +1,6 @@
 package PushYourLuck
 
-import MDP
+import mcts.MDP
 
 class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, PushYourLuckAction>(){
 

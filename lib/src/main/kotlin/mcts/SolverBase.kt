@@ -1,3 +1,5 @@
+package mcts
+
 import kotlin.math.ln
 import kotlin.math.sqrt
 
