@@ -47,7 +47,7 @@ class ReversiGame {
                                                 if (state.currentPlayer != ReversiSquare.EMPTY) {
                                                     while (state.currentPlayer == ai) {
                                                         println("AI is thinking")
-                                                        lastMove = ReversiSolverMinimax(state.clone()).getMove()
+                                                        lastMove = ReversiSolverHeuristicSim(state.clone()).getMove()
                                                         ReversiController.executeMove(state, lastMove)
                                                     }
                                                     println("Next player: ${state.currentPlayer}")
@@ -99,7 +99,7 @@ class ReversiGame {
                             val currentState = state.clone()
 
                             ai = state.currentPlayer
-                            lastMove = ReversiSolverMinimax(state.clone()).getMove()
+                            lastMove = ReversiSolverHeuristicSim(state.clone()).getMove()
                             ReversiController.executeMove(state, lastMove)
 
                             viewModel.update()
