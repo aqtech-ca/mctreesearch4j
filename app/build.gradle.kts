@@ -4,8 +4,8 @@ group = "me.john_"
 version = "1.0-SNAPSHOT"
 
 plugins {
-    kotlin("jvm") version "1.4.21-2"
-    id("org.jetbrains.compose") version "0.3.0-build146"
+    kotlin("jvm") version "1.5.0"
+    id("org.jetbrains.compose") version "0.4.0-build209"
     java
 }
 
@@ -18,7 +18,6 @@ repositories {
 }
 dependencies {
     implementation( "com.mcts:lib:1.0-SNAPSHOT" )
-    implementation( "de.magoeke.kotlin:connectfour:1.0-SNAPSHOT" )
     implementation(compose.desktop.currentOs)
     testImplementation(kotlin("test-junit"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")

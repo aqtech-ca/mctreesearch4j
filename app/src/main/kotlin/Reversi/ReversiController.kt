@@ -42,7 +42,11 @@ fun resolveFeasibleMoves(state: ReversiState, player: ReversiSquare) : List<Poin
     for (r in state.squares.indices) {
         for (c in state.squares.indices) {
             if (anyFlips(state, Point(r, c), player)) {
+                state.squares[r][c] = ReversiSquare.FEASIBLE
                 moves.add(Point(r, c))
+            }
+            else if (state.squares[r][c] == ReversiSquare.FEASIBLE) {
+                state.squares[r][c] = ReversiSquare.EMPTY
             }
         }
     }
@@ -63,7 +67,8 @@ fun anyFeasibleMoves(state: ReversiState, player: ReversiSquare) : Boolean {
 }
 
 private fun anyFlips(state: ReversiState, move: Point, player: ReversiSquare) : Boolean {
-    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY) {
+    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY &&
+        state.squares[move.x][move.y] != ReversiSquare.FEASIBLE) {
         return false
     }
 
@@ -97,7 +102,7 @@ private fun anyFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
         val square = state.squares[current.x][current.y]
 
         // Unflippable
-        if (square == ReversiSquare.EMPTY) {
+        if (square == ReversiSquare.EMPTY || square == ReversiSquare.FEASIBLE) {
             return false
         }
 
@@ -116,7 +121,8 @@ private fun anyFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
 }
 
 private fun getAllFlips(state: ReversiState, move: Point, player: ReversiSquare) : List<Point> {
-    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY ) {
+    if (state.squares[move.x][move.y] != ReversiSquare.EMPTY &&
+        state.squares[move.x][move.y] != ReversiSquare.FEASIBLE) {
         return emptyList()
     }
 
@@ -152,7 +158,7 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
         val square = state.squares[current.x][current.y]
 
         // Unflippable
-        if (square == ReversiSquare.EMPTY) {
+        if (square == ReversiSquare.EMPTY || square == ReversiSquare.FEASIBLE) {
             return emptyList()
         }
 

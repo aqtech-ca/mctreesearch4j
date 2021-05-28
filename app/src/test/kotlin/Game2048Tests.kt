@@ -4,7 +4,6 @@ import ExtendedStatelessSolver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import kotlin.random.Random
-import StatelessSolver
 import kotlin.test.assertNotNull
 
 class Game2048Tests {

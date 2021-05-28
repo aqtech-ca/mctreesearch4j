@@ -60,17 +60,17 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
 }
 
 fun main() {
-//    ReversiGame().run()
+    ReversiGame().run()
 
-    val elapsedMillis = measureTimeMillis {
-        var iterations = 20
-        var players = listOf(
-            ReversiPlayer({s -> ReversiSolverHeuristicSim(s).getMove()}, "Heuristic"),
-            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
-
-        simulate(players, iterations)
-        simulate(players.reversed(), iterations)
-    }
-
-    println("Simulation took $elapsedMillis ms")
+//    val elapsedMillis = measureTimeMillis {
+//        var iterations = 10
+//        var players = listOf(
+//            ReversiPlayer({s -> ReversiSolverHeuristicSim(s).getMove()}, "Heuristic"),
+//            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
+//
+//        simulate(players, iterations)
+//        simulate(players.reversed(), iterations)
+//    }
+//
+//    println("Simulation took $elapsedMillis ms")
 }

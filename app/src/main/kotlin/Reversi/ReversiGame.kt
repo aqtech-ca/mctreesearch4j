@@ -16,6 +16,7 @@ class ReversiGame {
     fun run() {
         val aiPlayer = mutableStateOf(ReversiSquare.EMPTY)
         val state = ReversiState(8)
+        ReversiController.resolveFeasibleMoves(state)
         val viewModel = ReversiViewModel(state)
         val lastAIMove = mutableStateOf(Point(-1, -1))
 
@@ -40,48 +41,54 @@ class ReversiGame {
                                             .fillMaxSize()
                                             .border(BorderStroke(0.1f.dp, Color(0xFF6200EE)))
                                             .background(Color(if (r == lastMove.x && c == lastMove.y) 0xFF8cee00 else 0xFFefe6fd)),
-                                        enabled = square == ReversiSquare.EMPTY,
                                         onClick = {
                                             println("row: $r col: $c")
-                                            if (ReversiController.executeMove(state, Point(r, c))) {
-                                                if (state.currentPlayer != ReversiSquare.EMPTY) {
-                                                    while (state.currentPlayer == ai) {
-                                                        println("AI is thinking")
-                                                        lastMove = ReversiSolverHeuristicSim(state.clone()).getMove()
-                                                        ReversiController.executeMove(state, lastMove)
-                                                    }
-                                                    println("Next player: ${state.currentPlayer}")
-                                                }
-
-                                                if (state.currentPlayer == ReversiSquare.EMPTY) {
-                                                    var aiCount = 0
-                                                    var playerCount = 0
-                                                    val playerSquare = ReversiController.getOpponent(ai)
-                                                    for (square in state.squares.flatten()) {
-                                                        if (square == ai) {
-                                                            aiCount++
+                                            if (state.squares[r][c] == ReversiSquare.FEASIBLE) {
+                                                if (ReversiController.executeMove(state, Point(r, c))) {
+                                                    ReversiController.resolveFeasibleMoves(state)
+                                                    if (state.currentPlayer != ReversiSquare.EMPTY) {
+                                                        while (state.currentPlayer == ai) {
+                                                            println("AI is thinking")
+                                                            lastMove =
+                                                                ReversiSolverVanilla(state.clone()).getMove()
+                                                            ReversiController.executeMove(state, lastMove)
+                                                            ReversiController.resolveFeasibleMoves(state)
                                                         }
-                                                        else if (square == playerSquare) {
-                                                            playerCount++
-                                                        }
+                                                        println("Next player: ${state.currentPlayer}")
                                                     }
 
-                                                    println("Game ended")
-                                                    if (playerCount > aiCount) {
-                                                        println("Player won by $playerCount to $aiCount")
-                                                    } else if (playerCount < aiCount) {
-                                                        println("AI won by $aiCount to $playerCount")
-                                                    } else {
-                                                        println("Tied $playerCount to $aiCount")
+                                                    if (ai != ReversiSquare.EMPTY){
+                                                        var aiCount = 0
+                                                        var playerCount = 0
+                                                        val playerSquare = ReversiController.getOpponent(ai)
+                                                        for (squareState in state.squares.flatten()) {
+                                                            if (squareState == ai) {
+                                                                aiCount++
+                                                            } else if (squareState == playerSquare) {
+                                                                playerCount++
+                                                            }
+                                                        }
+                                                        println("Player Score: " + playerCount)
+                                                        println("AI Score: " + aiCount)
+                                                        if (state.currentPlayer == ReversiSquare.EMPTY) {
+                                                            println("Game ended")
+                                                            when {
+                                                                playerCount > aiCount -> println("Player won by $playerCount to $aiCount")
+                                                                playerCount < aiCount -> println("AI won by $aiCount to $playerCount")
+                                                                else -> println("Tied $playerCount to $aiCount")
+                                                            }
+                                                        }
                                                     }
+
+                                                    viewModel.update()
                                                 }
-                                                viewModel.update()
                                             }
                                         }
                                     ) {
                                         when (square) {
                                             ReversiSquare.DARK -> Icon(Icons.Rounded.Phone,null)
                                             ReversiSquare.LIGHT -> Icon(Icons.Rounded.Star,null)
+                                            ReversiSquare.FEASIBLE -> Icon(Icons.Rounded.Info,null)
                                             else -> {}
                                         }
                                     }
@@ -96,11 +103,10 @@ class ReversiGame {
                             .padding(5.dp),
                         enabled = ai == ReversiSquare.EMPTY,
                         onClick = {
-                            val currentState = state.clone()
-
                             ai = state.currentPlayer
-                            lastMove = ReversiSolverHeuristicSim(state.clone()).getMove()
+                            lastMove = ReversiSolverVanilla(state.clone()).getMove()
                             ReversiController.executeMove(state, lastMove)
+                            ReversiController.resolveFeasibleMoves(state)
 
                             viewModel.update()
                         }) {

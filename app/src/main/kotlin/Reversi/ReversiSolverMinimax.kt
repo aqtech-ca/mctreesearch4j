@@ -21,7 +21,7 @@ class ReversiSolverHeuristicSim(initialState: ReversiState)
         arrayOf(10, 1, 5, 4, 4, 5, 1, 10),
         arrayOf(-10, -20, 1, 2, 2, 1, -20, -10),
         arrayOf(100, -10, 11, 6, 6, 11, -10, 100),
-        )
+    )
 
     override fun runSimulation(node: StateNode<ReversiState, Point>): Double {
         traceln("Simulation:")
