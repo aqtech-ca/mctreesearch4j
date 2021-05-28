@@ -40,17 +40,17 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
         }
 
         if (dark > light) {
-            if (i % 10 == 0) {
+            if (i % 1 == 0) {
                 println("${first.name} won by $dark to $light")
             }
             darkWins++
         } else if (dark < light) {
-            if (i % 10 == 0) {
+            if (i % 1 == 0) {
                 println("${second.name} won by $light to $dark")
             }
             lightWins++
         } else {
-            if (i % 10 == 0) {
+            if (i % 1 == 0) {
                 println("Tied $dark to $light")
             }
         }
@@ -60,16 +60,16 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
 }
 
 fun main() {
-    ReversiGame().run()
+    // ReversiGame().run()
 
     val elapsedMillis = measureTimeMillis {
-//        var iterations = 100
-//        var players = listOf(
-//            ReversiPlayer({s -> ReversiSolverMinimax(s).getMove()}, "Minimax"),
-//            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
-//
-//        simulate(players, iterations)
-//        simulate(players.reversed(), iterations)
+        var iterations = 20
+        var players = listOf(
+            ReversiPlayer({s -> ReversiSolverHeuristicSim(s).getMove()}, "Heuristic"),
+            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
+
+        simulate(players, iterations)
+        simulate(players.reversed(), iterations)
     }
 
     println("Simulation took $elapsedMillis ms")

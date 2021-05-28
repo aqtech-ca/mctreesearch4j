@@ -3,10 +3,10 @@ package mcts
 import kotlin.math.max
 
 open class StatefulSolver<TState, TAction>(
-    private val mdp: MDP<TState, TAction>,
-    private val simulationDepthLimit: Int,
+    protected val mdp: MDP<TState, TAction>,
+    protected val simulationDepthLimit: Int,
     explorationConstant: Double,
-    private val rewardDiscountFactor: Double,
+    protected val rewardDiscountFactor: Double,
     verbose: Boolean
 ) : SolverBase<TAction, StateNode<TState, TAction>>(verbose, explorationConstant) {
 
