@@ -1,4 +1,4 @@
-package me.john_
+package Connect4Run
 
 import ConnectFour.ConnectFourGame
 

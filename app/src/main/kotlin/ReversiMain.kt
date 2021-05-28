@@ -1,4 +1,4 @@
-package me.john_
+package ReversiMain
 
 import Reversi.*
 import mcts.StatefulSolver
