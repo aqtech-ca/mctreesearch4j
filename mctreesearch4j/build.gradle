@@ -4,12 +4,16 @@ plugins {
     id 'maven-publish'
 }
 
+apply plugin: 'maven'
+apply plugin: 'signing'
+
 group 'com.mcts'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
@@ -28,6 +32,11 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar) {
+    from javadoc
+}
+
+/*
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -38,6 +47,8 @@ publishing {
     }
 }
 
+ */
+
 jar {
     manifest {
         attributes["Main-Class"] = "com.mcts.MDP"
@@ -47,4 +58,11 @@ jar {
     // files or particular types at will
     from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+
+
 
