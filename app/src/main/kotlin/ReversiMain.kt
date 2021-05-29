@@ -60,7 +60,7 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
 }
 
 fun main() {
-//    ReversiGame().run()
+    // ReversiGame().run()
 
     val elapsedMillis = measureTimeMillis {
         var iterations = 20
