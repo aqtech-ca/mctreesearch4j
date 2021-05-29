@@ -1,6 +1,6 @@
 package ConnectFour
 
-import mcts.MDP
+import mctreesearch4j.MDP
 import de.magoeke.kotlin.connectfour.controllers.impl.MainController
 import de.magoeke.kotlin.connectfour.models.GameState
 import de.magoeke.kotlin.connectfour.models.Player

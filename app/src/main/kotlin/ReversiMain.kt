@@ -1,7 +1,7 @@
 package ReversiMain
 
 import Reversi.*
-import mcts.StatefulSolver
+import mctreesearch4j.StatefulSolver
 import java.awt.Point
 import kotlin.system.measureTimeMillis
 

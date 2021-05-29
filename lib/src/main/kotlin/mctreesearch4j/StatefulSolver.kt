@@ -1,4 +1,4 @@
-package mcts
+package mctreesearch4j
 
 import kotlin.math.max
 

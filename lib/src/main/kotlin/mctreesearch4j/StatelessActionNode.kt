@@ -1,4 +1,4 @@
-package mcts
+package mctreesearch4j
 
 class StatelessActionNode<TState, TAction>(
     parent: StatelessActionNode<TState, TAction>?,

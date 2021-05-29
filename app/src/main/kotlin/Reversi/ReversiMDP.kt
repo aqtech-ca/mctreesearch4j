@@ -1,6 +1,6 @@
 package Reversi
 
-import mcts.MDP
+import mctreesearch4j.MDP
 import java.awt.Point
 
 class ReversiMDP(private val initialState: ReversiState) : MDP<ReversiState, Point>(){

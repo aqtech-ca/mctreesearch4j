@@ -1,7 +1,7 @@
 package GridWorld
 
-import mcts.StatelessSolver
-import mcts.StatefulSolver
+import mctreesearch4j.StatelessSolver
+import mctreesearch4j.StatefulSolver
 
 class GridWorldGridSolve(val xSize: Int,
                          val ySize: Int,

@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'com.mcts'
+group 'com.mctreesearch4j'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -28,6 +28,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+/*
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -37,10 +38,11 @@ publishing {
         }
     }
 }
+*/
 
 jar {
     manifest {
-        attributes["Main-Class"] = "com.mcts.MDP"
+        attributes["Main-Class"] = "com.mctreesearch4j.MDP"
     }
     // This line of code recursively collects and copies all of a project's files
     // and adds them to the JAR itself. One can extend this task, to skip certain

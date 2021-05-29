@@ -1,6 +1,6 @@
 package PushYourLuck
 
-import mcts.MDP
+import mctreesearch4j.MDP
 
 class PushYourLuckMDP(val nDice: Int, val nSides: Int): MDP<PushYourLuckState, PushYourLuckAction>(){
 
