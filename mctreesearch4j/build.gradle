@@ -5,7 +5,7 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-group 'ca.aqtech.mctreesearch4j'
+group 'ca.aqtech'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -27,6 +27,11 @@ compileTestKotlin {
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set('sources')
     from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
 /*
@@ -52,4 +57,12 @@ jar {
 }
 
 apply from: "${rootDir}/scripts/publish-root.gradle"
+
+ext {
+    PUBLISH_GROUP_ID = 'ca.aqtech'
+    PUBLISH_VERSION = '1.0-SNAPSHOT'
+    PUBLISH_ARTIFACT_ID = 'mctreesearch4j'
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
