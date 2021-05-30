@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation( "com.mcts:mctreesearch4j:1.0-SNAPSHOT" )
+    implementation( "ca.aqtech:mctreesearch4j:1.0-SNAPSHOT" )
     implementation( "de.magoeke.kotlin:connectfour:1.0-SNAPSHOT" )
     implementation(compose.desktop.currentOs)
     testImplementation(kotlin("test-junit"))

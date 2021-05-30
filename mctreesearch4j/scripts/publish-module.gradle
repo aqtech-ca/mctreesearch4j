@@ -1,0 +1,13 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+
+    // For pure Kotlin libraries, in case you have them
+    from mctreesearch4j
+}
+
+artifacts {
+    archives sourcesJar
+}
