@@ -1,6 +1,6 @@
 package GridWorld
 
-import mctreesearch4j.MDP
+import ca.aqtech.mctreesearch4j.MDP
 
 class GridworldMDP(
         private val xSize: Int,

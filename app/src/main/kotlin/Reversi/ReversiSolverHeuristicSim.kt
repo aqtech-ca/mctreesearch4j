@@ -1,7 +1,7 @@
 package Reversi
 
-import mctreesearch4j.StateNode
-import mctreesearch4j.StatelessActionNode
+import ca.aqtech.mctreesearch4j.StateNode
+import ca.aqtech.mctreesearch4j.StatelessActionNode
 import java.awt.Point
 
 class ReversiSolverHeuristicSim(initialState: ReversiState)

@@ -1,4 +1,4 @@
-package mctreesearch4j
+package ca.aqtech.mctreesearch4j
 
 abstract class Node<TAction, TSelf>(
     val parent: TSelf?,

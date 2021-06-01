@@ -1,4 +1,4 @@
-package mctreesearch4j
+package ca.aqtech.mctreesearch4j
 abstract class MDP<TState, TAction> {
     abstract fun transition(state: TState, action: TAction) : TState
 
