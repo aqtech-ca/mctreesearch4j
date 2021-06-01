@@ -30,7 +30,7 @@ afterEvaluate {
                 // we'll set up later
                 groupId 'ca.aqtech'
                 artifactId 'mctreesearch4j'
-                version '1.0-SNAPSHOT'
+                version '1.0.0-beta'
 
                 // Two artifacts, the `aar` (or `jar`) and the sources
                 if (project.plugins.findPlugin("com.android.library")) {
