@@ -1,6 +1,9 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+
+
+/*
 task sourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     // For pure Kotlin libraries, in case you have them
@@ -11,11 +14,13 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     archiveClassifier.set('javadoc')
     from dokkaJavadoc.outputDirectory
 }
+*/
 
 artifacts {
     archives sourcesJar
     archives javadocJar
 }
+
 
 afterEvaluate {
     publishing {
