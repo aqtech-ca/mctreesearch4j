@@ -1,6 +1,6 @@
 import org.jetbrains.compose.compose
 
-group = "com.app"
+group = "ca.aqtech"
 version = "1.0-SNAPSHOT"
 
 plugins {
