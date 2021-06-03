@@ -7,7 +7,7 @@ apply plugin: 'signing'
 task sourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     // For pure Kotlin libraries, in case you have them
-    from mctreesearch4j
+    from ca.aqtech.mctreesearch4j
 }
 
 /*
@@ -51,7 +51,7 @@ afterEvaluate {
                     licenses {
                         license {
                             name = 'MIT License'
-                            url = 'https://github.com/JunTaoLuo/mctreesearch4j/MIT-license.txt'
+                            url = 'https://mit-license.org/'
                         }
                     }
                     developers {
