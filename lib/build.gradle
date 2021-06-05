@@ -3,14 +3,16 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'maven-publish'
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id 'signing'
+    id 'maven'
 }
 
 group 'ca.aqtech'
-version '1.0.0-beta'
+version '0.0.1'
 
 ext {
     PUBLISH_GROUP_ID = 'ca.aqtech'
-    PUBLISH_VERSION = '1.0.0-beta'
+    PUBLISH_VERSION = '0.0.1'
     PUBLISH_ARTIFACT_ID = 'mctreesearch4j'
 }
 
@@ -30,15 +32,75 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('sources')
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
+artifacts {
+    archives javadocJar, sourcesJar
 }
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'mctreesearch4j'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'MCTS for JVM.'
+                url 'http://mctreesearch4j.aqtech.ca'
+
+                scm {
+                    connection = 'scm:git:github.com/JunTaoLuo/mctreesearch4j.git'
+                    developerConnection = 'scm:git:ssh://github.com/JunTaoLuo/mctreesearch4j.git'
+                    url = 'https://github.com/JunTaoLuo/mctreesearch4j/tree/main'
+                }
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/JunTaoLuo/mctreesearch4j/MIT-license.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'larkz'
+                        name = 'Larkin Liu'
+                        email = 'larkin.liu@aqtech.ca'
+                    }
+                    developer {
+                        id = 'JunTaoLuo'
+                        name = 'Jun Tao Luo'
+                        email = 'jt.luo@mail.utoronto.ca'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 publishing {
     publications {
@@ -64,6 +126,11 @@ publishing {
                         name = 'Jun Tao Luo'
                         email = 'jt.luo@mail.utoronto.ca'
                     }
+                }
+                scm {
+                    connection = 'scm:git:github.com/JunTaoLuo/mctreesearch4j.git'
+                    developerConnection = 'scm:git:ssh://github.com/JunTaoLuo/mctreesearch4j.git'
+                    url = 'https://github.com/JunTaoLuo/mctreesearch4j/tree/main'
                 }
             }
         }
@@ -92,3 +159,4 @@ tasks.withType(GenerateMavenPom).all {
 // apply from: "${rootDir}/scripts/publish-root.gradle"
 // apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
+// run gradle generatePom
