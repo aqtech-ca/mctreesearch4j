@@ -2,10 +2,19 @@ plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'maven-publish'
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id 'signing'
+    id 'maven'
 }
 
-group 'com.mcts'
-version '1.0-SNAPSHOT'
+group 'ca.aqtech'
+version '0.0.1'
+
+ext {
+    PUBLISH_GROUP_ID = 'ca.aqtech'
+    PUBLISH_VERSION = '0.0.1'
+    PUBLISH_ARTIFACT_ID = 'mctreesearch4j'
+}
 
 repositories {
     mavenCentral()
@@ -23,24 +32,114 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('sources')
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
     from sourceSets.main.allSource
 }
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'mctreesearch4j'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'MCTS for JVM.'
+                url 'http://mctreesearch4j.aqtech.ca'
+
+                scm {
+                    connection = 'scm:git:github.com/JunTaoLuo/mctreesearch4j.git'
+                    developerConnection = 'scm:git:ssh://github.com/JunTaoLuo/mctreesearch4j.git'
+                    url = 'https://github.com/JunTaoLuo/mctreesearch4j/tree/main'
+                }
+
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/JunTaoLuo/mctreesearch4j/MIT-license.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'larkz'
+                        name = 'Larkin Liu'
+                        email = 'larkin.liu@aqtech.ca'
+                    }
+                    developer {
+                        id = 'JunTaoLuo'
+                        name = 'Jun Tao Luo'
+                        email = 'jt.luo@mail.utoronto.ca'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
-
-            artifact sourcesJar
+            pom {
+                name = 'mctreesearch4j'
+                description = 'Implementation of Monte Carlo Tree Search in JVM'
+                url = 'mctreesearch4j.aqtech.ca'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/JunTaoLuo/mctreesearch4j/MIT-license.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'larkz'
+                        name = 'Larkin Liu'
+                        email = 'larkin.liu@aqtech.ca'
+                    }
+                    developer {
+                        id = 'JunTaoLuo'
+                        name = 'Jun Tao Luo'
+                        email = 'jt.luo@mail.utoronto.ca'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:github.com/JunTaoLuo/mctreesearch4j.git'
+                    developerConnection = 'scm:git:ssh://github.com/JunTaoLuo/mctreesearch4j.git'
+                    url = 'https://github.com/JunTaoLuo/mctreesearch4j/tree/main'
+                }
+            }
         }
     }
 }
 
 jar {
     manifest {
-        attributes["Main-Class"] = "com.mcts.MDP"
+        attributes["Main-Class"] = "ca.aqtech.mctreesearch4j.MDP"
     }
     // This line of code recursively collects and copies all of a project's files
     // and adds them to the JAR itself. One can extend this task, to skip certain
@@ -48,3 +147,16 @@ jar {
     from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
+/*
+tasks.withType(GenerateMavenPom).all {
+    def matcher = name =~ /generatePomFileFor(\w+)Publication/
+    def publicationName = matcher[0][1]
+    destination = "$buildDir/poms/${publicationName}-pom.xml"
+}
+
+ */
+
+// apply from: "${rootDir}/scripts/publish-root.gradle"
+// apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+
+// gradle uploadArchives

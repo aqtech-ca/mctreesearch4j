@@ -1,4 +1,4 @@
-package mcts
+package ca.aqtech.mctreesearch4j
 
 import kotlin.math.ln
 import kotlin.math.sqrt

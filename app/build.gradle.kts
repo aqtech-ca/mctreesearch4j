@@ -1,6 +1,6 @@
 import org.jetbrains.compose.compose
 
-group = "me.john_"
+group = "ca.aqtech"
 version = "1.0-SNAPSHOT"
 
 plugins {
@@ -17,7 +17,7 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation( "com.mcts:lib:1.0-SNAPSHOT" )
+    implementation( "ca.aqtech:mctreesearch4j:1.0.0-beta" )
     implementation( "de.magoeke.kotlin:connectfour:1.0-SNAPSHOT" )
     implementation(compose.desktop.currentOs)
     testImplementation(kotlin("test-junit"))

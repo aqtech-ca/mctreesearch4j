@@ -1,4 +1,4 @@
-package mcts
+package ca.aqtech.mctreesearch4j
 
 class StateNode<TState, TAction>(
     parent: StateNode<TState, TAction>?,

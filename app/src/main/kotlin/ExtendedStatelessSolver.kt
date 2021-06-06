@@ -1,7 +1,7 @@
 import kotlin.math.ln
 import kotlin.math.sqrt
-import mcts.MDP
-import mcts.StatelessSolver
+import ca.aqtech.mctreesearch4j.MDP
+import ca.aqtech.mctreesearch4j.StatelessSolver
 
 class ExtendedStatelessSolver<TState, TAction>(
         mdp: MDP<TState, TAction>,
