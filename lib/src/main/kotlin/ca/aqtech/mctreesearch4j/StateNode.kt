@@ -1,11 +1,12 @@
 package ca.aqtech.mctreesearch4j
 
-class StateNode<TState, TAction>(
+class StateNode<TState, TAction> (
     parent: StateNode<TState, TAction>?,
     inducingAction: TAction?,
     val state: TState,
     val validActions: Collection<TAction>,
-    val isTerminal: Boolean) : Node<TAction, StateNode<TState, TAction>>(parent, inducingAction) {
+    val isTerminal: Boolean
+) : Node<TAction, StateNode<TState, TAction>>(parent, inducingAction) {
 
     private val children = mutableMapOf<TAction, MutableCollection<StateNode<TState, TAction>>>()
 
@@ -31,7 +32,7 @@ class StateNode<TState, TAction>(
         return "State: $state, Max Reward: ${"%.5f".format(maxReward)}"
     }
 
-    fun exploredActions() : Collection<TAction> {
+    fun exploredActions(): Collection<TAction> {
         return children.keys
     }
 }

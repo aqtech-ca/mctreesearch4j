@@ -66,7 +66,7 @@ fun main() {
         var iterations = 20
         var players = listOf(
             ReversiPlayer({s -> ReversiSolverHeuristicSim(s).getMove()}, "Heuristic"),
-            ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
+            ReversiPlayer({s -> ReversiSolver(s).getMove()}, "Base") )
 
         simulate(players, iterations)
         simulate(players.reversed(), iterations)

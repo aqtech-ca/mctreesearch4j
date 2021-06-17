@@ -3,7 +3,7 @@ package ca.aqtech.mctreesearch4j
 import kotlin.math.ln
 import kotlin.math.sqrt
 
-open class AdvancedStatelessSolver<TState, TAction>(
+open class AdvancedStatelessSolver<TState, TAction> (
     mdp: MDP<TState, TAction>,
     simulationDepthLimit: Int,
     explorationConstant: Double,

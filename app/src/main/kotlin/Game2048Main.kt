@@ -31,7 +31,7 @@ fun main() {
         0.9,
         true
     )
-    solver.constructTree(999)
+    solver.runTreeSearch(999)
     solver.displayTree()
 
     println("optimalAction")

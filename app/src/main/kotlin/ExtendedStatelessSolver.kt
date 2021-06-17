@@ -13,9 +13,9 @@ class ExtendedStatelessSolver<TState, TAction>(
 
     val explorationTermHistory = mutableListOf<Double>()
 
-    override fun constructTree(iterations: Int) {
+    override fun runTreeSearch(iterations: Int) {
         for (i in 0..iterations) {
-            iterateStep()
+            runTreeSearchIteration()
 
             val bestChild = root.getChildren().maxByOrNull { c -> calculateUCT(c)}
 

@@ -3,19 +3,18 @@ package ca.aqtech.mctreesearch4j
 import kotlin.math.ln
 import kotlin.math.sqrt
 
-abstract class SolverBase<TAction, TNode>(
+abstract class Solver<ActionType, NodeType: Node<ActionType, NodeType>> (
     protected val verbose: Boolean,
     protected val explorationConstant: Double
-) where TNode : Node<TAction, TNode> {
+) {
+    protected abstract var root: NodeType
 
-    protected abstract var root: TNode
+    protected abstract fun select(node: NodeType): NodeType
+    protected abstract fun expand(node: NodeType): NodeType
+    protected abstract fun simulate(node: NodeType): Double
+    protected abstract fun backpropagate(node: NodeType, reward: Double)
 
-    abstract fun selectNode(node: TNode) : TNode
-    abstract fun expandNode(node: TNode) : TNode
-    abstract fun runSimulation(node: TNode) : Double
-    abstract fun updateNode(node: TNode, reward: Double)
-
-    open fun constructTree(iterations: Int) {
+    open fun runTreeSearch(iterations: Int) {
         for (i in 0..iterations) {
             if (verbose)
             {
@@ -23,13 +22,13 @@ abstract class SolverBase<TAction, TNode>(
                 traceln("New iteration $i")
                 traceln("=============")
             }
-            iterateStep()
+            runTreeSearchIteration()
         }
     }
 
-    open fun iterateStep() {
+    open fun runTreeSearchIteration() {
         // Selection
-        val best = selectNode(root)
+        val best = select(root)
 
         if (verbose) {
             traceln("Selected:")
@@ -37,7 +36,7 @@ abstract class SolverBase<TAction, TNode>(
         }
 
         // Expansion
-        val expanded = expandNode(best)
+        val expanded = expand(best)
 
         if (verbose) {
             traceln("Expanding:")
@@ -45,54 +44,48 @@ abstract class SolverBase<TAction, TNode>(
         }
 
         // Simulation
-        val simulatedReward = runSimulation(expanded)
+        val simulatedReward = simulate(expanded)
 
         traceln("Simulated Reward: $simulatedReward")
 
         // Update
-        updateNode(expanded, simulatedReward)
+        backpropagate(expanded, simulatedReward)
     }
 
     // Utilities
 
-    open fun calculateUCT(node: TNode) : Double {
+    protected fun calculateUCT(node: NodeType) : Double {
         val parentN = node.parent?.n ?: node.n
         return calculateUCT(parentN, node.n, node.reward, explorationConstant)
     }
 
-    open fun calculateUCT(parentN: Int, n: Int, reward: Double, explorationConstant: Double) : Double{
-        return reward/n + explorationConstant* sqrt(ln(parentN.toDouble())/n)
+    protected open fun calculateUCT(parentN: Int, n: Int, reward: Double, explorationConstant: Double): Double {
+        return reward/n + explorationConstant*sqrt(ln(parentN.toDouble())/n)
     }
 
-    // Policy extraction
-
-    open fun extractOptimalAction(): TAction {
-        return extractOptimalAction(root)!!
-    }
-
-    private fun extractOptimalAction(node: TNode?): TAction? {
-        return node?.getChildren()?.maxByOrNull { c -> c.n }?.inducingAction
+    open fun extractOptimalAction(): ActionType? {
+        return root.getChildren().maxByOrNull { c -> c.n }?.inducingAction
     }
 
     // Debug and Diagnostics
 
-    fun traceln(string: String) {
+    protected fun traceln(string: String) {
         if (verbose) {
             println(string)
         }
     }
 
-    fun trace(string: String) {
+    protected fun trace(string: String) {
         if (verbose) {
             print(string)
         }
     }
 
-    protected open fun formatNode(node: TNode) : String {
+    protected open fun formatNode(node: NodeType): String {
         return node.toString()
     }
 
-    fun displayNode(node: TNode) {
+    open fun displayNode(node: NodeType) {
         if (node.parent != null) {
             displayNode(node.parent)
         }
@@ -104,11 +97,11 @@ abstract class SolverBase<TAction, TNode>(
         println(formatNode(node))
     }
 
-    fun displayTree(depthLimit: Int = 3) {
+    open fun displayTree(depthLimit: Int = 3) {
         displayTree(depthLimit, root, "")
     }
 
-    private fun displayTree(depthLimit: Int, node: TNode?, indent: String) {
+    private fun displayTree(depthLimit: Int, node: NodeType?, indent: String) {
         if (node == null) {
             return
         }
@@ -136,7 +129,7 @@ abstract class SolverBase<TAction, TNode>(
         displayTree(depthLimit, children.last(), generateIndent(indent) + " └")
     }
 
-    private fun generateIndent(indent: String) : String {
+    private fun generateIndent(indent: String): String {
         return indent.replace('├', '│').replace('└', ' ')
     }
 }

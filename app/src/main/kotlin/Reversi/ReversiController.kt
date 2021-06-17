@@ -81,7 +81,7 @@ private fun anyFlips(state: ReversiState, move: Point, player: ReversiSquare) : 
 
 private fun anyFlips(state: ReversiState, origin: Point, player: ReversiSquare, nextPoint: (p: Point) -> Unit) : Boolean {
     var flipped = false
-    var current = Point(origin)
+    val current = Point(origin)
     nextPoint(current)
 
     while (true) {
@@ -136,7 +136,7 @@ private fun getAllFlips(state: ReversiState, move: Point, player: ReversiSquare)
 
 private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, nextPoint: (p: Point) -> Unit) : List<Point> {
     var flips : MutableList<Point>? = null
-    var current = Point(origin)
+    val current = Point(origin)
     nextPoint(current)
 
     while (true) {
@@ -174,18 +174,18 @@ private fun getFlips(state: ReversiState, origin: Point, player: ReversiSquare, 
     return flips ?: emptyList()
 }
 
-private fun north(p: Point) : Unit {
+private fun north(p: Point) {
     p.x--
 }
 
-private fun east(p: Point) : Unit {
+private fun east(p: Point) {
     p.y++
 }
 
-private fun south(p: Point) : Unit {
+private fun south(p: Point) {
     p.x++
 }
 
-private fun west(p: Point) : Unit {
+private fun west(p: Point) {
     p.y--
 }

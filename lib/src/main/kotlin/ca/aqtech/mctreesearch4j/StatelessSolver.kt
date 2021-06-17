@@ -2,21 +2,21 @@ package ca.aqtech.mctreesearch4j
 
 import kotlin.math.max
 
-open class StatelessSolver<TState, TAction>(
-    private val mdp: MDP<TState, TAction>,
+open class StatelessSolver<StateType, ActionType>(
+    private val mdp: MDP<StateType, ActionType>,
     private val simulationDepthLimit: Int,
     explorationConstant: Double,
     private val rewardDiscountFactor: Double,
-    verbose: Boolean)
-    : SolverBase<TAction, StatelessActionNode<TState, TAction>>(verbose, explorationConstant) {
+    verbose: Boolean
+) : Solver<ActionType, ActionNode<StateType, ActionType>>(verbose, explorationConstant) {
 
-    override var root = StatelessActionNode<TState, TAction>(null, null)
+    final override var root = ActionNode<StateType, ActionType>(null, null)
 
     init {
         simulateActions(root)
     }
 
-    override fun selectNode(node: StatelessActionNode<TState, TAction>) : StatelessActionNode<TState, TAction> {
+    override fun select(node: ActionNode<StateType, ActionType>): ActionNode<StateType, ActionType> {
         // If this node is a leaf node, return it
         if (node.getChildren().isEmpty()) {
             return node
@@ -45,7 +45,7 @@ open class StatelessSolver<TState, TAction>(
         }
     }
 
-    override fun expandNode(node: StatelessActionNode<TState, TAction>): StatelessActionNode<TState, TAction> {
+    override fun expand(node: ActionNode<StateType, ActionType>): ActionNode<StateType, ActionType> {
         // If the node is terminal, return it, except root node
         if (mdp.isTerminal(node.state)) {
             return node
@@ -57,14 +57,14 @@ open class StatelessSolver<TState, TAction>(
         val actionTaken = unexploredActions.random() ?: throw Exception("No unexplored actions available")
 
         // Transition to new state for given action
-        val newNode = StatelessActionNode(node, actionTaken)
+        val newNode = ActionNode(node, actionTaken)
         node.addChild(newNode)
         simulateActions(newNode)
 
         return newNode
     }
 
-    override fun runSimulation(node: StatelessActionNode<TState, TAction>): Double {
+    override fun simulate(node: ActionNode<StateType, ActionType>): Double {
         traceln("Simulation:")
 
         // If state is terminal, the reward is defined by MDP
@@ -112,7 +112,7 @@ open class StatelessSolver<TState, TAction>(
         }
     }
 
-    override fun updateNode(node: StatelessActionNode<TState, TAction>, reward: Double) {
+    override fun backpropagate(node: ActionNode<StateType, ActionType>, reward: Double) {
         var currentStateNode = node
         var currentReward = reward
 
@@ -129,7 +129,7 @@ open class StatelessSolver<TState, TAction>(
 
     // Utilities
 
-    private fun simulateActions(node: StatelessActionNode<TState, TAction>) {
+    private fun simulateActions(node: ActionNode<StateType, ActionType>) {
         val parent = node.parent
 
         if (parent == null) {
