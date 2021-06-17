@@ -79,7 +79,7 @@ uploadArchives {
                 licenses {
                     license {
                         name = 'MIT License'
-                        url = 'https://github.com/JunTaoLuo/mctreesearch4j/MIT-license.txt'
+                        url = 'https://github.com/JunTaoLuo/mctreesearch4j/blob/main/MIT-LICENSE.txt'
                     }
                 }
 

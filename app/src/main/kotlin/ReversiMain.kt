@@ -63,7 +63,7 @@ fun main() {
     // ReversiGame().run()
 
     val elapsedMillis = measureTimeMillis {
-        var iterations = 20
+        var iterations = 100
         var players = listOf(
             ReversiPlayer({s -> ReversiSolverHeuristicSim(s).getMove()}, "Heuristic"),
             ReversiPlayer({s -> ReversiSolverVanilla(s).getMove()}, "Base") )
