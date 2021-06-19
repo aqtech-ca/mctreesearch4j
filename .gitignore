@@ -2,3 +2,4 @@
 .gradle
 **/build/
 !src/**/build/
+lib/gradle.properties
