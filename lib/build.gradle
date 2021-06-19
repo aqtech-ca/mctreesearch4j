@@ -8,11 +8,11 @@ plugins {
 }
 
 group 'ca.aqtech'
-version '0.0.1'
+version '0.0.2'
 
 ext {
     PUBLISH_GROUP_ID = 'ca.aqtech'
-    PUBLISH_VERSION = '0.0.1'
+    PUBLISH_VERSION = '0.0.2'
     PUBLISH_ARTIFACT_ID = 'mctreesearch4j'
 }
 
