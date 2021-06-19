@@ -3,14 +3,11 @@ package GridWorld
 import ca.aqtech.mctreesearch4j.MDP
 
 class GridworldMDP(
-        private val xSize: Int,
-        private val ySize: Int,
-        private val rewards: List<GridworldReward>,
-        private val transitionProbability: Double,
-        private val startingLocation: GridworldState = GridworldState(0, 0, false)) : MDP<GridworldState, GridworldAction>() {
-    private val _allActions = GridworldAction.values().toList()
-    private val _rewardStates = mutableMapOf<GridworldState, GridworldState>()
-
+    private val xSize: Int,
+    private val ySize: Int,
+    private val rewards: List<GridworldReward>,
+    private val transitionProbability: Double,
+    private val startingLocation: GridworldState = GridworldState(0, 0, false)) : MDP<GridworldState, GridworldAction>() {
     override fun initialState(): GridworldState {
         return startingLocation
     }
@@ -32,13 +29,14 @@ class GridworldMDP(
     }
 
     override fun reward(previousState: GridworldState?, action: GridworldAction?, state: GridworldState): Double {
+        var reward = 0.0
         for (r in rewards) {
             if (r.equals(state)) {
-                return r.value
+                reward += r.value
             }
         }
 
-        return 0.0
+        return reward
     }
 
     override fun transition(state: GridworldState, action: GridworldAction): GridworldState {
@@ -46,34 +44,32 @@ class GridworldMDP(
             return state
         }
         else if (rewards.any { r -> r.equals(state)}) {
-            return _rewardStates.getOrDefault(state, GridworldState(state.x, state.y, true))
+            return GridworldState(state.x, state.y, true)
         }
 
         // if target is out of bounds, return current state
-        val targetNeighbour = state.resolveNeighbour(action, xSize, ySize) ?:
-            return state
+        val targetNeighbour = state.ResolveNeighbour(action, xSize, ySize) ?:
+        return state
+
+        val nonTargetNeighbours = mutableListOf<GridworldState>()
+
+        for (a in GridworldAction.values().toList().minus(action)) {
+            val possibleNeighbour = state.ResolveNeighbour(a, xSize, ySize)
+            if (possibleNeighbour != null) {
+                nonTargetNeighbours.add(possibleNeighbour)
+            }
+        }
 
         if (Math.random() < transitionProbability){
             return targetNeighbour
         } else {
-            var nonTargetNeighbours : MutableList<GridworldState>? = null
-
-            for (a in _allActions.minus(action)) {
-                val possibleNeighbour = state.resolveNeighbour(a, xSize, ySize)
-                if (possibleNeighbour != null) {
-                    if (nonTargetNeighbours == null) {
-                        nonTargetNeighbours = mutableListOf()
-                    }
-                    nonTargetNeighbours.add(possibleNeighbour)
-                }
-            }
-
-            return nonTargetNeighbours?.random() ?: throw Exception("No valid neighbours exist")
+            return nonTargetNeighbours.random()
         }
+
     }
 
     override fun actions(state: GridworldState): Collection<GridworldAction> {
-        return _allActions.filter { a -> state.isNeighbourValid(a, xSize, ySize) != null }
+        return GridworldAction.values().filter { a -> state.ResolveNeighbour(a, xSize, ySize) != null }
     }
 
 }
