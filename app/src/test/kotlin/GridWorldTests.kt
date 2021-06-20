@@ -79,7 +79,7 @@ class GridWorldTests {
             openWorldErrors.add(this.testGridWorld(this.worldFeaturesOpenSpace, this.correctSolutionsOpenSpace))
         }
 
-        assertTrue(openWorldErrors.average() < 0.7, "Error percentage for grid world solution, (open space) " + openWorldErrors.average().toString() + " must be less than: 0.05")
+        assertTrue(openWorldErrors.average() < 0.15, "Error percentage for grid world solution, (open space) " + openWorldErrors.average().toString() + " must be less than: 0.05")
     }
     @Test fun gridWorldTestWall() {
         var wallErrorValues = mutableListOf(this.testGridWorld(this.worldFeaturesWall, this.correctSolutionsWall))
@@ -87,6 +87,6 @@ class GridWorldTests {
             wallErrorValues.add(this.testGridWorld(this.worldFeaturesWall, this.correctSolutionsWall))
         }
 
-        assertTrue(wallErrorValues.average() < 0.7 , "Error percentage for grid world solution, (wall) " + wallErrorValues.average() + " must be less than: 0.05")
+        assertTrue(wallErrorValues.average() < 0.15 , "Error percentage for grid world solution, (wall) " + wallErrorValues.average() + " must be less than: 0.05")
     }
 }
