@@ -7,13 +7,13 @@ class GridworldState(x: Int, y: Int, val isTerminal: Boolean) : GridworldPositio
                 y != ySize - 1
             }
             GridworldAction.RIGHT -> {
-                x == xSize - 1
+                x != xSize - 1
             }
             GridworldAction.DOWN -> {
-                y == 0
+                y != 0
             }
             GridworldAction.LEFT -> {
-                x == 0
+                x != 0
             }
         }
     }
