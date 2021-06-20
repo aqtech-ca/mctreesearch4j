@@ -35,7 +35,7 @@ fun main() {
             0.95,
             false
     )
-    gwSolver.constructTree(999)
+    gwSolver.runTreeSearch(999)
     gwSolver.displayTree()
 
     // Write data

@@ -2,17 +2,17 @@ package ca.aqtech.mctreesearch4j
 
 import kotlin.math.max
 
-open class StatefulSolver<TState, TAction>(
-    protected val mdp: MDP<TState, TAction>,
+open class StatefulSolver<StateType, ActionType> (
+    protected val mdp: MDP<StateType, ActionType>,
     protected val simulationDepthLimit: Int,
     explorationConstant: Double,
     protected val rewardDiscountFactor: Double,
     verbose: Boolean
-) : SolverBase<TAction, StateNode<TState, TAction>>(verbose, explorationConstant) {
+) : Solver<ActionType, StateNode<StateType, ActionType>>(verbose, explorationConstant) {
 
     override var root = createNode(null, null, mdp.initialState())
 
-    override fun selectNode(node: StateNode<TState, TAction>): StateNode<TState, TAction> {
+    override fun select(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
         // If the node is terminal, return it
         if (mdp.isTerminal(node.state)) {
             return node
@@ -51,10 +51,10 @@ open class StatefulSolver<TState, TAction>(
 
 
         // Existing state reached by an explored action
-        return selectNode(actionState)
+        return select(actionState)
     }
 
-    override fun expandNode(node: StateNode<TState, TAction>): StateNode<TState, TAction> {
+    override fun expand(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
         // If the node is terminal, return it
         if (node.isTerminal) {
             return node
@@ -69,7 +69,7 @@ open class StatefulSolver<TState, TAction>(
         return createNode(node, actionTaken, newState)
     }
 
-    override fun runSimulation(node: StateNode<TState, TAction>): Double {
+    override fun simulate(node: StateNode<StateType, ActionType>): Double {
         traceln("Simulation:")
 
         // If state is terminal, the reward is defined by MDP
@@ -118,7 +118,7 @@ open class StatefulSolver<TState, TAction>(
         }
     }
 
-    override fun updateNode(node: StateNode<TState, TAction>, reward: Double) {
+    override fun backpropagate(node: StateNode<StateType, ActionType>, reward: Double) {
         var currentStateNode = node
         var currentReward = reward
 
@@ -135,7 +135,7 @@ open class StatefulSolver<TState, TAction>(
 
     // Utilities
 
-    private fun createNode(parent: StateNode<TState, TAction>?, inducingAction: TAction?, state: TState) : StateNode<TState, TAction> {
+    private fun createNode(parent: StateNode<StateType, ActionType>?, inducingAction: ActionType?, state: StateType): StateNode<StateType, ActionType> {
         val validActions = mdp.actions(state).toList()
         val isTerminal = mdp.isTerminal(state)
         val stateNode = StateNode(parent, inducingAction, state, validActions, isTerminal)

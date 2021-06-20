@@ -1,23 +1,23 @@
 package GridWorld
 
 import ca.aqtech.mctreesearch4j.StatelessSolver
-import ca.aqtech.mctreesearch4j.StatefulSolver
 
-class GridWorldGridSolve(val xSize: Int,
-                         val ySize: Int,
-                         val rewards: List<GridworldReward>,
-                         val transitionProbability: Double,
-                         val mcIter: Int = 1000,
-                         val simDepth: Int = 40,
-                         val exploreConstant: Double = 1.4,
-                         val rewardDiscount: Double = 0.9,
-                         val verboseBool: Boolean = false) {
+class GridWorldGridSolve(
+    private val xSize: Int,
+    private val ySize: Int,
+    private val rewards: List<GridworldReward>,
+    private val transitionProbability: Double,
+    private val iterations: Int = 1000,
+    private val simDepth: Int = 40,
+    private val exploreConstant: Double = 1.4,
+    private val rewardDiscount: Double = 0.9,
+    private val verbose: Boolean = false) {
 
     var mapOfSolutions = mutableMapOf<Pair<Int, Int>, String>()
 
     fun getWorldSolve() {
 
-        var rewardLocations = mutableListOf<Pair<Int, Int>>()
+        val rewardLocations = mutableListOf<Pair<Int, Int>>()
         for (r in rewards) {
             rewardLocations.add( Pair(r.x, r.y))
         }
@@ -25,7 +25,7 @@ class GridWorldGridSolve(val xSize: Int,
         for (x in 0 until xSize) {
             for (y in 0 until ySize) {
                 if (Pair(x, y) !in rewardLocations){
-                    var gridworld = GridworldMDP(
+                    val gridworld = GridworldMDP(
                         xSize,
                         ySize,
                         rewards,
@@ -33,16 +33,16 @@ class GridWorldGridSolve(val xSize: Int,
                         GridworldState(x, y, false)
                     )
 
-                    var solver = StatefulSolver(
+                    val solver = StatelessSolver(
                         gridworld,
-                        mcIter,
+                        iterations,
                         exploreConstant,
                         rewardDiscount,
-                        verboseBool
+                        verbose
                     )
 
                     // println("Solving at [$x, $y]")
-                    solver.constructTree(simDepth)
+                    solver.runTreeSearch(simDepth)
                     // solver.displayTree()
                     // println("Optimal action: ${solver.getNextOptimalAction()}")
 
@@ -52,7 +52,7 @@ class GridWorldGridSolve(val xSize: Int,
         }
     }
 
-    fun visualizeWorldSolve(): Unit {
+    fun visualizeWorldSolve() {
 
         for (y in ySize-1 downTo 0) {
             print('[')

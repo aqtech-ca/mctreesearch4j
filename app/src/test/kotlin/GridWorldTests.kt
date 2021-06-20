@@ -45,9 +45,9 @@ class GridWorldTests {
                 5,
                 worldFeatures,
                 0.85,
-                1000,
-                100,
-                1.4,
+                9999,
+                75,
+                0.9,
                 0.9,
                 false
         )
@@ -67,7 +67,7 @@ class GridWorldTests {
         println(worldFeatures.size)
         println(gw.mapOfSolutions.size)
         println(numIncorrect)
-        return numIncorrect/ (gw.mapOfSolutions.size - worldFeatures.size)
+        return numIncorrect / (gw.mapOfSolutions.size - worldFeatures.size)
 
     }
 

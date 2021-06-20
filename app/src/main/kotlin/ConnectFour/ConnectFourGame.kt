@@ -6,7 +6,6 @@ import de.magoeke.kotlin.connectfour.models.Board
 import de.magoeke.kotlin.connectfour.models.GameState
 import de.magoeke.kotlin.connectfour.models.Player
 import java.util.*
-import kotlin.random.Random
 
 class ConnectFourGame {
     private val boardSize = 7
@@ -18,7 +17,7 @@ class ConnectFourGame {
         val moves = mutableListOf<Int>()
 
         println("Playing Connect 4 as \"o\" against Computer as \"x\"")
-        var playerOrder = 0
+        var playerOrder: Int
         do {
             print("Play as player 1 or 2? ")
             playerOrder = input.nextInt()
@@ -61,8 +60,8 @@ class ConnectFourGame {
                 false
         )
 
-        stateless.constructTree(50)
-        val move = stateless.extractOptimalAction()
+        stateless.runTreeSearch(50)
+        val move = stateless.extractOptimalAction()!!
 
         controller.turn(move)
         return move
@@ -86,7 +85,7 @@ class ConnectFourGame {
 
     private fun printBoard(board: Board) {
         printOutline()
-        printIndicies()
+        printIndices()
 
         for (row in board.to2DArray()) {
             for (column in row) {
@@ -95,7 +94,7 @@ class ConnectFourGame {
             println()
         }
 
-        printIndicies()
+        printIndices()
         printOutline()
     }
 
@@ -106,7 +105,7 @@ class ConnectFourGame {
         println()
     }
 
-    private fun printIndicies() {
+    private fun printIndices() {
         for (i in 0 until boardSize) {
             print("$i ")
         }

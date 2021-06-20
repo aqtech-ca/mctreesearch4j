@@ -20,13 +20,12 @@ lib
     ...
     └── src.main.kotlin
         └── ca.aqtech.mctreesearch4j
-            ├── AdvancedStatelessSolver.kt
             ├── MDP.kt
             ├── Node.kt
-            ├── SolverBase.kt
+            ├── Solver.kt
             ├── StateNode.kt
             ├── StatefulSolver.kt
-            ├── StatelessActionNode.kt
+            ├── ActionNode.kt
             └── StatelessSolver.kt
 
 ```

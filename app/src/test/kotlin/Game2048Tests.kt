@@ -36,7 +36,7 @@ class Game2048Tests {
                 0.9,
                 true
         )
-        solver.constructTree(200)
+        solver.runTreeSearch(200)
         solver.displayTree()
 
         println("optimalAction")

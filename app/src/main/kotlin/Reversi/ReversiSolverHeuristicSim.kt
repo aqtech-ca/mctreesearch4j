@@ -1,15 +1,14 @@
 package Reversi
 
 import ca.aqtech.mctreesearch4j.StateNode
-import ca.aqtech.mctreesearch4j.StatelessActionNode
 import java.awt.Point
 
 class ReversiSolverHeuristicSim(initialState: ReversiState)
-    : ReversiSolverBase(initialState) {
+    : ReversiSolver(initialState) {
 
-    override fun iterateStep() {
+    override fun runTreeSearchIteration() {
 //        displayTree(4)
-        super.iterateStep()
+        super.runTreeSearchIteration()
     }
 
     private val heuristicWeight = arrayOf(
@@ -23,7 +22,7 @@ class ReversiSolverHeuristicSim(initialState: ReversiState)
         arrayOf(100, -10, 11, 6, 6, 11, -10, 100),
         )
 
-    override fun runSimulation(node: StateNode<ReversiState, Point>): Double {
+    override fun simulate(node: StateNode<ReversiState, Point>): Double {
         traceln("Simulation:")
 
         // If state is terminal, the reward is defined by MDP
