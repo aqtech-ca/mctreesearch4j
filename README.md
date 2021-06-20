@@ -1,38 +1,33 @@
 # mctreesearch4j
 
 ![Static](https://img.shields.io/static/v1?label=docs&message=latest&color=blue&style=flat-square)
+![kotlin-version](https://kotlin-version.aws.icerock.dev/kotlin-version?group=ca.aqtech&name=mctreesearch4j)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ca.aqtech/mctreesearch4j/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/ca.aqtech/mctreesearch4j)
 
-An robust Implementation of the Monte Carlo Tree Search Algorithm for the JVM
+An robust Implementation of the Monte Carlo Tree Search (MCTS) algorithm for the JVM.
 
 ## Objective
 
-We create an robust and modular implemntation of the MCTS algorithm for the JVM written in Kotlin. We demonstrate that the design of the MCTS implementation enables it to flexibly adapt to any single player or adversarial game, with unique heuristics and customization which can be implemented with ease. In addition, the implementation is reasonably efficient in both time and space complexity and accurate for a standard MDP, when compared to state-of-the-art dynamic programming counterparts.
+We create a robust and modular implementation of the MCTS algorithm for the JVM written in Kotlin. We demonstrate that the design of the MCTS implementation enables it to flexibly adapt to any single player or adversarial game, with unique heuristics and customization which can be implemented with ease. In addition, the implementation is reasonably efficient in both time and space complexity and accurate for a standard MDP, when compared to state-of-the-art dynamic programming counterparts.
 
 ## Structure
 
-The library contains the implmentation of the MCTS algorithm for single player and adversarial games. The project is compiled using `gradle`.
+The library contains the implementation of the MCTS algorithm for single player and adversarial games. The project is compiled using `gradle`.
 
 ```
 lib
-├── {gradle_files ...}
-└── src
-    └── main
-        └── kotlin
-            ├── ActionNode.kt
-            ├── AdversarialStatelessSolver.kt
-            ├── IDistribution.kt
+└── 
+    ...
+    └── src.main.kotlin
+        └── ca.aqtech.mctreesearch4j
+            ├── AdvancedStatelessSolver.kt
             ├── MDP.kt
             ├── Node.kt
-            ├── NodeBase.kt
-            ├── POMDP.kt
-            ├── ProbabilisticElement.kt
-            ├── SimulationState.kt
-            ├── SparseCategoricalDistribution.kt
-            ├── StateActionNode.kt
+            ├── SolverBase.kt
             ├── StateNode.kt
             ├── StatefulSolver.kt
-            ├── StatelessSolver.kt
-            └── UniformDistribution.kt
+            ├── StatelessActionNode.kt
+            └── StatelessSolver.kt
 
 ```
 
@@ -65,11 +60,22 @@ abstract class MDP<TState, TAction> {
 
 In the `app/` folder of this repository, you may see various examples of game engines interfacing with the MDP controller.
 
-### GridWorld
+## Maven Central
 
-See `app/src/main/kotlin/GridWorld/` for the MDP implementation.
+This codebase is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it 
+has full compatibility with any JVM language. 
 
+### Kotlin Integration (groovy)
+```groovy
+dependencies {
+    implementation "ca.aqtech.mctreesearch4j:0.0.2"
+}
+```
 
+### Scala Integration (SBT)
 
-
-
+```sbt
+libraryDependencies ++= Seq(
+  "ca.aqtech" % "mctreesearch4j" % "0.0.2"
+)
+```

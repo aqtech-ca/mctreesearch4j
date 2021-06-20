@@ -73,7 +73,7 @@ class GridworldMDP(
     }
 
     override fun actions(state: GridworldState): Collection<GridworldAction> {
-        return _allActions.filter { a -> state.isNeighbourValid(a, xSize, ySize) != null }
+        return _allActions.filter { a -> state.isNeighbourValid(a, xSize, ySize) }
     }
 
 }
