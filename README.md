@@ -22,10 +22,10 @@ lib
         └── ca.aqtech.mctreesearch4j
             ├── MDP.kt
             ├── Node.kt
-            ├── SolverBase.kt
+            ├── Solver.kt
             ├── StateNode.kt
             ├── StatefulSolver.kt
-            ├── StatelessActionNode.kt
+            ├── ActionNode.kt
             └── StatelessSolver.kt
 
 ```
