@@ -37,7 +37,7 @@ The MCTS lib can be implemented by creating an interface implementing a Markov D
 `MDP.kt` defines the interface of the MDP. To run the MCTS solver, you must extend this `MDP.kt` class in any JVM language, and provide your specific definitions. 
 
 ```kotlin
-abstract class MDP<TState, TAction> {
+abstract class MDP<StateType, ActionType> {
     abstract fun transition(state: StateType, action: ActionType) : StateType
     /* Class method that returns a legal state given current state (TState) and action taken (TAction) */
 
