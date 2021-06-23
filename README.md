@@ -38,19 +38,19 @@ The MCTS lib can be implemented by creating an interface implementing a Markov D
 
 ```kotlin
 abstract class MDP<TState, TAction> {
-    abstract fun transition(state: TState, action: TAction) : TState
+    abstract fun transition(state: StateType, action: ActionType) : StateType
     /* Class method that returns a legal state given current state (TState) and action taken (TAction) */
 
-    abstract fun reward(previousState: TState?, action: TAction?, state: TState) : Double
+    abstract fun reward(previousState: StateType?, action: ActionType?, state: StateType) : Double
     /* Class method to return a reward (Double) given state transitions parameters */
 
-    abstract fun initialState() : TState
+    abstract fun initialState() : StateType
     /* Return the initial state of the MCTS (TState) */
 
-    abstract fun isTerminal(state: TState) : Boolean
+    abstract fun isTerminal(state: StateType) : Boolean
     /* Return boolean indicating if the state is terminal. */
 
-    abstract fun actions(state: TState) : Iterable<TAction>
+    abstract fun actions(state: StateType) : Iterable<ActionType>
     /* Return an Iterable of legal actions given a current state. */
 }
 ```
