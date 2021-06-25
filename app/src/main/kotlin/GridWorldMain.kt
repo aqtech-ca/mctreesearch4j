@@ -28,6 +28,7 @@ fun main() {
             startingLocation = GridworldState(2, 2, false)
     )
 
+    val startTime = System.currentTimeMillis()
     var gwSolver = ExtendedStatelessSolver(
             gridworld,
             999,
@@ -36,6 +37,8 @@ fun main() {
             false
     )
     gwSolver.runTreeSearch(999)
+    val solverRunTime = System.currentTimeMillis() - startTime
+
     gwSolver.displayTree()
 
     // Write data
@@ -48,4 +51,7 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(gwSolver.explorationTermHistory.joinToString(", "))
     }
+
+    println("Solver Runtime: ")
+    println(solverRunTime)
 }

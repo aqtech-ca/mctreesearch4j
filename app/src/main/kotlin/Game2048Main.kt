@@ -1,5 +1,7 @@
 import Twenty48.*
 import java.io.File
+import kotlin.system.measureTimeMillis
+
 
 fun main() {
 
@@ -23,7 +25,7 @@ fun main() {
 
     val game2048MDP = Game2048MDP(initialGameState)
 
-
+    val startTime = System.currentTimeMillis()
     var solver = ExtendedStatelessSolver(
         game2048MDP,
         999,
@@ -32,6 +34,8 @@ fun main() {
         true
     )
     solver.runTreeSearch(999)
+    val solverRunTime = System.currentTimeMillis() - startTime
+
     solver.displayTree()
 
     println("optimalAction")
@@ -60,5 +64,8 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(solver.explorationTermHistory.joinToString(", "))
     }
+
+    println("Solver Runtime: ")
+    println(solverRunTime)
 
 }

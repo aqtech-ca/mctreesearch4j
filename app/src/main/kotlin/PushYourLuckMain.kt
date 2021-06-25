@@ -22,6 +22,7 @@ fun main() {
 
     val pylMDP = PushYourLuckMDP(nDice = 1, nSides = 6)
 
+    val startTime = System.currentTimeMillis()
     var solver = ExtendedStatelessSolver(
             pylMDP,
             999,
@@ -31,6 +32,8 @@ fun main() {
     )
 
     solver.runTreeSearch(999)
+    val solverRunTime = System.currentTimeMillis() - startTime
+
     solver.displayTree()
     val optimalHorizon = solver.getOptimalHorizon()
     println(optimalHorizon.toString())
@@ -46,5 +49,8 @@ fun main() {
     outputFile.printWriter().use { out ->
         out.println(solver.explorationTermHistory.joinToString(", "))
     }
+
+    println("Solver Runtime: ")
+    println(solverRunTime)
 
 }

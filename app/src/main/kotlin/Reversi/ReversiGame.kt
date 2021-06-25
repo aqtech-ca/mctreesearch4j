@@ -47,7 +47,13 @@ class ReversiGame {
                                                 if (state.currentPlayer != ReversiSquare.EMPTY) {
                                                     while (state.currentPlayer == ai) {
                                                         println("AI is thinking")
+
+                                                        val startTime = System.currentTimeMillis()
                                                         lastMove = ReversiSolverHeuristicSim(state.clone()).getMove()
+                                                        val solverRunTime = System.currentTimeMillis() - startTime
+                                                        println("Solver Runtime: ")
+                                                        println(solverRunTime)
+
                                                         ReversiController.executeMove(state, lastMove)
                                                     }
                                                     println("Next player: ${state.currentPlayer}")
