@@ -4,7 +4,7 @@ import ExtendedStatelessSolver
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import kotlin.random.Random
-import ca.aqtech.mctreesearch4j.StatelessSolver
+import ca.aqtech.mctreesearch4j.SimpleSolver
 import kotlin.test.assertNotNull
 
 class Game2048Tests {

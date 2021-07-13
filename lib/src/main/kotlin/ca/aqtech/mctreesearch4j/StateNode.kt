@@ -8,23 +8,29 @@ class StateNode<TState, TAction> (
     val isTerminal: Boolean
 ) : Node<TAction, StateNode<TState, TAction>>(parent, inducingAction) {
 
-    private val children = mutableMapOf<TAction, MutableCollection<StateNode<TState, TAction>>>()
+    private val children = mutableMapOf<TAction, StateNode<TState, TAction>>()
 
     override fun addChild(child: StateNode<TState, TAction>) {
         if (child.inducingAction == null) {
             throw Exception("Inducing action must be set on child")
         }
+        if (children.keys.contains(child.inducingAction)) {
+            throw Exception("A child with the same inducing action has already been added")
+        }
 
-        val childrenList = children.getOrPut(child.inducingAction, { mutableListOf() })
-        childrenList.add(child)
+        children[child.inducingAction] = child
     }
 
     override fun getChildren(action: TAction?): Collection<StateNode<TState, TAction>> {
         return if (action == null) {
-            children.values.flatten()
-        }
-        else {
-            children[action] ?: listOf()
+            children.values
+        } else {
+            val child = children[action]
+            if (child == null) {
+                listOf()
+            } else {
+                listOf(child)
+            }
         }
     }
 
