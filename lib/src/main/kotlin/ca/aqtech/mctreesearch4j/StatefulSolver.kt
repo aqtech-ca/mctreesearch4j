@@ -59,13 +59,13 @@ open class StatefulSolver<StateType, ActionType> (
         }
 
         var depth = 0
-        var  = node.state
+        var currentState = node.state
         var discount = rewardDiscountFactor
 
         while(true) {
-            val validActions = mdp.actions()
+            val validActions = mdp.actions(currentState)
             val randomAction = validActions.random()
-            val newState = mdp.transition(, randomAction)
+            val newState = mdp.transition(currentState, randomAction)
 
             if (verbose)
             {
@@ -74,7 +74,7 @@ open class StatefulSolver<StateType, ActionType> (
             }
 
             if (mdp.isTerminal(newState)) {
-                val reward = mdp.reward(, randomAction, newState) * discount
+                val reward = mdp.reward(currentState, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Terminal state reached : $reward")
                 }
