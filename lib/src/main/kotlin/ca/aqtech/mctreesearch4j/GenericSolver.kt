@@ -2,7 +2,7 @@ package ca.aqtech.mctreesearch4j
 
 import kotlin.math.max
 
-open class SimpleSolver<StateType, ActionType>(
+open class GenericSolver<StateType, ActionType>(
     private val mdp: MDP<StateType, ActionType>,
     private val simulationDepthLimit: Int,
     explorationConstant: Double,

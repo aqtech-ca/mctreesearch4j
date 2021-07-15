@@ -1,7 +1,7 @@
 import kotlin.math.ln
 import kotlin.math.sqrt
 import ca.aqtech.mctreesearch4j.MDP
-import ca.aqtech.mctreesearch4j.SimpleSolver
+import ca.aqtech.mctreesearch4j.GenericSolver
 
 class ExtendedStatelessSolver<StateType, ActionType>(
         mdp: MDP<StateType, ActionType>,
@@ -9,7 +9,7 @@ class ExtendedStatelessSolver<StateType, ActionType>(
         explorationConstant: Double,
         rewardDiscountFactor: Double,
         verbose: Boolean
-) : SimpleSolver<StateType, ActionType>(mdp, simulationDepthLimit, explorationConstant, rewardDiscountFactor, verbose) {
+) : GenericSolver<StateType, ActionType>(mdp, simulationDepthLimit, explorationConstant, rewardDiscountFactor, verbose) {
 
     val explorationTermHistory = mutableListOf<Double>()
 
