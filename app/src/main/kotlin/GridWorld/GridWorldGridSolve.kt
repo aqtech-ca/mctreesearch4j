@@ -1,6 +1,6 @@
 package GridWorld
 
-import ca.aqtech.mctreesearch4j.StatelessSolver
+import ca.aqtech.mctreesearch4j.GenericSolver
 
 class GridWorldGridSolve(
     private val xSize: Int,
@@ -33,7 +33,7 @@ class GridWorldGridSolve(
                         GridworldState(x, y, false)
                     )
 
-                    val solver = StatelessSolver(
+                    val solver = GenericSolver(
                         gridworld,
                         iterations,
                         exploreConstant,

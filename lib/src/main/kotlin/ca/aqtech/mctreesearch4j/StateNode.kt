@@ -1,30 +1,36 @@
 package ca.aqtech.mctreesearch4j
 
-class StateNode<TState, TAction> (
-    parent: StateNode<TState, TAction>?,
-    inducingAction: TAction?,
-    val state: TState,
-    val validActions: Collection<TAction>,
+class StateNode<StateType, ActionType> (
+    parent: StateNode<StateType, ActionType>?,
+    inducingAction: ActionType?,
+    val state: StateType,
+    val validActions: Collection<ActionType>,
     val isTerminal: Boolean
-) : Node<TAction, StateNode<TState, TAction>>(parent, inducingAction) {
+) : Node<ActionType, StateNode<StateType, ActionType>>(parent, inducingAction) {
 
-    private val children = mutableMapOf<TAction, MutableCollection<StateNode<TState, TAction>>>()
+    private val children = mutableMapOf<ActionType, StateNode<StateType, ActionType>>()
 
-    override fun addChild(child: StateNode<TState, TAction>) {
+    override fun addChild(child: StateNode<StateType, ActionType>) {
         if (child.inducingAction == null) {
             throw Exception("Inducing action must be set on child")
         }
+        if (children.keys.contains(child.inducingAction)) {
+            throw Exception("A child with the same inducing action has already been added")
+        }
 
-        val childrenList = children.getOrPut(child.inducingAction, { mutableListOf() })
-        childrenList.add(child)
+        children[child.inducingAction] = child
     }
 
-    override fun getChildren(action: TAction?): Collection<StateNode<TState, TAction>> {
+    override fun getChildren(action: ActionType?): Collection<StateNode<StateType, ActionType>> {
         return if (action == null) {
-            children.values.flatten()
-        }
-        else {
-            children[action] ?: listOf()
+            children.values
+        } else {
+            val child = children[action]
+            if (child == null) {
+                listOf()
+            } else {
+                listOf(child)
+            }
         }
     }
 
@@ -32,7 +38,7 @@ class StateNode<TState, TAction> (
         return "State: $state, Max Reward: ${"%.5f".format(maxReward)}"
     }
 
-    fun exploredActions(): Collection<TAction> {
+    fun exploredActions(): Collection<ActionType> {
         return children.keys
     }
 }

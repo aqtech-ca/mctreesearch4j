@@ -13,45 +13,24 @@ open class StatefulSolver<StateType, ActionType> (
     override var root = createNode(null, null, mdp.initialState())
 
     override fun select(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
-        // If the node is terminal, return it
-        if (mdp.isTerminal(node.state)) {
-            return node
-        }
-
-        val exploredActions = node.exploredActions()
-
-        assert(node.validActions.size >= exploredActions.size)
-
-        // This state has not been fully explored
-        if (node.validActions.size > exploredActions.size) {
-            return node
-        }
-
-        // This state has been explored, select best action
-        var bestAction = exploredActions.first()
-        var bestActionScore : Double? = null
-
-        for (action in exploredActions) {
-            val childrenOfAction = node.getChildren(action)
-            val actionN = childrenOfAction.sumOf { c -> c.n }
-            val actionReward = childrenOfAction.sumOf { c -> c.reward }
-            val actionScore = calculateUCT(node.n, actionN, actionReward, explorationConstant)
-
-            if (bestActionScore == null || actionScore > bestActionScore) {
-                bestAction = action
-                bestActionScore = actionScore
+        var currentNode = node
+        while(true) {
+            // If the node is terminal, return it
+            if (mdp.isTerminal(currentNode.state)) {
+                return currentNode
             }
+
+            val exploredActions = currentNode.exploredActions()
+            assert(currentNode.validActions.size >= exploredActions.size)
+
+            // This state has not been fully explored
+            if (currentNode.validActions.size > exploredActions.size) {
+                return currentNode
+            }
+
+            // This state has been explored, select best action
+            currentNode = currentNode.getChildren().maxByOrNull { a -> calculateUCT(a) } ?: throw Exception("There were no children for explored node")
         }
-
-        val newState = mdp.transition(node.state, bestAction)
-
-        val actionState = node.getChildren(bestAction).firstOrNull { s -> s.state == newState }
-        // New state reached by an explored action
-                ?: return createNode(node, bestAction, newState)
-
-
-        // Existing state reached by an explored action
-        return select(actionState)
     }
 
     override fun expand(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
@@ -80,13 +59,13 @@ open class StatefulSolver<StateType, ActionType> (
         }
 
         var depth = 0
-        var currentState = node.state
+        var currenStateType = node.state
         var discount = rewardDiscountFactor
 
         while(true) {
-            val validActions = mdp.actions(currentState)
+            val validActions = mdp.actions(currenStateType)
             val randomAction = validActions.random()
-            val newState = mdp.transition(currentState, randomAction)
+            val newState = mdp.transition(currenStateType, randomAction)
 
             if (verbose)
             {
@@ -95,7 +74,7 @@ open class StatefulSolver<StateType, ActionType> (
             }
 
             if (mdp.isTerminal(newState)) {
-                val reward = mdp.reward(currentState, randomAction, newState) * discount
+                val reward = mdp.reward(currenStateType, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Terminal state reached : $reward")
                 }
@@ -103,12 +82,12 @@ open class StatefulSolver<StateType, ActionType> (
                 return reward
             }
 
-            currentState = newState
+            currenStateType = newState
             depth++
             discount *= rewardDiscountFactor
 
             if (depth > simulationDepthLimit) {
-                val reward = mdp.reward(currentState, randomAction, newState) * discount
+                val reward = mdp.reward(currenStateType, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Depth limit reached: $reward")
                 }
@@ -119,16 +98,16 @@ open class StatefulSolver<StateType, ActionType> (
     }
 
     override fun backpropagate(node: StateNode<StateType, ActionType>, reward: Double) {
-        var currentStateNode = node
+        var currenStateTypeNode = node
         var currentReward = reward
 
         while (true)
         {
-            currentStateNode.maxReward = max(currentReward, currentStateNode.maxReward)
-            currentStateNode.reward += currentReward
-            currentStateNode.n++
+            currenStateTypeNode.maxReward = max(currentReward, currenStateTypeNode.maxReward)
+            currenStateTypeNode.reward += currentReward
+            currenStateTypeNode.n++
 
-            currentStateNode = currentStateNode.parent ?: break
+            currenStateTypeNode = currenStateTypeNode.parent ?: break
             currentReward *= rewardDiscountFactor
         }
     }

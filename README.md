@@ -39,13 +39,13 @@ The MCTS lib can be implemented by creating an interface implementing a Markov D
 ```kotlin
 abstract class MDP<StateType, ActionType> {
     abstract fun transition(state: StateType, action: ActionType) : StateType
-    /* Class method that returns a legal state given current state (TState) and action taken (TAction) */
+    /* Class method that returns a legal state given current state (StateType) and action taken (ActionType) */
 
     abstract fun reward(previousState: StateType?, action: ActionType?, state: StateType) : Double
     /* Class method to return a reward (Double) given state transitions parameters */
 
     abstract fun initialState() : StateType
-    /* Return the initial state of the MCTS (TState) */
+    /* Return the initial state of the MCTS (StateType) */
 
     abstract fun isTerminal(state: StateType) : Boolean
     /* Return boolean indicating if the state is terminal. */
@@ -67,7 +67,7 @@ has full compatibility with any JVM language.
 ### Kotlin Integration (groovy)
 ```groovy
 dependencies {
-    implementation "ca.aqtech.mctreesearch4j:0.0.2"
+    implementation "ca.aqtech.mctreesearch4j:0.0.3"
 }
 ```
 
@@ -75,6 +75,6 @@ dependencies {
 
 ```sbt
 libraryDependencies ++= Seq(
-  "ca.aqtech" % "mctreesearch4j" % "0.0.2"
+  "ca.aqtech" % "mctreesearch4j" % "0.0.3"
 )
 ```
