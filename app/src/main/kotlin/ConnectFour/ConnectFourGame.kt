@@ -1,6 +1,6 @@
 package ConnectFour
 
-import ca.aqtech.mctreesearch4j.SimpleSolver
+import ca.aqtech.mctreesearch4j.GenericSolver
 import de.magoeke.kotlin.connectfour.controllers.impl.MainController
 import de.magoeke.kotlin.connectfour.models.Board
 import de.magoeke.kotlin.connectfour.models.GameState
@@ -52,7 +52,7 @@ class ConnectFourGame {
         println("Computer is thinking...")
 
         val game = ConnectFourMDP(ConnectFourState(moves), moves.size % 2 == 0)
-        val stateless = SimpleSolver(
+        val stateless = GenericSolver(
                 game,
                 800,
                 1.4,

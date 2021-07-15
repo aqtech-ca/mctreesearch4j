@@ -59,13 +59,13 @@ open class StatefulSolver<StateType, ActionType> (
         }
 
         var depth = 0
-        var currentState = node.state
+        var currenStateType = node.state
         var discount = rewardDiscountFactor
 
         while(true) {
-            val validActions = mdp.actions(currentState)
+            val validActions = mdp.actions(currenStateType)
             val randomAction = validActions.random()
-            val newState = mdp.transition(currentState, randomAction)
+            val newState = mdp.transition(currenStateType, randomAction)
 
             if (verbose)
             {
@@ -74,7 +74,7 @@ open class StatefulSolver<StateType, ActionType> (
             }
 
             if (mdp.isTerminal(newState)) {
-                val reward = mdp.reward(currentState, randomAction, newState) * discount
+                val reward = mdp.reward(currenStateType, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Terminal state reached : $reward")
                 }
@@ -82,12 +82,12 @@ open class StatefulSolver<StateType, ActionType> (
                 return reward
             }
 
-            currentState = newState
+            currenStateType = newState
             depth++
             discount *= rewardDiscountFactor
 
             if (depth > simulationDepthLimit) {
-                val reward = mdp.reward(currentState, randomAction, newState) * discount
+                val reward = mdp.reward(currenStateType, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Depth limit reached: $reward")
                 }
@@ -98,16 +98,16 @@ open class StatefulSolver<StateType, ActionType> (
     }
 
     override fun backpropagate(node: StateNode<StateType, ActionType>, reward: Double) {
-        var currentStateNode = node
+        var currenStateTypeNode = node
         var currentReward = reward
 
         while (true)
         {
-            currentStateNode.maxReward = max(currentReward, currentStateNode.maxReward)
-            currentStateNode.reward += currentReward
-            currentStateNode.n++
+            currenStateTypeNode.maxReward = max(currentReward, currenStateTypeNode.maxReward)
+            currenStateTypeNode.reward += currentReward
+            currenStateTypeNode.n++
 
-            currentStateNode = currentStateNode.parent ?: break
+            currenStateTypeNode = currenStateTypeNode.parent ?: break
             currentReward *= rewardDiscountFactor
         }
     }
