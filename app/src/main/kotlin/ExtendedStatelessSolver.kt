@@ -3,13 +3,13 @@ import kotlin.math.sqrt
 import ca.aqtech.mctreesearch4j.MDP
 import ca.aqtech.mctreesearch4j.SimpleSolver
 
-class ExtendedStatelessSolver<TState, TAction>(
-        mdp: MDP<TState, TAction>,
+class ExtendedStatelessSolver<StateType, ActionType>(
+        mdp: MDP<StateType, ActionType>,
         simulationDepthLimit: Int,
         explorationConstant: Double,
         rewardDiscountFactor: Double,
         verbose: Boolean
-) : SimpleSolver<TState, TAction>(mdp, simulationDepthLimit, explorationConstant, rewardDiscountFactor, verbose) {
+) : SimpleSolver<StateType, ActionType>(mdp, simulationDepthLimit, explorationConstant, rewardDiscountFactor, verbose) {
 
     val explorationTermHistory = mutableListOf<Double>()
 
@@ -29,8 +29,8 @@ class ExtendedStatelessSolver<TState, TAction>(
         }
     }
 
-    fun getOptimalHorizon(): List<TAction> {
-        val optimalHorizonArr = mutableListOf<TAction>()
+    fun getOptimalHorizon(): List<ActionType> {
+        val optimalHorizonArr = mutableListOf<ActionType>()
         var node = root
 
         while (true){
