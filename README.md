@@ -67,7 +67,7 @@ has full compatibility with any JVM language.
 ### Kotlin Integration (groovy)
 ```groovy
 dependencies {
-    implementation "ca.aqtech.mctreesearch4j:0.0.2"
+    implementation "ca.aqtech.mctreesearch4j:0.0.3"
 }
 ```
 
@@ -75,6 +75,6 @@ dependencies {
 
 ```sbt
 libraryDependencies ++= Seq(
-  "ca.aqtech" % "mctreesearch4j" % "0.0.2"
+  "ca.aqtech" % "mctreesearch4j" % "0.0.3"
 )
 ```
