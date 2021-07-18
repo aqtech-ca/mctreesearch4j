@@ -33,11 +33,11 @@ class ReversiSolverHeuristicSim(initialState: ReversiState)
         }
 
         var depth = 0
-        var currenStateType = node.state
+        var currentState = node.state
         var discount = rewardDiscountFactor
 
         while(true) {
-            val validActions = mdp.actions(currenStateType)
+            val validActions = mdp.actions(currentState)
 
             var bestActionScore = Int.MIN_VALUE
             var bestActions = mutableListOf<Point>()
@@ -56,7 +56,7 @@ class ReversiSolverHeuristicSim(initialState: ReversiState)
             }
 
             val randomAction = bestActions.random()
-            val newState = mdp.transition(currenStateType, randomAction)
+            val newState = mdp.transition(currentState, randomAction)
 
             if (verbose) {
                 trace("-> $randomAction ")
@@ -64,7 +64,7 @@ class ReversiSolverHeuristicSim(initialState: ReversiState)
             }
 
             if (mdp.isTerminal(newState)) {
-                val reward = mdp.reward(currenStateType, randomAction, newState) * discount
+                val reward = mdp.reward(currentState, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Terminal state reached : $reward")
                 }
@@ -72,12 +72,12 @@ class ReversiSolverHeuristicSim(initialState: ReversiState)
                 return reward
             }
 
-            currenStateType = newState
+            currentState = newState
             depth++
             discount *= rewardDiscountFactor
 
             if (depth > simulationDepthLimit) {
-                val reward = mdp.reward(currenStateType, randomAction, newState) * discount
+                val reward = mdp.reward(currentState, randomAction, newState) * discount
                 if (verbose) {
                     traceln("-> Depth limit reached: $reward")
                 }
