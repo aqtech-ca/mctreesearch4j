@@ -78,3 +78,17 @@ libraryDependencies ++= Seq(
   "ca.aqtech" % "mctreesearch4j" % "0.0.3"
 )
 ```
+
+### Cite mctreesearch4j
+
+Please cite the framework as follows:
+
+```
+@misc{mctreesearch4j,
+  author       = {Liu, Larkin and Luo, Jun Tao},
+  title        = {mctreesearch4j: A Monte Carlo Tree Search JVM Library},
+  howpublished = {Web page},
+  url          = {https://mctreesearch4j.aqtech.ca/},
+  year         = {2021}
+}
+```
