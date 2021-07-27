@@ -27,9 +27,14 @@ Flexible implementations of Monte Carlo Tree Search (MCTS), combined with domain
 
 # Statement of Need
 
-``mctreesearch4j`` test cite [@Kocsis:2006].
-
 Open source implementations of Monte Carlo Tree Search exist, but have not gained widespread adoption. Implementations of MCTS have been written for JVM, C/C++, and Python, yet many do not provide easy access to heuristics, nor do they implement extensible and modular state action space abstractions. Furthermore, many implementations do not provide easy access to heuristics, nor do they implement extensible and modular state action space abstractions. *mctreesearch4j* aims build on the performance advantages of a compiled language such as JVM, while simultaneously providing a complete set of capabilities, namely extensibility and modularity. Therefore, many improvements and research experiments could be performed by extending and modifying the capabilities of the base software. *mctreesearch4j* is designed to enable researchers to experiment with various MCTS strategies while standardizing the functionality of the MCTS solver and ensuring reliability, where the experiments are reproducible and the solver compatible with common JVM runtimes.
+
+# Monte Carlo Tree Search
+
+Monte Carlo Tree Search primarily makes use of a deterministic selection of actions and resulting outcomes to estimate the reward function of the system. MCTS is a tree search adaptation of the UCB1 Multi-Armed Bandit Strategy [@Auer:2002]. When performing one tree traversal in MCTS, a series of actions is randomly played. This tree search is not entirely random as it is guided by the UCB1 illustrated in Eq. eq:mcts-uct. The MCTS algorithm is distinctly divided into 4-phases, *Selection*, *Expansion*, *Simulation*, and *Backpropagation*, which are clearly illustrated in Fig. mcts-diagram. In *Selection*, a policy deterministically selects which action to play, based on previously expanded states. This selection is typically guided by the UCT measure, from Eq. eq:mcts-uct. In the *Expansion* phase, states that are unexplored are added to the the tree in the fashion end of each node in the search tree. Subsequently, in the *Simulation* phase, a simulation is stochastically played out. Finally *Backpropagation* propagates the final reward of either a terminal state, or a node at an arbitrary depth limit, back to the root node. This 4-phase process is repeated until a maximum number of iterations or a convergence criteria is established. 
+
+![Alt text](mcts-diagram-v2.png?raw=true "Title")
+
 
 # Design Principles
 
@@ -37,7 +42,7 @@ Open source implementations of Monte Carlo Tree Search exist, but have not gaine
 
 - Adaptability is defined as the ability for MDP domain to be easily integrated into the *mctreesearch4j* framework with ease via class abstractions. Our implementation seeks to simplify the adoption of MCTS solutions for a variety of domains. 
 - Secondly, we design a software that is fully compatible with the Java Virtual Machine (JVM). 
-- And lastly, we design to achieve a high degree of extensibility and modularity within the framework. Extensibility is the defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
+- We design to achieve a high degree of extensibility and modularity within the framework. Extensibility is the defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
 
 # Domain Abstraction
 
@@ -51,7 +56,6 @@ abstract class MDP<StateType, ActionType> {
     abstract fun initialState() : StateType
     abstract fun isTerminal(StateType) : Boolean
     abstract fun actions(StateType) : Collection<ActionType>
-``
 ```
 
 ## Solver Design
@@ -64,9 +68,39 @@ The differentiation lies in their respective memory utilization of abstract node
 
 # Customization
 
+Though the default MCTS implementation works well in many scenarios, there are situations where knowledge about specific problem domains can be applied to improve the MCTS performance. Improvements to MCTS, such as heuristics driven simulation, where domain knowledge can be exploited to improve solver performance. We demonstrate that a Reversi AI that uses heuristics derived from [@Guenther:2004] is able to outperform the basic MCTS implementation. These heuristics are programmed via extensibility points in the *mctreesearch4j* solver implementation, where the key mechanisms can be altered or augmented. Our heuristic, illustrated in Fig. Reversi Heuristic, introduces the ``heuristicWeight`` array, a 2D array storing domain specific ratings of every position on a Reversi board representing the desirability of that position on the board. The negative numbers represent a likely loss and positive numbers representing a likely win, again as represented in Fig. fig:reversi-heu. This value is taken into consideration when traversing down the simulation tree. The ``heuristicWeight`` array adjusts the propensity to explore any position for both agents based on the heurisitc's belief about the desirability of the position. To alter the MCTS simulation phase we override the ``simulate()`` method and create a new definition for it. The application of this ``heuristicWeight`` only requires minor alterations to the ``simulate()`` method, as illustrated in Code Listing X.
+
+```kotlin
+override fun simulate(node: NodeType): Double {
+    /*... Original Simulation code ...*/
+    while(true) {
+        val validActions = mdp.actions(currentState)
+        var bestActionScore = Int.MIN_VALUE // Begin heuristic
+            var bestActions = mutableListOf<Point>()
+            for (action in validActions) {
+                val score = heuristicWeight[action.x][action.y]
+                if (score > bestActionScore) {
+                    bestActionScore = score
+                    bestActions = mutableListOf(action)
+                }
+                if (score == bestActionScore) {bestActions.add(action)}
+            }
+        val randomAction = bestActions.random() // End heuristic
+        val newState = mdp.transition(currentState, randomAction)
+        /*... Original Simulation code ...*/
+    }
+}
+```
+
 # Results
 
+When the MCTS solver is accurately selecting the optimal solutions, it will continue to cause the agent to explore in the optimal subset of the state space, and reduce its exploration in the non-optimal subset of the state space. We provide a quick example in the MDP Domain of GridWorld, detailed in [@Liu:2021]. The cumulative number of visits corresponding to the optimal policy is proportionally increasing with respect to the number of MCTS iterations. Whereas for non-optimal solutions, the cumulative visits are significantly less because the solver will avoid visiting the non-optimal state subspace. 
+
+![Convergence of visits](gw_visits.png?raw=true "Title")
+
 # Conclusion
+
+In closing, *mctreesearch4j* presents a framework which enables programmers to adapt an MCTS solver to a variety of MDP domains. This is important because software application was a main focus of *mctreesearch4j*. Furthermore, *mctreesearch4j* is fully compatible with JVM, and this design decision was made due to the excellent support of class structure and generic variable typing in Kotlin, and other JVM languages, as well as support for mobile applications. Yet most importantly, *mctreesearch4j* is modular and extensible, the key mechanism of MCTS are broken down, and the programmer is able inherit class characteristics, redefine and/or re-implement certain sections of the algorithm while maintaining a high degree of MCTS standardization.
 
 # Acknowledgements
 
