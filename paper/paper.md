@@ -31,9 +31,9 @@ Open source implementations of Monte Carlo Tree Search exist, but have not gaine
 
 # Monte Carlo Tree Search
 
-Monte Carlo Tree Search primarily makes use of a deterministic selection of actions and resulting outcomes to estimate the reward function of the system. MCTS is a tree search adaptation of the UCB1 Multi-Armed Bandit Strategy [@Auer:2002]. When performing one tree traversal in MCTS, a series of actions is randomly played. This tree search is not entirely random as it is guided by the UCB1 illustrated in Eq. eq:mcts-uct. The MCTS algorithm is distinctly divided into 4-phases, *Selection*, *Expansion*, *Simulation*, and *Backpropagation*, which are clearly illustrated in Fig. mcts-diagram. In *Selection*, a policy deterministically selects which action to play, based on previously expanded states. This selection is typically guided by the UCT measure, from Eq. eq:mcts-uct. In the *Expansion* phase, states that are unexplored are added to the the tree in the fashion end of each node in the search tree. Subsequently, in the *Simulation* phase, a simulation is stochastically played out. Finally *Backpropagation* propagates the final reward of either a terminal state, or a node at an arbitrary depth limit, back to the root node. This 4-phase process is repeated until a maximum number of iterations or a convergence criteria is established. 
+Monte Carlo Tree Search primarily makes use of a deterministic selection of actions and resulting outcomes to estimate the reward function of the system. MCTS is a tree search adaptation of the UCB1 Multi-Armed Bandit Strategy [@Auer:2002]. When performing one tree traversal in MCTS, a series of actions is randomly played. This tree search is not entirely random as it is guided by the UCB1 illustrated in Eq. eq:mcts-uct. The MCTS algorithm is distinctly divided into 4-phases, *Selection*, *Expansion*, *Simulation*, and *Backpropagation*, which are clearly illustrated in Fig. \ref{fig:mcts-diagram}. In *Selection*, a policy deterministically selects which action to play, based on previously expanded states. This selection is typically guided by the UCT measure, from Eq. eq:mcts-uct. In the *Expansion* phase, states that are unexplored are added to the the tree in the fashion end of each node in the search tree. Subsequently, in the *Simulation* phase, a simulation is stochastically played out. Finally *Backpropagation* propagates the final reward of either a terminal state, or a node at an arbitrary depth limit, back to the root node. This 4-phase process is repeated until a maximum number of iterations or a convergence criteria is established. 
 
-![Alt text](mcts-diagram-v2.png?raw=true "Title")
+![Monte Carlo Tree Search Key Mechanisms. [@Browne:2012] \label{fig:mcts-diagram}](mcts-diagram-v2.png?raw=true "Title")
 
 
 # Design Principles
@@ -41,14 +41,14 @@ Monte Carlo Tree Search primarily makes use of a deterministic selection of acti
 ``mctreesearch4j`` is designed follow three key design principles. Firstly, we design for adaptability. 
 
 - Adaptability is defined as the ability for MDP domain to be easily integrated into the *mctreesearch4j* framework with ease via class abstractions. Our implementation seeks to simplify the adoption of MCTS solutions for a variety of domains. 
-- Secondly, we design a software that is fully compatible with the Java Virtual Machine (JVM). 
+- We design a software that is fully compatible with the Java Virtual Machine (JVM). 
 - We design to achieve a high degree of extensibility and modularity within the framework. Extensibility is the defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
 
 # Domain Abstraction
 
-The main abstraction that is used to define an MDP problem is the abstract class defined in the code listing MDP Interface, using generic type variables. Each of the methods correspond to specific behaviour of a discrete MDP. In *mctreesearch4j`` we use generic types ``StateType`` and ``ActionType`` to represent the MDP states and actions respectively. This abstract class has five members that must be implemented. These abstract class methods define the functionality of an MDP. The MDP abstraction will be used by core MCTS solvers to compute the optimal policy. The MDP interface can be written in any JVM language, we use Kotlin and Scala for this paper, with the Scala implementation from [@Liu:2021-connect4].
+The main abstraction that is used to define an MDP problem is the abstract class defined in *MDP Abstraction*, using generic type variables. Each of the methods correspond to specific behaviour of a discrete MDP. In *mctreesearch4j* we use generic types ``StateType`` and ``ActionType`` to represent the MDP states and actions respectively. This abstract class has five members that must be implemented. These abstract class methods define the functionality of an MDP. The MDP abstraction will be used by core MCTS solvers to compute the optimal policy. The MDP interface can be written in any JVM language, we use Kotlin and Scala for this paper, with the Scala implementation from [@Liu:2021-connect4].
 
-### MDP Interface
+### MDP Abstraction 
 ```kotlin
 abstract class MDP<StateType, ActionType> {
     abstract fun transition(StateType, ActionType) : StateType
@@ -60,7 +60,7 @@ abstract class MDP<StateType, ActionType> {
 
 ## Solver Design
 
-![Alt text](software_design_mcts.png?raw=true "Title")
+![Software Architecture. \ref{fig:software-design} ](software_design_mcts.png?raw=true "Title")
 
 *mctreesearch4j* provides a default implementation known as ``class GenericSolver``, and an alternate ``StatefulSolver``. The abstract ``Solver`` serves as the base class for both versions, and defines a set of functionalities that all solver implementations must provide as well as a set of extensible utilities. Similar to the MDP abstraction, the solver uses a set of type parameters to provide strongly typed methods that unify and simplify the MCTS implementation. The programmer is free to select the data type or data structure that best defines how states and actions are represented in their MDP domain. Thus we can infer that, Generic and Stateful solvers have different representations of the ``NodeType``. 
 
@@ -68,7 +68,9 @@ The differentiation lies in their respective memory utilization of abstract node
 
 # Customization
 
-Though the default MCTS implementation works well in many scenarios, there are situations where knowledge about specific problem domains can be applied to improve the MCTS performance. Improvements to MCTS, such as heuristics driven simulation, where domain knowledge can be exploited to improve solver performance. We demonstrate that a Reversi AI that uses heuristics derived from [@Guenther:2004] is able to outperform the basic MCTS implementation. These heuristics are programmed via extensibility points in the *mctreesearch4j* solver implementation, where the key mechanisms can be altered or augmented. Our heuristic, illustrated in Fig. Reversi Heuristic, introduces the ``heuristicWeight`` array, a 2D array storing domain specific ratings of every position on a Reversi board representing the desirability of that position on the board. The negative numbers represent a likely loss and positive numbers representing a likely win, again as represented in Fig. fig:reversi-heu. This value is taken into consideration when traversing down the simulation tree. The ``heuristicWeight`` array adjusts the propensity to explore any position for both agents based on the heurisitc's belief about the desirability of the position. To alter the MCTS simulation phase we override the ``simulate()`` method and create a new definition for it. The application of this ``heuristicWeight`` only requires minor alterations to the ``simulate()`` method, as illustrated in Code Listing X.
+Though the default MCTS implementation works well in many scenarios, there are situations where knowledge about specific problem domains can be applied to improve the MCTS performance. Improvements to MCTS, such as heuristics driven simulation, where domain knowledge can be exploited to improve solver performance. We demonstrate that a Reversi AI that uses heuristics derived from [@Guenther:2004] is able to outperform the basic MCTS implementation. These heuristics are programmed via extensibility points in the *mctreesearch4j* solver implementation, where the key mechanisms can be altered or augmented. Our heuristic, illustrated in Fig. Reversi Heuristic, introduces the ``heuristicWeight`` array, a 2D array storing domain specific ratings of every position on a Reversi board representing the desirability of that position on the board. The negative numbers represent a likely loss and positive numbers representing a likely win, again as represented in Fig. fig:reversi-heu. This value is taken into consideration when traversing down the simulation tree. The ``heuristicWeight`` array adjusts the propensity to explore any position for both agents based on the heurisitc's belief about the desirability of the position. To alter the MCTS simulation phase we override the ``simulate()`` method and create a new definition for it. The application of this ``heuristicWeight`` only requires minor alterations to the ``simulate()`` method, as illustrated in *Heuristic Implementation Example*.
+
+### Heuristic Implementation Example
 
 ```kotlin
 override fun simulate(node: NodeType): Double {
