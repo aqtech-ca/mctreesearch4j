@@ -10,7 +10,7 @@ authors:
     orcid: 0000-0002-9375-1035
     affiliation: 1
   - name: Jun Tao Luo
-    orcid: 
+    orcid: 0000-0002-2681-8922
     affiliation: 2
 affiliations:
  - name: University of Toronto
@@ -39,7 +39,7 @@ Open source implementations of Monte Carlo Tree Search exist, but have not gaine
 - Secondly, we design a software that is fully compatible with the Java Virtual Machine (JVM). 
 - And lastly, we design to achieve a high degree of extensibility and modularity within the framework. Extensibility is the defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
 
-# Usage
+# Domain Abstraction
 
 The main abstraction that is used to define an MDP problem is the abstract class defined in the code listing MDP Interface, using generic type variables. Each of the methods correspond to specific behaviour of a discrete MDP. In \textit{mctreesearch4j} we use generic types ``StateType`` and ``ActionType`` to represent the MDP states and actions respectively. This abstract class has five members that must be implemented. These abstract class methods define the functionality of an MDP. The MDP abstraction will be used by core MCTS solvers to compute the optimal policy. The MDP interface can be written in any JVM language, we use Kotlin and Scala for this paper, with the Scala implementation from [@Liu:2021-connect4].
 
@@ -54,15 +54,14 @@ abstract class MDP<StateType, ActionType> {
 }
 ```
 
-
-
-
-
-
-
-## Domain Abstraction
-
 ## Solver Design
+
+![Alt text](software_design_mcts.png?raw=true "Title")
+
+*mctreesearch4j* provides a default implementation known as ``class GenericSolver``, and an alternate ``StatefulSolver``. The abstract ``Solver`` serves as the base class for both versions, and defines a set of functionalities that all solver implementations must provide as well as a set of extensible utilities. Similar to the MDP abstraction, the solver uses a set of type parameters to provide strongly typed methods that unify and simplify the MCTS implementation. The programmer is free to select the data type or data structure that best defines how states and actions are represented in their MDP domain. Thus we can infer that, Generic and Stateful solvers have different representations of the ``NodeType``. 
+
+The differentiation lies in their respective memory utilization of abstract node types to track states during MCTS iterations. The default ``class GenericSolver} provides a leaner implementation, where actions are tracked and no explicit states are stored permanently. The states tracked with ``class GenericSolver} are dynamic and the MDP transitions must be rerun when traversing the search tree during selection in order to infer the state. The ``class StatefulSolver} keeps an explicit record of the visited states, and additional information, such as terminality and availability of downstream actions. The extra overhead of storing the state explicitly in the MCTS node, allows the algorithm to optimize its search using information from previously visited states. This is particularly useful for deterministic games, where a re-computation of the MDP transition is not necessary to determine the state of the agent after a particular taking a specific action. This differentiation results in different implementations of the \textit{Selection} step, while maintaining identical implementations of \textit{Expansion}, \textit{Simulate} and \textit{Backpropagation}. Both implementation iterates the algorithm in the most common pattern of \textit{Selection}, \textit{Expansion}, \textit{Simulation}, \textit{Backpropagation} until a certain number of ``iterations}.
+
 
 # Customization
 
