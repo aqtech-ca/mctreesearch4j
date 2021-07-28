@@ -81,14 +81,15 @@ libraryDependencies ++= Seq(
 
 ### Cite mctreesearch4j
 
-Please cite the framework as follows:
+Currently, to cite our framework, please cite our preprint:
 
 ```
-@misc{mctreesearch4j,
-  author       = {Liu, Larkin and Luo, Jun Tao},
-  title        = {mctreesearch4j: A Monte Carlo Tree Search JVM Library},
-  howpublished = {Web page},
-  url          = {https://mctreesearch4j.aqtech.ca/},
-  year         = {2021}
-}
+@article{mctreesearch4j,
+  author = {Liu, Larkin and Luo, Jun Tao},
+  title = {An Extensible and Modular Design and Implementation of Monte Carlo Tree Search for the JVM},
+  journal = {Preprint},
+  year = {2021},
+  url = {https://www.preprints.org/manuscript/202107.0622/v1},
+  doi = {doi:10.20944/preprints202107.0622.v1}
+ } 
 ```
