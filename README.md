@@ -8,7 +8,7 @@ An robust Implementation of the Monte Carlo Tree Search (MCTS) algorithm for the
 
 ## Objective
 
-We create a robust and modular implementation of the MCTS algorithm for the JVM written in Kotlin. We demonstrate that the design of the MCTS implementation enables it to flexibly adapt to any single player or adversarial game, with unique heuristics and customization which can be implemented with ease. In addition, the implementation is reasonably efficient in both time and space complexity and accurate for a standard MDP, when compared to state-of-the-art dynamic programming counterparts.
+Flexible implementations of Monte Carlo Tree Search (MCTS), combined with domain specific knowledge and hybridization with other search algorithms, can be a very powerful for the solution of problems in complex planning. We introduce *mctreesearch4j*, a standard MCTS implementation written as a standard JVM library following key design principles of object oriented programming. We define key class abstractions allowing the MCTS library to flexibly adapt to any well defined Markov Decision Process or turn-based adversarial game. Furthermore, our library is designed to be modular and extensible, utilizing class inheritance and generic typing to standardize custom algorithm definitions. We demonstrate that the design of the MCTS implementation provides ease of adaptation for unique heuristics and customization across varying Markov Decision Process (MDP) domains. In addition, the implementation is reasonably performant and accurate for standard MDP’s. In addition, via the implementation of *mctreesearch4j*, the nuances of different types of MCTS algorithms are discussed.
 
 ## Structure
 
