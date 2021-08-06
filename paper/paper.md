@@ -1,5 +1,5 @@
 ---
-title: 'mctreesearch4j: Monte Carlo Tree Search made Easy'
+title: 'mctreesearch4j: A Monte Carlo Tree Search Implementation for the JVM'
 tags:
   - Java Virtual Machine
   - Monte Carlo Tree Search
@@ -31,7 +31,7 @@ Open source implementations of Monte Carlo Tree Search exist, but have not gaine
 
 # Monte Carlo Tree Search
 
-Monte Carlo Tree Search primarily makes use of a deterministic selection of actions and resulting outcomes to estimate the reward function of well defined Markov Decision Process (MDP). MCTS is a tree search adaptation of the UCB1 Multi-Armed Bandit Strategy [@Auer:2002]. We present a more detailed discussion in [@Liu:2021]. The MCTS algorithm is distinctly divided into 4-phases, *Selection*, *Expansion*, *Simulation*, and *Backpropagation*, which are clearly illustrated in Fig. \ref{fig:mcts-diagram}. In *Selection*, a policy deterministically selects which action to play, based on previously expanded states, guided by some exploration constant, *C*. In the *Expansion* phase, states that are unexplored, represented by a leaf node, are added to the search tree one at time. Subsequently, in the *Simulation* phase, a simulation is stochastically played out. Finally, *Backpropagation* propagates the final reward of either a terminal state, or a node at an arbitrary depth limit, back to the root node. This 4-phase process is repeated until a maximum number of iterations or a convergence criteria is established. 
+Monte Carlo Tree Search primarily makes use of a deterministic selection of actions and stochastic simulations to estimate the reward function of well defined Markov Decision Process (MDP). MCTS is a tree search adaptation of the UCB1 Multi-Armed Bandit Strategy [@Auer:2002]. We present a more detailed discussion in [@Liu:2021]. The MCTS algorithm is distinctly divided into 4-phases, *Selection*, *Expansion*, *Simulation*, and *Backpropagation*, which are clearly illustrated in Fig. \ref{fig:mcts-diagram}. In *Selection*, a policy deterministically selects which action to play, based on previously expanded states, guided by some exploration constant, *C*. In the *Expansion* phase, states that are unexplored, represented by a leaf node, are added to the search tree. Subsequently, in the *Simulation* phase, a simulation is stochastically played out. Finally, *Backpropagation* propagates the final reward of either a terminal state, or a node at a specified depth limit, back to the root node. This 4-phase process is repeated until a maximum number of iterations or a convergence criteria is established. 
 
 ![Monte Carlo Tree Search Key Mechanisms. [@Browne:2012] \label{fig:mcts-diagram}](mcts-diagram-v2.png?raw=true "Title")
 
@@ -40,7 +40,7 @@ Monte Carlo Tree Search primarily makes use of a deterministic selection of acti
 
 *mctreesearch4j* is designed follow three key design principles. 
 
-- **Adaptability**: Adaptability is defined as the ability for MDP domain to be easily integrated into the *mctreesearch4j* framework with ease via class abstractions. Our implementation seeks to simplify the adoption of MCTS solutions for a variety of domains. 
+- **Adaptability**: Adaptability is defined as the ability for MDP domain to be easily integrated into the *mctreesearch4j* framework using provided class abstractions. Our implementation seeks to simplify the adoption of MCTS solutions for a variety of domains. 
 - **JVM Compatibility**: We design a library that is fully compatible with the Java Virtual Machine (JVM), and consequently functional with any JVM languages, ie. Java, Scala, Kotlin etc.
 - **Extensibility** We design to achieve a high degree of extensibility and modularity within the framework. Extensibility is the defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
 
@@ -62,9 +62,9 @@ abstract class MDP<StateType, ActionType> {
 
 ![Software Architecture. \ref{fig:software-design} ](software_design_mcts.png?raw=true "Title")
 
-*mctreesearch4j* provides a default implementation known as ``class GenericSolver``, and an alternate ``StatefulSolver``. The abstract ``Solver`` serves as the base class for both versions, and defines a set of functionalities that all solver implementations must provide as well as a set of extensible utilities. Similar to the MDP abstraction, the solver uses a set of type parameters to provide strongly typed methods that unify and simplify the MCTS implementation. The programmer is free to select the data type or data structure that best defines how states and actions are represented in their MDP domain. Thus we can infer that, Generic and Stateful solvers have different representations of the ``NodeType``, which defines how nodes are represented in the MCTS tree. 
+*mctreesearch4j* provides a default implementation known as ``GenericSolver``, and an alternate ``StatefulSolver``. The abstract ``Solver`` serves as the base class for both versions, and defines a set of functionalities that all solver implementations must provide as well as a set of extensible utilities. Similar to the MDP abstraction, the solver uses a set of type parameters to provide strongly typed methods that unify and simplify the solver implementation. The programmer is free to select the data type or data structure that best defines how states and actions are represented in their MDP domain.
 
-The differentiation between solvers lie in their respective memory utilization of abstract node types to track states during MCTS iterations. The default ``GenericSolver`` provides a leaner implementation, where actions are tracked and no explicit states are stored permanently. The states tracked with ``GenericSolver`` are dynamic and the MDP transitions must be rerun when traversing the search tree during selection in order to infer the state. The ``StatefulSolver`` keeps an explicit record of the visited states, and additional information, such as terminality and availability of downstream actions. The extra overhead of storing the state explicitly in the MCTS node, allows the algorithm to optimize its search using information from previously visited states. This is particularly useful for deterministic games, where a re-computation of the MDP transition is not necessary to determine the state of the agent after a particular taking a specific action. This differentiation results in different implementations of the *Selection* step, while maintaining identical implementations of *Expansion*, *Simulate* and *Backpropagation*. 
+The difference between solvers lies in their respective memory utilization of abstract node types to track states during MCTS iterations. The default ``GenericSolver`` provides a leaner implementation, where actions are tracked and no explicit states are stored permanently. The states tracked with ``GenericSolver`` are dynamic and the MDP transitions must be rerun when traversing the search tree during selection in order to infer the state. The ``StatefulSolver`` keeps an explicit record of the visited states, and additional information, such as terminality and availability of downstream actions. The extra overhead of storing the state explicitly in the MCTS node, allows the algorithm to optimize its search using information from previously visited states. This is particularly useful for deterministic games, where a re-computation of the MDP transition is not necessary to determine the state of the agent after taking a specific action. This results in different implementations of the *Selection* step, while maintaining identical implementations of *Expansion*, *Simulate* and *Backpropagation*. 
 
 # Customization
 
@@ -96,14 +96,19 @@ override fun simulate(node: NodeType): Double {
 
 # Results
 
-When the MCTS solver is accurately selecting the optimal solutions, it will continue to compel the agent to explore in the optimal subset of the state space, and reduce its exploration in the non-optimal subset of the state space. We provide a quick example in the MDP Domain of GridWorld, detailed in [@Liu:2021]. The cumulative number of visits corresponding to the optimal policy is proportionally increasing with respect to the number of MCTS iterations. Whereas for non-optimal solutions, the cumulative visits are significantly less because the solver will avoid visiting the non-optimal state subspace. 
+When the MCTS solver is accurately selecting the optimal solutions, it will continue to compel the agent to explore in the optimal subset of the state space, and reduce its exploration in the non-optimal subset of the state space. We provide a quick example in the MDP Domain of GridWorld, detailed in [@Liu:2021]. The cumulative number of visits corresponding to the optimal policy is proportionally increasing with respect to the number of MCTS iterations. Whereas for non-optimal solutions, the cumulative visits are significantly lower because the solver will avoid visiting the non-optimal state subspace. 
 
 ![Convergence of visits](gw_visits.png?raw=true "Title")
 
 # Conclusion
 
-In closing, *mctreesearch4j* presents a framework which enables programmers to adapt an MCTS solver to a variety of MDP domains. This is important because software application was a main focus of *mctreesearch4j*. Furthermore, *mctreesearch4j* is fully compatible with JVM, and this design decision was made due to the excellent support of class structure and generic variable typing in Kotlin, and other JVM languages, as well as support for mobile applications. Yet most importantly, *mctreesearch4j* is modular and extensible, the key mechanism of MCTS are broken down, and the programmer is able inherit class characteristics, redefine and/or re-implement certain sections of the algorithm while maintaining a high degree of MCTS standardization.
+In closing, *mctreesearch4j* presents a framework which enables programmers to adapt an MCTS solver to a variety of MDP domains. This is important because software application was a main focus of *mctreesearch4j*. Furthermore, *mctreesearch4j* is fully compatible with JVM, and this design decision was made due to the excellent support of class structure and generic variable typing in Kotlin, and other JVM languages, as well as support for mobile applications. Yet most importantly, *mctreesearch4j* is modular and extensible, the key mechanism of MCTS are broken down, and the programmer is able inherit class members, redefine and/or re-implement certain sections of the algorithm while maintaining a high degree of MCTS standardization.
 
 # Acknowledgements
+
+This research was conducted without external funding, resulting in no conflicts of interests. We would like to acknowledge the Maven Central Repository, for providing an important service to make our JVM artifacts  accessible to all JVM projects. 
+
+*mctreesearch4j* is available here: [mvnrepository.com/artifact/ca.aqtech/mctreesearch4j](https://mvnrepository.com/artifact/ca.aqtech/mctreesearch4j)
+
 
 # References
