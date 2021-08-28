@@ -87,9 +87,8 @@ Currently, to cite our framework, please cite our preprint:
 @article{mctreesearch4j,
   author = {Liu, Larkin and Luo, Jun Tao},
   title = {An Extensible and Modular Design and Implementation of Monte Carlo Tree Search for the JVM},
-  journal = {Preprint},
+  journal = {arXiv},
   year = {2021},
-  url = {https://www.preprints.org/manuscript/202107.0622/v1},
-  doi = {doi:10.20944/preprints202107.0622.v1}
+  url = {https://arxiv.org/abs/2108.10061},
  } 
 ```
