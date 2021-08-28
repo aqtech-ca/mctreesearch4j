@@ -89,6 +89,6 @@ Currently, to cite our framework, please cite our preprint:
   title = {An Extensible and Modular Design and Implementation of Monte Carlo Tree Search for the JVM},
   journal = {arXiv},
   year = {2021},
-  url = {https://arxiv.org/abs/2108.10061},
+  url = {https://arxiv.org/abs/2108.10061}
  } 
 ```
