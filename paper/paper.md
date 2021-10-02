@@ -23,7 +23,7 @@ bibliography: paper.bib
 
 # Summary
 
-We introduce *mctreesearch4j*, a Monte Carlo Tree Search (MCTS) implementation written as a standard JVM library following key object oriented programming design principles. This implementation of MCTS, designed with the prominent ideas of modularity and extensibility, provides a powerful tool to enable the discovery of approximate solutions to complex planning problems via rapid experimentation. *mctreesearch4j* utilizes class inheritance and generic types to standardize custom algorithm definitions. In addition, key class abstractions are designed for the library to flexibly adapt to any well-defined Markov Decision Process (MDP’s) or turn-based adversarial games.  Furthermore, *mctreesearch4j* is capable of customization across a variety of MDP domains, consequently enabling the adoption of MCTS heuristics and customization into the core library with ease.
+We introduce *mctreesearch4j*, a Monte Carlo Tree Search (MCTS) implementation written as a standard JVM library following key object oriented programming design principles. This implementation of MCTS, designed with the prominent ideas of modularity and extensibility, provides a powerful tool to enable the discovery of approximate solutions to complex planning problems via rapid experimentation. *mctreesearch4j* utilizes class inheritance and generic types to standardize custom algorithm definitions. In addition, key class abstractions are designed for the library to flexibly adapt to any well-defined Markov Decision Process (MDP) or turn-based adversarial games.  Furthermore, *mctreesearch4j* is capable of customization across a variety of MDP domains, consequently enabling the adoption of MCTS heuristics and customization into the core library with ease.
 
 # Statement of Need
 
@@ -42,7 +42,7 @@ Monte Carlo Tree Search primarily makes use of a deterministic selection of acti
 
 - **Adaptability**: Adaptability is defined as the ability for MDP domain to be easily integrated into the *mctreesearch4j* framework using provided class abstractions. Our implementation seeks to simplify the adoption of MCTS solutions for a variety of domains. 
 - **JVM Compatibility**: We design a library that is fully compatible with the Java Virtual Machine (JVM), and consequently functional with any JVM languages, ie. Java, Scala, Kotlin etc.
-- **Extensibility** We design to achieve a high degree of extensibility and modularity within the framework. Extensibility is the defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
+- **Extensibility** We design to achieve a high degree of extensibility and modularity within the framework. Extensibility is defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
 
 # Domain Abstraction
 
@@ -60,7 +60,7 @@ abstract class MDP<StateType, ActionType> {
 
 ## Solver Design
 
-![Software Architecture. \ref{fig:software-design} ](software_design_mcts.png?raw=true "Title")
+![Software Architecture.](software_design_mcts.png?raw=true "Title")
 
 *mctreesearch4j* provides a default implementation known as ``GenericSolver``, and an alternate ``StatefulSolver``. The abstract ``Solver`` serves as the base class for both versions, and defines a set of functionalities that all solver implementations must provide as well as a set of extensible utilities. Similar to the MDP abstraction, the solver uses a set of type parameters to provide strongly typed methods that unify and simplify the solver implementation. The programmer is free to select the data type or data structure that best defines how states and actions are represented in their MDP domain.
 
@@ -68,7 +68,9 @@ The difference between solvers lies in their respective memory utilization of ab
 
 # Customization
 
-Though the default MCTS implementation works well in many scenarios, there are situations where knowledge about specific problem domains can be applied to improve the MCTS performance. Improvements to MCTS, such as heuristics driven simulation, exploit domain knowledge to improve solver performance. We demonstrate that a Reversi AI that uses heuristics derived from [@Guenther:2004] is able to outperform the basic MCTS implementation [@Liu:2021]. These heuristics are programmed via extensibility points in the *mctreesearch4j* solver implementation, where the key mechanisms can be altered or augmented. In our Heuristic Implementation Example, we introduce the ``heuristicWeight`` array, a 2D array storing domain specific ratings of every position on a Reversi board representing the desirability of that position on the board. The negative numbers represent a likely loss and positive numbers representing a likely win, again as represented in Fig. fig:reversi-heu. This value is taken into consideration when traversing down the simulation tree. The ``heuristicWeight`` array adjusts the propensity to explore any position for both agents based on the heurisitc's belief about the desirability of the position. To alter the MCTS simulation phase we override the ``simulate()`` method and create a new definition for it. The application of this ``heuristicWeight`` only requires minor alterations to the ``simulate()`` method, as illustrated in *Heuristic Implementation Example*.
+Though the default MCTS implementation works well in many scenarios, there are situations where knowledge about specific problem domains can be applied to improve the MCTS performance. Improvements to MCTS, such as heuristics driven simulation, exploit domain knowledge to improve solver performance. We demonstrate that a Reversi AI that uses heuristics derived from [@Guenther:2004] is able to outperform the basic MCTS implementation contained in *mctreesearch4j*. These heuristics are programmed via extensibility points in the *mctreesearch4j* solver implementation, where the key mechanisms can be altered or augmented. In our Heuristic Implementation Example, we introduce the ``heuristicWeight`` array, a 2D array storing domain specific ratings of every position on a Reversi board representing the desirability of that position on the board. The negative numbers represent a likely loss and positive numbers representing a likely win, again as represented in Fig. \ref{fig:reversi-heu}. 
+
+This value is taken into consideration when traversing down the simulation tree. The ``heuristicWeight`` array adjusts the propensity to explore any position for both agents based on the heurisitc's belief about the desirability of the position. To alter the MCTS simulation phase we override the ``simulate()`` method and create a new definition for it. The application of this ``heuristicWeight`` only requires minor alterations to the ``simulate()`` method, as illustrated in *Heuristic Implementation Example*.
 
 ### Heuristic Implementation Example
 
@@ -94,11 +96,13 @@ override fun simulate(node: NodeType): Double {
 }
 ```
 
+![Reversi Heuristic. \label{fig:reversi-heu} ](reversi-heu.png?raw=true "Title")
+
 # Results
 
 When the MCTS solver is accurately selecting the optimal solutions, it will continue to compel the agent to explore in the optimal subset of the state space, and reduce its exploration in the non-optimal subset of the state space. We provide a quick example in the MDP Domain of GridWorld, detailed in [@Liu:2021]. The cumulative number of visits corresponding to the optimal policy is proportionally increasing with respect to the number of MCTS iterations. Whereas for non-optimal solutions, the cumulative visits are significantly lower because the solver will avoid visiting the non-optimal state subspace. 
 
-![Convergence of visits](gw_visits.png?raw=true "Title")
+![Convergence of visits.](gw_visits.png?raw=true "Title")
 
 # Conclusion
 
