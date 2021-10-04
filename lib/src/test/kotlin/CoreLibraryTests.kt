@@ -5,17 +5,14 @@ import TestStochasticMDP
 import ca.aqtech.mctreesearch4j.ActionNode
 import ca.aqtech.mctreesearch4j.GenericSolver
 
+
 class CoreLibraryTests {
     // Test Node Expand
-    var actionNode = ActionNode<TestStochasticState, TestStochasticAction>(null, null)
-
-
-
-
-
+    // var root = ActionNode<TestStochasticState, TestStochasticAction>(null, null)
     // Test Simple MDP Function
+
     val testMDP = TestStochasticMDP()
-    val iterations = 5
+    val iterations = 1
     val exploreConstant = 0.4
     val rewardDiscount = 0.01
     val verbose = true
@@ -28,18 +25,21 @@ class CoreLibraryTests {
         verbose
     )
 
-    val nextNode = solver.expand(actionNode)
+    var testRoot = solver.root
 
-    //.expand(actionNode)
-    
-    fun coreLibraryTest(i: Int) {
-        // println("cool test")
-        true
+    // Ensure State content is not mutated in transition
+    @Test fun coreLibraryStateMutationCheck() {
+        val testNode = solver.expand(testRoot)
+        assertTrue(testNode.state.stateIndex is Int,  "Is integer")
     }
 
+    // Ensure expansion is working properly, and meta-info is transfered from state-to-state.
     @Test fun coreLibraryTestGo() {
-        this.coreLibraryTest(1)
-        // false
-        // assertTrue(4 == 7, "failed test")
+        var nextNode = solver.expand(testRoot)
+        val iterC = (2..99).random()
+        for (i in 1..iterC){
+            nextNode = solver.expand(nextNode)
+        }
+        assertTrue(nextNode.state.counter == iterC + 1,  "Test MDP Expansion")
     }
 }

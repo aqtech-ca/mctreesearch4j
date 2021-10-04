@@ -7,7 +7,7 @@ abstract class Solver<ActionType, NodeType: Node<ActionType, NodeType>> (
     protected val verbose: Boolean,
     protected val explorationConstant: Double
 ) {
-    protected abstract var root: NodeType
+    abstract var root: NodeType
 
     abstract fun select(node: NodeType): NodeType
     abstract fun expand(node: NodeType): NodeType
