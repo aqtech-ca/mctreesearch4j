@@ -9,10 +9,10 @@ abstract class Solver<ActionType, NodeType: Node<ActionType, NodeType>> (
 ) {
     protected abstract var root: NodeType
 
-    protected abstract fun select(node: NodeType): NodeType
-    protected abstract fun expand(node: NodeType): NodeType
-    protected abstract fun simulate(node: NodeType): Double
-    protected abstract fun backpropagate(node: NodeType, reward: Double)
+    abstract fun select(node: NodeType): NodeType
+    abstract fun expand(node: NodeType): NodeType
+    abstract fun simulate(node: NodeType): Double
+    abstract fun backpropagate(node: NodeType, reward: Double)
 
     open fun runTreeSearch(iterations: Int) {
         for (i in 0..iterations) {
