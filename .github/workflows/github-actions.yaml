@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Github Workflow - Maven Release
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
@@ -22,4 +22,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      - run: |
+          cd lib
+          gradle clean build
       - run: echo "🍏 This job's status is ${{ job.status }}."
