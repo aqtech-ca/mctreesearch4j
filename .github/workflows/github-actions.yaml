@@ -24,6 +24,9 @@ jobs:
           ls ${{ github.workspace }}
       - run: |
           sdk install gradle 6.0.1
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk version
           cd lib
           gradle clean build
       - run: echo "🍏 This job's status is ${{ job.status }}."
