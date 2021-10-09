@@ -23,6 +23,7 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: |
+          sdk install gradle 6.0.1
           cd lib
           gradle clean build
       - run: echo "🍏 This job's status is ${{ job.status }}."
