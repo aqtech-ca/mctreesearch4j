@@ -2,6 +2,19 @@ package ca.aqtech.mctreesearch4j
 
 import kotlin.math.max
 
+/**
+ * A stateless solver for a Markov Decision Process (MDP).
+ *
+ * This solver does not permanently store states at each of the nodes in the tree. Instead simulations are rerun for
+ * each MCTS iteration starting from the root node. This allows maximum flexibility in handling a variety of MDPs
+ * but may be slower due to the repeated simulations.
+ *
+ * @param StateType the type that represents the states of the MDP.
+ * @param ActionType the type that represents the actions that can be taken in the MDP.
+ *
+ * The constructor takes in a [MDP], a depth limit for simulations, a exploration constant, a reward discount factor
+ * and a verbosity flag.
+ */
 open class GenericSolver<StateType, ActionType>(
     private val mdp: MDP<StateType, ActionType>,
     private val simulationDepthLimit: Int,
