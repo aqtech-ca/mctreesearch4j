@@ -10,12 +10,14 @@ open class GenericSolver<StateType, ActionType>(
     verbose: Boolean
 ) : Solver<ActionType, ActionNode<StateType, ActionType>>(verbose, explorationConstant) {
 
+    // Inherited doc comments
     final override var root = ActionNode<StateType, ActionType>(null, null)
 
     init {
         simulateActions(root)
     }
 
+    // Inherited doc comments
     override fun select(node: ActionNode<StateType, ActionType>): ActionNode<StateType, ActionType> {
         // If this node is a leaf node, return it
         if (node.getChildren().isEmpty()) {
@@ -45,6 +47,7 @@ open class GenericSolver<StateType, ActionType>(
         }
     }
 
+    // Inherited doc comments
     override fun expand(node: ActionNode<StateType, ActionType>): ActionNode<StateType, ActionType> {
         // If the node is terminal, return it, except root node
         if (mdp.isTerminal(node.state)) {
@@ -64,6 +67,7 @@ open class GenericSolver<StateType, ActionType>(
         return newNode
     }
 
+    // Inherited doc comments
     override fun simulate(node: ActionNode<StateType, ActionType>): Double {
         traceln("Simulation:")
 
@@ -112,6 +116,7 @@ open class GenericSolver<StateType, ActionType>(
         }
     }
 
+    // Inherited doc comments
     override fun backpropagate(node: ActionNode<StateType, ActionType>, reward: Double) {
         var currentStateNode = node
         var currentReward = reward

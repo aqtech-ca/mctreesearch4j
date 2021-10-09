@@ -10,8 +10,10 @@ open class StatefulSolver<StateType, ActionType> (
     verbose: Boolean
 ) : Solver<ActionType, StateNode<StateType, ActionType>>(verbose, explorationConstant) {
 
+    // Inherited doc comments
     override var root = createNode(null, null, mdp.initialState())
 
+    // Inherited doc comments
     override fun select(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
         var currentNode = node
         while(true) {
@@ -33,6 +35,7 @@ open class StatefulSolver<StateType, ActionType> (
         }
     }
 
+    // Inherited doc comments
     override fun expand(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
         // If the node is terminal, return it
         if (node.isTerminal) {
@@ -48,6 +51,7 @@ open class StatefulSolver<StateType, ActionType> (
         return createNode(node, actionTaken, newState)
     }
 
+    // Inherited doc comments
     override fun simulate(node: StateNode<StateType, ActionType>): Double {
         traceln("Simulation:")
 
@@ -97,6 +101,7 @@ open class StatefulSolver<StateType, ActionType> (
         }
     }
 
+    // Inherited doc comments
     override fun backpropagate(node: StateNode<StateType, ActionType>, reward: Double) {
         var currentStateNode = node
         var currentReward = reward
