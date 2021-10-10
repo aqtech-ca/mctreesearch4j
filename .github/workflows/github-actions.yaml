@@ -37,11 +37,11 @@ jobs:
 
           gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
           mkdir gpg-keys
-          gpg --import-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
+          gpg --export-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
 
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
-
+          
           gradle clean build
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
