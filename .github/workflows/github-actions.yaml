@@ -31,7 +31,6 @@ jobs:
           sdk version
           sdk install gradle 6.0.1
           pip install getgist
-      - name: Verifying secrets and authenticating 
       - run: |
           cd lib
           getgist larkz plaintext_gpg_7CC36306.txt
@@ -41,7 +40,6 @@ jobs:
 
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
-
-      - name: Compiling code
+      
       - run: |
           gradle clean build
