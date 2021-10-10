@@ -36,6 +36,7 @@ jobs:
           getgist larkz plaintext_gpg_7CC36306.txt
 
           gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
+          mkdir gpg-keys
           gpg --import-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
 
           getgist larkz mctreesearch4j_gradle.properties
