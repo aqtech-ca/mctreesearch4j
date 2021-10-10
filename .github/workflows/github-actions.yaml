@@ -33,7 +33,7 @@ jobs:
           pip install getgist
           cd lib
           getgist larkz plaintext_gpg_${{ env.GPG_ID }}.txt
-          gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
+          gpg --allow-secret-key-import --import plaintext_gpg_${{ env.GPG_ID }}.txt
           mkdir gpg-keys
           gpg --export-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
           getgist larkz mctreesearch4j_gradle.properties
