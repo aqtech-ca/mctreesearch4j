@@ -1,4 +1,6 @@
 name: Github Workflow - Maven Release
+env:
+    GETGIST_TOKEN: ${{ secrets.GITHUB_OAUTH_TOKEN }}
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
@@ -27,6 +29,18 @@ jobs:
           source "$HOME/.sdkman/bin/sdkman-init.sh"
           sdk version
           sdk install gradle 6.0.1
+          pip install getgist
+
           cd lib
+
+          getgist larkz plaintext_gpg_7CC36306.txt
+
+          gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
+          gpg --import-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
+
+          getgist larkz mctreesearch4j_gradle.properties
+          cp mctreesearch4j_gradle.properties gradle.properties
+
           gradle clean build
+          
       - run: echo "🍏 This job's status is ${{ job.status }}."
