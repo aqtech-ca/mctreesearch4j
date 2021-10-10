@@ -26,10 +26,3 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       
-      - name: Installing required libraries
-      - run: |
-          curl -s "https://get.sdkman.io" | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk version
-          sdk install gradle 6.0.1
-          pip install getgist
