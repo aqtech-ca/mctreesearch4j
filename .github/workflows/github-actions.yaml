@@ -41,3 +41,5 @@ jobs:
     runs-on: ubuntu-latest
     # if: github.event.pull_request.merged == true
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
