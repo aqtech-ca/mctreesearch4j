@@ -2,6 +2,7 @@ name: Github Workflow - Maven Release
 env:
     GETGIST_TOKEN: ${{ secrets.GIT_OAUTH_TOKEN }}
     GPG_ID: 7CC36306
+    USERNAME: ${{ env.USERNAME }}
 on:
   # Trigger the workflow on push or pull request,
   # but only for the dev branch
@@ -35,11 +36,11 @@ jobs:
           sdk install gradle 6.0.1
           pip install getgist
           cd lib
-          getgist larkz plaintext_gpg_${{ env.GPG_ID }}.txt
+          getgist ${{ env.USERNAME }} plaintext_gpg_${{ env.GPG_ID }}.txt
           gpg --allow-secret-key-import --import plaintext_gpg_${{ env.GPG_ID }}.txt
           mkdir gpg-keys
           gpg --export-secret-keys ${{ env.GPG_ID }} > gpg-keys/${{ env.GPG_ID }}.gpg
-          getgist larkz mctreesearch4j_gradle.properties
+          getgist ${{ env.USERNAME }} mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
           gradle clean build
       - run: echo "🍏 This job's status is ${{ job.status }}."
@@ -56,11 +57,11 @@ jobs:
           sdk install gradle 6.0.1
           pip install getgist
           cd lib
-          getgist larkz plaintext_gpg_${{ env.GPG_ID }}.txt
+          getgist ${{ env.USERNAME }} plaintext_gpg_${{ env.GPG_ID }}.txt
           gpg --allow-secret-key-import --import plaintext_gpg_${{ env.GPG_ID }}.txt
           mkdir gpg-keys
           gpg --export-secret-keys ${{ env.GPG_ID }} > gpg-keys/${{ env.GPG_ID }}.gpg
-          getgist larkz mctreesearch4j_gradle.properties
+          getgist ${{ env.USERNAME }} mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
           gradle uploadArchives
           echo PR #${{ github.event.number }} has been closed and merged, released to Nexus staging!
