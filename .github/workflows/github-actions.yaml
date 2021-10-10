@@ -41,7 +41,6 @@ jobs:
 
       - name: Release
         if: github.event.pull_request.merged == true
-        uses: actions/checkout@v2
         - run: |
           curl -s "https://get.sdkman.io" | bash
           source "$HOME/.sdkman/bin/sdkman-init.sh"
