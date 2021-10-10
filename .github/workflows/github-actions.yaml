@@ -39,8 +39,4 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
   merge_and_release:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
-    steps:
-      - run: |
-        echo PR #${{ github.event.number }} has been closed without being merged
-        gradle uploadArchives
+    
