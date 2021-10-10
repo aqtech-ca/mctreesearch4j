@@ -4,7 +4,7 @@ env:
 on:
   # Trigger the workflow on push or pull request,
   # but only for the dev branch
-  push:
+  pull_request:
     branches:
       - dev
 jobs:
@@ -36,8 +36,26 @@ jobs:
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
           gradle clean build
-          gradle uploadArchives
-          
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: Release
+        if: github.event.pull_request.merged == true
+        uses: actions/checkout@v2
+        - run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk version
+          sdk install gradle 6.0.1
+          pip install getgist
+          cd lib
+          getgist larkz plaintext_gpg_7CC36306.txt
+          gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
+          mkdir gpg-keys
+          gpg --export-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
+          getgist larkz mctreesearch4j_gradle.properties
+          cp mctreesearch4j_gradle.properties gradle.properties
+          gradle uploadArchives
+
 
         
