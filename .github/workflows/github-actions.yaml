@@ -1,6 +1,6 @@
 name: Github Workflow - Maven Release
 env:
-    GETGIST_TOKEN: ${{ secrets.GITHUB_OAUTH_TOKEN }}
+    GETGIST_TOKEN: ${{ secrets.GIT_OAUTH_TOKEN }}
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
