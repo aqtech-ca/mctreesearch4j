@@ -40,6 +40,5 @@ jobs:
 
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
-      
-      - run: |
           gradle clean build
+          
