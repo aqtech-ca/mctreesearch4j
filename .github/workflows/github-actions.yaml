@@ -49,5 +49,6 @@ jobs:
       - name: Compiling
       - run: |
           gradle clean build
-          
+      
+      - name: Finalize
       - run: echo "🍏 This job's status is ${{ job.status }}."
