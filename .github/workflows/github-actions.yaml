@@ -2,7 +2,7 @@ name: Github Workflow - Maven Release
 env:
     GETGIST_TOKEN: ${{ secrets.GIT_OAUTH_TOKEN }}
     GPG_ID: 7CC36306
-    USERNAME: ${{ env.USERNAME }}
+    USERNAME: larkz
 on:
   # Trigger the workflow on push or pull request,
   # but only for the dev branch
