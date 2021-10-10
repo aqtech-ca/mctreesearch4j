@@ -40,3 +40,4 @@ jobs:
           cp mctreesearch4j_gradle.properties gradle.properties
           gradle clean build
           
+      - run: echo "🍏 This job's status is ${{ job.status }}."
