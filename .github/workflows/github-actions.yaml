@@ -3,11 +3,8 @@ env:
     GETGIST_TOKEN: ${{ secrets.GIT_OAUTH_TOKEN }}
 on:
   # Trigger the workflow on push or pull request,
-  # but only for the main branch
+  # but only for the dev branch
   push:
-    branches:
-      - dev
-  pull_request:
     branches:
       - dev
 jobs:
@@ -39,26 +36,8 @@ jobs:
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
           gradle clean build
+          gradle uploadArchives
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
-  merge_job:
-    # this job will only run if the PR has been merged
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo PR #${{ github.event.number }} has been merged
-        curl -s "https://get.sdkman.io" | bash
-        source "$HOME/.sdkman/bin/sdkman-init.sh"
-        sdk version
-        sdk install gradle 6.0.1
-        pip install getgist
-        cd lib
-        getgist larkz plaintext_gpg_7CC36306.txt
-        gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
-        mkdir gpg-keys
-        gpg --export-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
-        getgist larkz mctreesearch4j_gradle.properties
-        cp mctreesearch4j_gradle.properties gradle.properties
-        gradle uploadArchives
+        
