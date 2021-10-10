@@ -45,10 +45,10 @@ jobs:
 
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
-      
-      - name: Compiling
+
+      - name: Compiling code
       - run: |
           gradle clean build
-      
+          
       - name: Finalize
       - run: echo "🍏 This job's status is ${{ job.status }}."
