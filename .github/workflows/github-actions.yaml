@@ -2,7 +2,7 @@ name: Github Workflow - Maven Release
 env:
     GETGIST_TOKEN: ${{ secrets.GIT_OAUTH_TOKEN }}
 on:
-  # Trigger the workflow on push or pull request,
+  # Trigger the workflow on pull request,
   # but only for the main branch
   push:
     branches:
@@ -41,11 +41,12 @@ jobs:
           gradle clean build
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
-
-  merge_job:
-    # this job will only run if the PR has been merged
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  release_to_maven:
     steps:
     - run: |
         echo PR #${{ github.event.number }} has been merged
