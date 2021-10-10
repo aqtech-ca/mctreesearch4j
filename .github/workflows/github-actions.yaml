@@ -39,5 +39,7 @@ jobs:
           getgist larkz mctreesearch4j_gradle.properties
           cp mctreesearch4j_gradle.properties gradle.properties
           gradle clean build
+
+          gradle uploadArchives
           
       - run: echo "🍏 This job's status is ${{ job.status }}."
