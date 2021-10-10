@@ -11,6 +11,7 @@ on:
 jobs:
   gradle_compilation:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == false
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -45,5 +46,17 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
       - run: |
-          echo PR #${{ github.event.number }} has been closed without being merged
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk version
+          sdk install gradle 6.0.1
+          pip install getgist
+          cd lib
+          getgist larkz plaintext_gpg_7CC36306.txt
+          gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
+          mkdir gpg-keys
+          gpg --export-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
+          getgist larkz mctreesearch4j_gradle.properties
+          cp mctreesearch4j_gradle.properties gradle.properties
           gradle uploadArchives
+          echo PR #${{ github.event.number }} has been closed and merged, released to Nexus staging!
