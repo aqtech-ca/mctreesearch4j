@@ -1,6 +1,7 @@
 name: Github Workflow - Maven Release
 env:
     GETGIST_TOKEN: ${{ secrets.GIT_OAUTH_TOKEN }}
+    GPG_ID: 7CC36306
 on:
   # Trigger the workflow on push or pull request,
   # but only for the dev branch
@@ -31,7 +32,7 @@ jobs:
           sdk install gradle 6.0.1
           pip install getgist
           cd lib
-          getgist larkz plaintext_gpg_7CC36306.txt
+          getgist larkz plaintext_gpg_${{ GPG_ID }}.txt
           gpg --allow-secret-key-import --import plaintext_gpg_7CC36306.txt
           mkdir gpg-keys
           gpg --export-secret-keys 7CC36306 > gpg-keys/7CC36306.gpg
