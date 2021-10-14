@@ -109,7 +109,8 @@ abstract class Solver<ActionType, NodeType: Node<ActionType, NodeType>> (
     }
 
     /**
-     * Returns the best action from the root by choosing the node with the highest amount of visits.
+     * Returns the best action from the root by choosing the node with the highest amount of visits. This function
+     * can be overriden to modify the behavior to improve performance for a specific problem domain.
      */
     open fun extractOptimalAction(): ActionType? {
         return root.getChildren().maxByOrNull { c -> c.n }?.inducingAction
