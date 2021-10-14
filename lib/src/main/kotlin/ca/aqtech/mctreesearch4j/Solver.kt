@@ -62,7 +62,7 @@ abstract class Solver<ActionType, NodeType: Node<ActionType, NodeType>> (
 
     /**
      * Runs a single iterations of MCTS. The default implementation runs [select], [expand], [simulate], [backpropagate]
-     * in sequence.
+     * in sequence. This can be overridden to improve performance for specific problem domains.
      */
     open fun runTreeSearchIteration() {
         // Selection
