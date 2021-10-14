@@ -2,6 +2,19 @@ package ca.aqtech.mctreesearch4j
 
 import kotlin.math.max
 
+/**
+ * A stateful solver for a Markov Decision Process (MDP).
+ *
+ * This solver permanently store states at each of the nodes in the tree. Simulations are run once throughout the entire
+ * MCTS run. This may not work well in some stochastic MDPs with high branching factors but may improve performance for
+ * deterministic MDPs with lower branching factor by reducing the number of simulations run.
+ *
+ * @param StateType the type that represents the states of the MDP.
+ * @param ActionType the type that represents the actions that can be taken in the MDP.
+ *
+ * The constructor takes in a [MDP], a depth limit for simulations, a exploration constant, a reward discount factor
+ * and a verbosity flag.
+ */
 open class StatefulSolver<StateType, ActionType> (
     protected val mdp: MDP<StateType, ActionType>,
     protected val simulationDepthLimit: Int,
@@ -10,8 +23,10 @@ open class StatefulSolver<StateType, ActionType> (
     verbose: Boolean
 ) : Solver<ActionType, StateNode<StateType, ActionType>>(verbose, explorationConstant) {
 
+    // Inherited doc comments
     override var root = createNode(null, null, mdp.initialState())
 
+    // Inherited doc comments
     override fun select(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
         var currentNode = node
         while(true) {
@@ -33,6 +48,7 @@ open class StatefulSolver<StateType, ActionType> (
         }
     }
 
+    // Inherited doc comments
     override fun expand(node: StateNode<StateType, ActionType>): StateNode<StateType, ActionType> {
         // If the node is terminal, return it
         if (node.isTerminal) {
@@ -48,6 +64,7 @@ open class StatefulSolver<StateType, ActionType> (
         return createNode(node, actionTaken, newState)
     }
 
+    // Inherited doc comments
     override fun simulate(node: StateNode<StateType, ActionType>): Double {
         traceln("Simulation:")
 
@@ -97,6 +114,7 @@ open class StatefulSolver<StateType, ActionType> (
         }
     }
 
+    // Inherited doc comments
     override fun backpropagate(node: StateNode<StateType, ActionType>, reward: Double) {
         var currentStateNode = node
         var currentReward = reward
