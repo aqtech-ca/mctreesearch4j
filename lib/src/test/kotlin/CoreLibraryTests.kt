@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test
 import TestStochasticMDP
 import ca.aqtech.mctreesearch4j.ActionNode
 import ca.aqtech.mctreesearch4j.GenericSolver
+import TestStochasticAction
+import TestStochasticState
 
 
 class CoreLibraryTests {
@@ -30,16 +32,30 @@ class CoreLibraryTests {
     // Ensure State content is not mutated in transition
     @Test fun coreLibraryStateMutationCheck() {
         val testNode = solver.expand(testRoot)
-        assertTrue(testNode.state.stateIndex is Int,  "Is integer")
+        assertTrue(testNode.state.stateIndex is Int,  "Is integer, state content unmutated.")
+    }
+
+    // Test selection returns an action node.
+    @Test fun coreLibraryTestSelection() {
+        val node = solver.select(testRoot)
+        assertTrue(node is ActionNode<TestStochasticState, TestStochasticAction>,  "Test Search Tree Selection")
     }
 
     // Ensure expansion is working properly, and meta-info is transfered from state-to-state.
-    @Test fun coreLibraryTestGo() {
+    @Test fun coreLibraryTestExpand(): ActionNode<TestStochasticState, TestStochasticAction> {
         var nextNode = solver.expand(testRoot)
         val iterC = (2..99).random()
         for (i in 1..iterC){
             nextNode = solver.expand(nextNode)
         }
-        assertTrue(nextNode.state.counter == iterC + 1,  "Test MDP Expansion")
+        assertTrue(nextNode.state.counter == iterC + 1,  "Test Search Tree Expansion")
+        return nextNode
     }
+
+    // Test selection returns an action node.
+    @Test fun coreLibraryTestSelection2() {
+        val node = solver.select(coreLibraryTestExpand())
+        assertTrue(node is ActionNode<TestStochasticState, TestStochasticAction>,  "Test Search Tree Selection")
+    }
+
 }
