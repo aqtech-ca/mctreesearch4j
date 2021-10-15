@@ -7,26 +7,27 @@ import ca.aqtech.mctreesearch4j.GenericSolver
 import TestStochasticAction
 import TestStochasticState
 
-
 class CoreLibraryTests {
     // Test Node Expand
     // var root = ActionNode<TestStochasticState, TestStochasticAction>(null, null)
     // Test Simple MDP Function
 
     val testMDP = TestStochasticMDP()
-    val iterations = 1
+
+    val depthLimit = 29
     val exploreConstant = 0.4
     val rewardDiscount = 0.01
     val verbose = true
 
     val solver = GenericSolver(
         testMDP,
-        iterations,
+        depthLimit,
         exploreConstant,
         rewardDiscount,
         verbose
     )
 
+    // Testing the GenericSolver (Default)
     var testRoot = solver.root
 
     // Ensure State content is not mutated in transition
@@ -57,5 +58,27 @@ class CoreLibraryTests {
         val node = solver.select(coreLibraryTestExpand())
         assertTrue(node is ActionNode<TestStochasticState, TestStochasticAction>,  "Test Search Tree Selection")
     }
+
+    // Test simulation
+    @Test fun coreLibraryTestSimulation() {
+        val rewardValue = solver.simulate(testRoot)
+        assertTrue(rewardValue is Double,  "Test Simulation")
+    }
+
+    // Test backpropagation
+    @Test fun coreLibraryTestBackpropagation() {
+        var node = testRoot
+        val n1 = node.n
+        solver.backpropagate(testRoot, 20.0)
+        val n2 = node.n
+        assertTrue(n2 > n1,  "Test Increment of Node Visits")
+    }
+
+    // Tests for the base Solver
+
+    // Test if counted n times properly
+
+
+
 
 }
