@@ -10,6 +10,7 @@ on:
     types: [opened, closed, synchronize]
     branches:
       - dev
+      - main
 jobs:
   gradle_compilation:
     runs-on: ubuntu-latest
