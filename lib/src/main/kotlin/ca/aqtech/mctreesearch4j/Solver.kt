@@ -23,27 +23,26 @@ abstract class Solver<ActionType, NodeType: Node<ActionType, NodeType>> (
     /**
      * the root node of the tree.
      */
-    protected abstract var root: NodeType
-
+    abstract var root: NodeType
     /**
      * Returns a leaf node in the tree given a starting node in the tree.
      */
-    protected abstract fun select(node: NodeType): NodeType
+    abstract fun select(node: NodeType): NodeType
 
     /**
      * Creates and returns a new child node given a leaf node.
      */
-    protected abstract fun expand(node: NodeType): NodeType
+    abstract fun expand(node: NodeType): NodeType
 
     /**
      * Runs a simulation from the given leaf node and computes a score for the node.
      */
-    protected abstract fun simulate(node: NodeType): Double
+    abstract fun simulate(node: NodeType): Double
 
     /**
      * Propagates the reward for the given node to the root of the tree.
      */
-    protected abstract fun backpropagate(node: NodeType, reward: Double)
+    abstract fun backpropagate(node: NodeType, reward: Double)
 
     /**
      * Runs a given number of iterations of MCTS. The order is specified by [runTreeSearchIteration]

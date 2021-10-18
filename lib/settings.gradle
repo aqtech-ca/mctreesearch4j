@@ -1,2 +1,3 @@
 rootProject.name = 'mctreesearch4j'
+include("tests")
 
