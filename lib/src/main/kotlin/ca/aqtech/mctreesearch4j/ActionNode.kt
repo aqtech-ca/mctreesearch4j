@@ -11,7 +11,7 @@ package ca.aqtech.mctreesearch4j
  * The constructor takes in a [ActionNode] that represents the parent node and an [ActionType] that represents the
  * action taken to transition to the current node.
  */
-class ActionNode<StateType, ActionType> (
+class ActionNode<StateType, ActionType>(
     parent: ActionNode<StateType, ActionType>?,
     inducingAction: ActionType?
 ) : Node<ActionType, ActionNode<StateType, ActionType>>(parent, inducingAction) {

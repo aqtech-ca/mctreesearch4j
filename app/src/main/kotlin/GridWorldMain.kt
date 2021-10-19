@@ -1,3 +1,5 @@
+package GridWorld
+
 import GridWorld.*
 import java.io.File
 
@@ -28,7 +30,7 @@ fun main() {
             startingLocation = GridworldState(2, 2, false)
     )
 
-    var gwSolver = ExtendedStatelessSolver(
+    var gwSolver = ExtendedSolver.ExtendedStatelessSolver(
             gridworld,
             999,
             0.28,

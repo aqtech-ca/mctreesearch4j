@@ -1,3 +1,5 @@
+package PushYourLuck
+
 import PushYourLuck.PushYourLuckMDP
 import java.io.File
 
@@ -22,7 +24,7 @@ fun main() {
 
     val pylMDP = PushYourLuckMDP(nDice = 1, nSides = 6)
 
-    var solver = ExtendedStatelessSolver(
+    var solver = ExtendedSolver.ExtendedStatelessSolver(
             pylMDP,
             999,
             0.07,
