@@ -46,11 +46,3 @@ application {
     mainClassName = "MCTSGamesMain.MCTSGamesMainKt"
 }
 
-abstract class GreetingTask : DefaultTask() {
-    @TaskAction
-    fun greet() {
-        println("hello from GreetingTask")
-    }
-}
-
-tasks.register<GreetingTask>("hello")

@@ -1,5 +1,7 @@
 package MCTSGamesMain
 
+import Twenty48.Game2048
+
 
 /*
 fun main(arg1: String) {
@@ -26,14 +28,14 @@ fun main(args: Array<String>) {
         PushYourLuck.main()
     }
 
-    if ("GridWorldSolve" in args) {
-        println("Get a Policy for Grid World via MCTS: ")
+    if ("GridWorld" in args) {
+        println("Get a Policy for GridWorld via MCTS: ")
         GridWorld.main()
     }
-    
 
-    println("hahaha")
-    println(args[0])
-
+    if ("Game2048" in args) {
+        println("Get a Solution for 2048 Game via MCTS: ")
+        Twenty48.main()
+    }
 }
 
