@@ -1,16 +1,5 @@
 package MCTSGamesMain
 
-import Twenty48.Game2048
-
-
-/*
-fun main(arg1: String) {
-    println("hahaha")
-    println(arg1)
-}
-
- */
-
 fun main(args: Array<String>) {
 
     if ("ReversiGame" in args) {
