@@ -59,6 +59,37 @@ abstract class MDP<StateType, ActionType> {
 
 In the `app/` folder of this repository, you may see various examples of game engines interfacing with the MDP controller.
 
+### Running Gradle examples via Gradle
+
+It is possible to run the examples directly via Gradle. Simply select from the list of MDP / Games to run. Here are the list of arguments `args`:
+
+- `ReversiGame`: Initiates a game of Reversi between the user and AI, complete with user interface.
+- `ReversiAdversarialSim`: Generates a simulation of competitive Reversi between 2 AI's.
+- `PushYourLuckSim`: Initiates an MDP (Push Your Luck) and produces a policy for a single state.
+- `GridWorld`: Initiates an MDP and produces a policy for a state in the game of GridWorld.
+- `Game2048`: Initiates an MDP and produces a policy for a state in the game of the Game 2048.
+
+To run the tasks via Gradle simply run,
+
+```bash
+gradle run --args="{arg1} {arg2}"
+```
+
+Where `arg1`, `arg2` for example are the strings representing the task to run, seperated by spaces. For example:
+
+```bash
+gradle run --args="ReversiGame GridWorld" 
+```
+
+Or simply to run 1 example,
+
+```bash
+gradle run --args="ReversiGame" 
+```
+
+
+Furthermore, there is an example of *mctreesearch4j* integrated with the game of [Connect-4 in an example written in Scala](https://github.com/larkz/connect4-scala).
+
 ## Maven Central
 
 This codebase is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it 
