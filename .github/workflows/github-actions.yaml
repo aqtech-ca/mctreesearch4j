@@ -9,7 +9,6 @@ on:
   pull_request:
     types: [opened, closed, synchronize]
     branches:
-      - dev
       - main
 jobs:
   gradle_compilation:
