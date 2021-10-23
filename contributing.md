@@ -45,6 +45,10 @@ By contributing, you agree that your contributions will be licensed under its MI
 We use standard [Kotlin coding conventions](https://kotlinlang.org/docs/coding-conventions.html).
 
 
+## Continuing Support
+
+For additional support or questions related to the software you may reach out to `larkin@aqtech.ca`.
+
 ## References
 This document was adapted from the open-source contribution guidelines from [briandk](https://gist.github.com/briandk/3d2e8b3ec8daf5a27a62).
 
