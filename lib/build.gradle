@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'ca.aqtech'
-version '0.0.4-dev'
+version '0.0.4'
 
 ext {
     PUBLISH_GROUP_ID = 'ca.aqtech'
