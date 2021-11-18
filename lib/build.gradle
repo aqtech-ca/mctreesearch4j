@@ -6,8 +6,8 @@ plugins {
     id 'signing'
     id 'maven'
 }
-F
-group 'ca.aqtech'F
+
+group 'ca.aqtech'
 version '0.0.4-dev'
 
 ext {
