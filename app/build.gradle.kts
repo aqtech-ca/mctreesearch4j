@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    implementation( "ca.aqtech:mctreesearch4j:0.0.3" )
+    implementation( "ca.aqtech:mctreesearch4j:0.0.4-dev" )
     implementation(compose.desktop.currentOs)
-    implementation( "ca.aqtech.app:app-1.0-SNAPSHOT" )
+    // implementation( "ca.aqtech.app:app-1.0-SNAPSHOT" )
     testImplementation(kotlin("test-junit"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.1.0")
