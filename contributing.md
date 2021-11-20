@@ -7,8 +7,8 @@ We love your input! We want to make contributing to this project as easy and tra
 - Proposing new features
 - Becoming a maintainer
 
-## We Develop with Github
-We use github to host code, to track issues and feature requests, as well as accept pull requests.
+## We Develop with GitHub
+We use GitHub to host code, to track issues and feature requests, as well as accept pull requests.
 
 ## All Code Changes Happen Through Pull Requests
 Pull requests are the best way to propose changes to the codebase. We actively welcome your pull requests:
@@ -21,7 +21,7 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 6. Issue that pull request to `dev` branch.
 7. Code will be put into a trial period before a Maven release is ready to be released, and merged with `main` branch.
 
-## Report bugs using Github's [issues](https://github.com/aqtech-ca/mctreesearch4j/issues)
+## Report bugs using GitHub's [issues](https://github.com/aqtech-ca/mctreesearch4j/issues)
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](); it's that easy!
 
 ## Write bug reports with detail, background, and sample code
@@ -38,7 +38,7 @@ We use GitHub issues to track public bugs. Report a bug by [opening a new issue]
 - Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
 
 ## License
-By contributing, you agree that your contributions will be licensed under its MIT License. In short, when you submit code changes, your submissions are understood to be under the same [MIT License](http://choosealicense.com/licenses/mit/) that covers the project. Feel free to contact the maintainers if that's a concern.
+By contributing, you agree that your contributions will be licensed under the MIT License. In short, when you submit code changes, your submissions are understood to be under the same [MIT License](http://choosealicense.com/licenses/mit/) that covers the project. Feel free to contact the maintainers if that's a concern.
 
 ## Use a Consistent Coding Style
 

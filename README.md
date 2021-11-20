@@ -16,7 +16,7 @@ The library contains the implementation of the MCTS algorithm for single player 
 
 ```
 lib
-└── 
+└──
     ...
     └── src.main.kotlin
         └── ca.aqtech.mctreesearch4j
@@ -34,7 +34,7 @@ The MCTS lib can be implemented by creating an interface implementing a Markov D
 
 ## Defining an MDP
 
-`MDP.kt` defines the interface of the MDP. To run the MCTS solver, you must extend this `MDP.kt` class in any JVM language, and provide your specific definitions. 
+`MDP.kt` defines the interface of the MDP. To run the MCTS solver, you must extend this `MDP.kt` class in any JVM language, and provide your specific definitions.
 
 ```kotlin
 abstract class MDP<StateType, ActionType> {
@@ -61,7 +61,7 @@ In the `app/` folder of this repository, you may see various examples of game en
 
 ### Running Gradle examples via Gradle
 
-It is possible to run the examples directly via Gradle. Simply select from the list of MDP / Games to run. Here are the list of arguments `args`:
+It is possible to run the examples directly via Gradle. Simply select from the list of MDP / Games to run. Here is the list of arguments `args`:
 
 - `ReversiGame`: Initiates a game of Reversi between the user and AI, complete with user interface.
 - `ReversiAdversarialSim`: Generates a simulation of competitive Reversi between 2 AI's.
@@ -78,13 +78,13 @@ gradle run --args="{arg1} {arg2}"
 Where `arg1`, `arg2` for example are the strings representing the task to run, seperated by spaces. For example:
 
 ```bash
-gradle run --args="ReversiGame GridWorld" 
+gradle run --args="ReversiGame GridWorld"
 ```
 
-Or simply to run 1 example,
+Or simply to run one example,
 
 ```bash
-gradle run --args="ReversiGame" 
+gradle run --args="ReversiGame"
 ```
 
 
@@ -92,8 +92,8 @@ Furthermore, there is an example of *mctreesearch4j* integrated with the game of
 
 ## Maven Central
 
-This codebase is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it 
-has full compatibility with any JVM language. 
+This software package is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it
+has full compatibility with any JVM language.
 
 ### Kotlin Integration (groovy)
 ```groovy
@@ -121,5 +121,5 @@ Currently, to cite our framework, please cite our preprint:
   journal = {arXiv},
   year = {2021},
   url = {https://arxiv.org/abs/2108.10061}
- } 
+ }
 ```
