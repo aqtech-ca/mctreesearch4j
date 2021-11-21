@@ -132,7 +132,7 @@ In closing, *mctreesearch4j* presents a framework which enables programmers to a
 
 # Acknowledgements
 
-This research was conducted without external funding, resulting in no conflicts of interests. We would like to acknowledge the Maven Central Repository, for providing an important service to make our JVM artifacts  accessible to all JVM projects.
+This research was conducted without external funding, resulting in no conflicts of interests. We would like to acknowledge the Maven Central Repository, for providing an important service to make our JVM artifacts accessible to all JVM projects.
 
 *mctreesearch4j* is available here: [mvnrepository.com/artifact/ca.aqtech/mctreesearch4j](https://mvnrepository.com/artifact/ca.aqtech/mctreesearch4j)
 
