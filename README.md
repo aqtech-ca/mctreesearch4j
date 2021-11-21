@@ -92,7 +92,7 @@ Furthermore, there is an example of *mctreesearch4j* integrated with the game of
 
 ## Maven Central
 
-This software package is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it
+The JVM artifact is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it
 has full compatibility with any JVM language.
 
 ### Kotlin Integration (groovy)
