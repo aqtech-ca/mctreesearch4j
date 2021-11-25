@@ -9,14 +9,7 @@ import kotlin.test.assertNotNull
 
 class Game2048Tests {
 
-    val scenarioGrid1 = arrayOf(
-            arrayOf(0, 0, 2, 0),
-            arrayOf(2, 2, 0, 0),
-            arrayOf(64, 64, 2, 2),
-            arrayOf(128, 256, 512, 1024)
-    )
-
-    val scenarioGrid2 = arrayOf(
+    val scenarioGrid = arrayOf(
             arrayOf(1024, 0, 0, 0),
             arrayOf(512, 512, 0, 0),
             arrayOf(0, 0, 0, 0),
@@ -65,12 +58,7 @@ class Game2048Tests {
         }
     }
 
-    @Test fun game2048testSenario1() {
-        this.testGame2048(this.scenarioGrid1)
-
-    }
-
-    @Test fun game2048testScenario2() {
-        this.testGame2048(this.scenarioGrid2)
+    @Test fun game2048testScenario1() {
+        this.testGame2048(this.scenarioGrid)
     }
 }
