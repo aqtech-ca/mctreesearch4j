@@ -33,7 +33,7 @@ class Game2048Tests {
                 game2048MDP,
                 500,
                 1.4,
-                0.9,
+                0.95,
                 true
         )
         solver.runTreeSearch(200)
