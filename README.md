@@ -87,8 +87,19 @@ Or simply to run one example,
 gradle run --args="ReversiGame"
 ```
 
-
 Furthermore, there is an example of *mctreesearch4j* integrated with the game of [Connect-4 in an example written in Scala](https://github.com/larkz/connect4-scala).
+
+
+### Compiling the Core Library
+
+To perform a local compilation of the core library located in the `lib/` folder, the user must omit `uploadArchives` step defined in the `gradle.build` file, which signs the .jar artifcat via GPG key and uploads to Maven Central Repository. The GPG key is tied to the Maven release of this repository, and is not intended for local compilation. To compile a local .jar without signing it for release, simply run,
+
+```bash
+gradle clean build -x uploadArchives
+```
+
+This will effectively exclude the upload to Maven step which is automated in this codebase, and allow the user to compile a local .jar for testing and experimentation. For a complete release to the Maven repository as a signed artifact, a PR to the main branch must be submitted, reviewed, and approved.
+
 
 ## Maven Central
 
@@ -98,7 +109,7 @@ has full compatibility with any JVM language.
 ### Kotlin Integration (groovy)
 ```groovy
 dependencies {
-    implementation "ca.aqtech.mctreesearch4j:0.0.3"
+    implementation "ca.aqtech.mctreesearch4j:0.0.4"
 }
 ```
 
@@ -106,7 +117,7 @@ dependencies {
 
 ```sbt
 libraryDependencies ++= Seq(
-  "ca.aqtech" % "mctreesearch4j" % "0.0.3"
+  "ca.aqtech" % "mctreesearch4j" % "0.0.4"
 )
 ```
 

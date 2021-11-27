@@ -47,7 +47,7 @@ The MCTS algorithm is distinctly divided into 4-phases, *Selection*, *Expansion*
 - **JVM Compatibility**: We design a library that is fully compatible with the Java Virtual Machine (JVM), and consequently functional with any JVM languages, ie. Java, Scala, Kotlin etc.
 - **Extensibility** We design to achieve a high degree of extensibility and modularity within the framework. Extensibility is defined as the ability for key mechanisms to be reused, redefined, and enhanced, without sacrificing interoperability.
 
-*mctreesearch4j* serves as a framework to standardize the development of Monte Carlo Tree Search development in a research setting, while simultaneously serving as an industry grade software for deployment of MCTS for the JVM ecosystem. *mctreesearch4j* is specifically designed to be extensible, standardized, and modular. This standardization is key to enabling scientists and engineers to better reproduce results of AI research, and furthermore reduce the iteration speed of research into novel algorithms in AI.
+*mctreesearch4j* serves as a framework to standardize the development of Monte Carlo Tree Search development in a research setting, while simultaneously serving as a production-ready software for deployment of MCTS for the JVM ecosystem. *mctreesearch4j* is specifically designed to be extensible, standardized, and modular. This standardization is key to enabling scientists and engineers to better reproduce results of AI research, and furthermore reduce the iteration speed of research into novel algorithms in AI.
 
 # Domain Abstraction
 
