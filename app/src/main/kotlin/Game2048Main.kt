@@ -1,3 +1,6 @@
+package Twenty48
+
+import ExtendedSolver.ExtendedStatelessSolver
 import Twenty48.*
 import java.io.File
 
@@ -24,7 +27,7 @@ fun main() {
     val game2048MDP = Game2048MDP(initialGameState)
 
 
-    var solver = ExtendedStatelessSolver(
+    var solver = ExtendedSolver.ExtendedStatelessSolver(
         game2048MDP,
         999,
         1.4,

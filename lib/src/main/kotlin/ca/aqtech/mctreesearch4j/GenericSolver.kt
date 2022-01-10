@@ -2,6 +2,19 @@ package ca.aqtech.mctreesearch4j
 
 import kotlin.math.max
 
+/**
+ * A stateless solver for a Markov Decision Process (MDP).
+ *
+ * This solver does not permanently store states at each of the nodes in the tree. Instead simulations are rerun for
+ * each MCTS iteration starting from the root node. This allows maximum flexibility in handling a variety of MDPs
+ * but may be slower due to the repeated simulations.
+ *
+ * @param StateType the type that represents the states of the MDP.
+ * @param ActionType the type that represents the actions that can be taken in the MDP.
+ *
+ * The constructor takes in a [MDP], a depth limit for simulations, a exploration constant, a reward discount factor
+ * and a verbosity flag.
+ */
 open class GenericSolver<StateType, ActionType>(
     private val mdp: MDP<StateType, ActionType>,
     private val simulationDepthLimit: Int,
@@ -10,12 +23,14 @@ open class GenericSolver<StateType, ActionType>(
     verbose: Boolean
 ) : Solver<ActionType, ActionNode<StateType, ActionType>>(verbose, explorationConstant) {
 
+    // Inherited doc comments
     final override var root = ActionNode<StateType, ActionType>(null, null)
 
     init {
         simulateActions(root)
     }
 
+    // Inherited doc comments
     override fun select(node: ActionNode<StateType, ActionType>): ActionNode<StateType, ActionType> {
         // If this node is a leaf node, return it
         if (node.getChildren().isEmpty()) {
@@ -45,6 +60,7 @@ open class GenericSolver<StateType, ActionType>(
         }
     }
 
+    // Inherited doc comments
     override fun expand(node: ActionNode<StateType, ActionType>): ActionNode<StateType, ActionType> {
         // If the node is terminal, return it, except root node
         if (mdp.isTerminal(node.state)) {
@@ -64,6 +80,7 @@ open class GenericSolver<StateType, ActionType>(
         return newNode
     }
 
+    // Inherited doc comments
     override fun simulate(node: ActionNode<StateType, ActionType>): Double {
         traceln("Simulation:")
 
@@ -112,6 +129,7 @@ open class GenericSolver<StateType, ActionType>(
         }
     }
 
+    // Inherited doc comments
     override fun backpropagate(node: ActionNode<StateType, ActionType>, reward: Double) {
         var currentStateNode = node
         var currentReward = reward

@@ -16,7 +16,7 @@ The library contains the implementation of the MCTS algorithm for single player 
 
 ```
 lib
-└── 
+└──
     ...
     └── src.main.kotlin
         └── ca.aqtech.mctreesearch4j
@@ -34,7 +34,7 @@ The MCTS lib can be implemented by creating an interface implementing a Markov D
 
 ## Defining an MDP
 
-`MDP.kt` defines the interface of the MDP. To run the MCTS solver, you must extend this `MDP.kt` class in any JVM language, and provide your specific definitions. 
+`MDP.kt` defines the interface of the MDP. To run the MCTS solver, you must extend this `MDP.kt` class in any JVM language, and provide your specific definitions.
 
 ```kotlin
 abstract class MDP<StateType, ActionType> {
@@ -59,15 +59,57 @@ abstract class MDP<StateType, ActionType> {
 
 In the `app/` folder of this repository, you may see various examples of game engines interfacing with the MDP controller.
 
+### Running Gradle examples via Gradle
+
+It is possible to run the examples directly via Gradle. Simply select from the list of MDP / Games to run. Here is the list of arguments `args`:
+
+- `ReversiGame`: Initiates a game of Reversi between the user and AI, complete with user interface.
+- `ReversiAdversarialSim`: Generates a simulation of competitive Reversi between 2 AI's.
+- `PushYourLuckSim`: Initiates an MDP (Push Your Luck) and produces a policy for a single state.
+- `GridWorld`: Initiates an MDP and produces a policy for a state in the game of GridWorld.
+- `Game2048`: Initiates an MDP and produces a policy for a state in the game of the Game 2048.
+
+To run the tasks via Gradle simply run,
+
+```bash
+gradle run --args="{arg1} {arg2}"
+```
+
+Where `arg1`, `arg2` for example are the strings representing the task to run, seperated by spaces. For example:
+
+```bash
+gradle run --args="ReversiGame GridWorld"
+```
+
+Or simply to run one example,
+
+```bash
+gradle run --args="ReversiGame"
+```
+
+Furthermore, there is an example of *mctreesearch4j* integrated with the game of [Connect-4 in an example written in Scala](https://github.com/larkz/connect4-scala).
+
+
+### Compiling the Core Library
+
+To perform a local compilation of the core library located in the `lib/` folder, the user must omit `uploadArchives` step defined in the `gradle.build` file, which signs the .jar artifcat via GPG key and uploads to Maven Central Repository. The GPG key is tied to the Maven release of this repository, and is not intended for local compilation. To compile a local .jar without signing it for release, simply run,
+
+```bash
+gradle clean build -x uploadArchives
+```
+
+This will effectively exclude the upload to Maven step which is automated in this codebase, and allow the user to compile a local .jar for testing and experimentation. For a complete release to the Maven repository as a signed artifact, a PR to the main branch must be submitted, reviewed, and approved.
+
+
 ## Maven Central
 
-This codebase is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it 
-has full compatibility with any JVM language. 
+The JVM artifact is available directly via the [Maven Central repository - mctreesearch4j](https://search.maven.org/artifact/ca.aqtech/mctreesearch4j). In principle, it
+has full compatibility with any JVM language.
 
 ### Kotlin Integration (groovy)
 ```groovy
 dependencies {
-    implementation "ca.aqtech.mctreesearch4j:0.0.3"
+    implementation "ca.aqtech.mctreesearch4j:0.0.4"
 }
 ```
 
@@ -75,7 +117,7 @@ dependencies {
 
 ```sbt
 libraryDependencies ++= Seq(
-  "ca.aqtech" % "mctreesearch4j" % "0.0.3"
+  "ca.aqtech" % "mctreesearch4j" % "0.0.4"
 )
 ```
 
@@ -90,5 +132,5 @@ Currently, to cite our framework, please cite our preprint:
   journal = {arXiv},
   year = {2021},
   url = {https://arxiv.org/abs/2108.10061}
- } 
+ }
 ```

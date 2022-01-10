@@ -59,9 +59,7 @@ private fun simulate(players: List<ReversiPlayer>, iterations: Int)
     println("${first.name} wins: $darkWins, ${second.name} wins: $lightWins")
 }
 
-fun main() {
-    // ReversiGame().run()
-
+fun adversarialSim() {
     val elapsedMillis = measureTimeMillis {
         var iterations = 20
         var players = listOf(
@@ -73,4 +71,8 @@ fun main() {
     }
 
     println("Simulation took $elapsedMillis ms")
+}
+
+fun main() {
+    ReversiGame().run()
 }
