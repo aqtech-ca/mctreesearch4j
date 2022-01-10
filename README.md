@@ -3,6 +3,7 @@
 ![Static](https://img.shields.io/static/v1?label=docs&message=latest&color=blue&style=flat-square)
 ![kotlin-version](https://kotlin-version.aws.icerock.dev/kotlin-version?group=ca.aqtech&name=mctreesearch4j)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ca.aqtech/mctreesearch4j/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/ca.aqtech/mctreesearch4j)
+[![DOI](https://zenodo.org/badge/311016146.svg)](https://zenodo.org/badge/latestdoi/311016146)
 
 An robust Implementation of the Monte Carlo Tree Search (MCTS) algorithm for the JVM.
 
